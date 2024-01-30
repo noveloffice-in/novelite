@@ -1,0 +1,14 @@
+{
+  "name": "novelite",
+  "version": "0.1.0",
+  "description": "App for Novel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd client-dashboard && yarn dev",
+    "build": "cd client-dashboard && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

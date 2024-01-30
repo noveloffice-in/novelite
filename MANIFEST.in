@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include novelite *.css
+recursive-include novelite *.csv
+recursive-include novelite *.html
+recursive-include novelite *.ico
+recursive-include novelite *.js
+recursive-include novelite *.json
+recursive-include novelite *.md
+recursive-include novelite *.png
+recursive-include novelite *.py
+recursive-include novelite *.svg
+recursive-include novelite *.txt
+recursive-exclude novelite *.pyc
