@@ -78,30 +78,6 @@ export default function Getdata(props) {
             );
             return customerData?.leads;
         }
-
-        // const leadsIdArray = getLeadID()?.map((lead) => {
-        //     return lead.leads
-        // });
-
-        // console.log("Leads array = ", getLeadID());
-        dispatch(setLeads(getLeadID()));
-
-        // leadsIdArray?.forEach(leadID => {
-        //     const { data } = useFrappeGetDoc(
-        //         'Leads', `${leadID}`
-        //     );
-        //     if(data){
-        //         dispatch(setLocation(data?.confirmed_location)) 
-        //         dispatch(setCR(data?.complementary_table[0].cr)) 
-        //         dispatch(setMR(data?.complementary_table[0].mr)) 
-        //         dispatch(setMRandCR(data?.complementary_table[0].mr_and_cr)) 
-
-        //         console.log("datas = ", data?.complementary_table[0].mr_and_cr);
-        //     }
-
-        // });
-
-        // console.log("customerData = ", leadsIdArray);
     }
 
 
