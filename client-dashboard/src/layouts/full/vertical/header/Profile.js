@@ -9,13 +9,15 @@ import { Stack, display } from '@mui/system';
 import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import unlimitedImg from 'src/assets/images/backgrounds/unlimited-bg.png';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFrappeAuth } from 'frappe-react-sdk';
 import CustomToggle from '../../../../views/dashboard/CustomToggle';
+import { setUser } from '../../../../store/apps/userProfile/NovelProfileSlice';
 
 const Profile = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorEl2, setAnchorEl2] = useState(null);
   const fullName = useSelector((state) => state.novelprofileReducer.fullName);
   const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
@@ -44,6 +46,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     logout();
+    dispatch(setUser(undefined));
     localStorage.clear();
     setTimeout(() => {
       navigate("/Login");

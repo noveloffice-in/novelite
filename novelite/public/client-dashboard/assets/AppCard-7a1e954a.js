@@ -1,0 +1,1 @@
+import{e as a,j as p,P as t}from"./index-f22446e5.js";import{C as i}from"./Card-99a14ea7.js";const r=({children:s})=>{const o=a(e=>e.customizer);return p.jsx(i,{sx:{display:"flex",p:0},elevation:o.isCardShadow?9:0,variant:o.isCardShadow?void 0:"outlined",children:s})};r.propTypes={children:t.node};const c=r;export{c as A};

@@ -3,7 +3,7 @@ import PageContainer from '../../components/container/PageContainer';
 import { Box, Stack } from '@mui/system';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
-import { Card, Divider, Grid, Typography } from '@mui/material';
+import { Card, Divider, Grid, IconButton, InputAdornment, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Logo from '../../layouts/full/shared/logo/Logo';
@@ -22,6 +22,8 @@ import 'react-toastify/dist/ReactToastify.css';
 //For password
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CustomOutlinedInput from '../../components/forms/theme-elements/CustomOutlinedInput';
+import { IconEye, IconEyeOff } from '@tabler/icons';
 
 const style = {
     position: 'absolute',
@@ -234,19 +236,28 @@ export default function NovelLogin() {
                                             <Stack>
                                                 <Box>
                                                     <CustomFormLabel htmlFor="userEmail">Email</CustomFormLabel>
-                                                    <CustomTextField id="userEmail" variant="outlined" autoComplete="userEmail" fullWidth onChange={handleLoginChange} />
+                                                    <CustomTextField id="userEmail" variant="outlined" autoComplete="userEmail" placeholder="sample@email.com" fullWidth onChange={handleLoginChange} />
                                                 </Box>
                                                 <Box>
                                                     <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
-                                                    <Box display='flex' alignItems='center' justifyContent='center' >
-                                                        <CustomTextField id="password" type={ showPassword ? "text" : "password"} variant="outlined" fullWidth autoComplete="current-password" onChange={handleLoginChange} style={{marginLeft:'-0.3rem', marginRight:'0.1rem'}} />
-                                                        {
-                                                            showPassword ? 
-                                                            <VisibilityOffIcon style={{marginLeft:'-30px', cursor:'pointer', zIndex:'1'}} onClick={()=>setShowPassword(false)} />
-                                                            :
-                                                            <VisibilityIcon style={{marginLeft:'-30px', cursor:'pointer', zIndex:'1'}} onClick={()=>setShowPassword(true)}/>
+                                                    <CustomOutlinedInput
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        endAdornment={
+                                                            <InputAdornment position="end">
+                                                                <IconButton
+                                                                    aria-label="toggle password visibility"
+                                                                    onClick={() => { setShowPassword(!showPassword) }}
+                                                                    edge="end"
+                                                                >
+                                                                    {showPassword ? <IconEyeOff size="20" /> : <IconEye size="20" />}
+                                                                </IconButton>
+                                                            </InputAdornment>
                                                         }
-                                                    </Box>
+                                                        id="password"
+                                                        onChange={handleLoginChange}
+                                                        placeholder="*******"
+                                                        fullWidth
+                                                    />
                                                 </Box>
                                             </Stack>
                                             <Box mt={3}>

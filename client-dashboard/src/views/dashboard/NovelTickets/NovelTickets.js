@@ -4,7 +4,7 @@ import PageContainer from '../../../components/container/PageContainer';
 import ChildCard from 'src/components/shared/ChildCard';
 import NovelTicketFilter from './NovelTicketFilter';
 import NovelTicketsList from './NovelTicketsList';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
 
 const BCrumb = [
@@ -31,7 +31,6 @@ export default function NovelTickets() {
         if (location !== 'Property Location') {
             setFilterLocation(location);
         }
-        // console.log("ReRendering");
     }, [userLocation]);
 
     if (filterLocation === null) {
@@ -78,6 +77,8 @@ export default function NovelTickets() {
         }
     });
     confirmedLocations?.unshift({ shortName: "ALL", fullName: "ALL" });
+
+    // console.log("confirmedLocations = ", confirmedLocations);
     // var confirmedLocations = ['NOM','NTP', 'NMS'];
 
     //-----------------------------------------------------------END---------------------------------------------------------//

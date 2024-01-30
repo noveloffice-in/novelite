@@ -1,0 +1,1 @@
+import{s as t}from"./Typography-493ceae3.js";import{ac as r}from"./index-f22446e5.js";import{c as s}from"./createStack-e9d30bfe.js";const a=s({createStyledComponent:t("div",{name:"MuiStack",slot:"Root",overridesResolver:(o,e)=>e.root}),useThemeProps:o=>r({props:o,name:"MuiStack"})}),i=a;export{i as S};

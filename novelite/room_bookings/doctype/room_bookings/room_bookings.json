@@ -1,0 +1,186 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:B-{location}-{booking_date}-{###}",
+ "creation": "2024-01-24 14:37:31.028815",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "summary_section",
+  "booking_status",
+  "column_break_krohd",
+  "booking_date",
+  "booking_timings",
+  "booked_timings",
+  "room_info_section",
+  "location",
+  "column_break_9hbmk",
+  "room_type",
+  "column_break_pg3qx",
+  "room",
+  "client_details_section",
+  "client_type",
+  "guest_details_section",
+  "guest_name",
+  "guest_email",
+  "guest_phone",
+  "property_customer_details_section",
+  "booking_customer_details_section",
+  "billing_details_section"
+ ],
+ "fields": [
+  {
+   "fieldname": "summary_section",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "booking_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Booking Status",
+   "options": "Blocked Temporarily\nConfirmed",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_krohd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 11,
+   "fieldname": "booking_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Booking Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room_info_section",
+   "fieldtype": "Section Break",
+   "label": "Room Info"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Room Locations",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_9hbmk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Rooms",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_details_section",
+   "fieldtype": "Section Break",
+   "label": "Client Details"
+  },
+  {
+   "fieldname": "client_type",
+   "fieldtype": "Select",
+   "label": "Client Type",
+   "options": "Guest\nProperty Customer\nBooking Customer",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.client_type == \"Guest\";",
+   "fieldname": "guest_details_section",
+   "fieldtype": "Section Break",
+   "label": "Guest Details"
+  },
+  {
+   "depends_on": "eval:doc.client_type == \"Property Customer\";",
+   "fieldname": "property_customer_details_section",
+   "fieldtype": "Section Break",
+   "label": "Property Customer Details"
+  },
+  {
+   "depends_on": "eval:doc.client_type == \"Booking Customer\";",
+   "fieldname": "booking_customer_details_section",
+   "fieldtype": "Section Break",
+   "label": "Booking Customer Details"
+  },
+  {
+   "fieldname": "guest_name",
+   "fieldtype": "Data",
+   "label": "Guest Name"
+  },
+  {
+   "fieldname": "guest_email",
+   "fieldtype": "Data",
+   "label": "Guest Email"
+  },
+  {
+   "fieldname": "guest_phone",
+   "fieldtype": "Phone",
+   "label": "Guest Phone"
+  },
+  {
+   "fieldname": "booked_timings",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Booking Timings",
+   "options": "Room Booking Time Slots"
+  },
+  {
+   "fieldname": "booking_timings",
+   "fieldtype": "Small Text",
+   "label": "Booking Timings",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Room Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_pg3qx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "billing_details_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Details"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-29 12:46:48.958281",
+ "modified_by": "Administrator",
+ "module": "Room Bookings",
+ "name": "Room Bookings",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

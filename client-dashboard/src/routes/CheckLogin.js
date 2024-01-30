@@ -20,6 +20,8 @@ export default function CheckLogin(props) {
     useEffect(()=>{
         if (currentUser != undefined) {
             naviagate('/dashboard');
+        } else {
+            naviagate('/login');
         }
     },[])
 

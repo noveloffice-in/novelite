@@ -9,6 +9,7 @@ import EcommerceReducer from './apps/eCommerce/EcommerceSlice';
 import UserProfileReducer from './apps/userProfile/UserProfileSlice';
 import BlogReducer from './apps/blog/BlogSlice';
 import NovelprofileReducer from './apps/userProfile/NovelProfileSlice';
+import BookingsSliceReducer from './apps/bookings/BookingsSlice'
 
 //For persist
 import storage from 'redux-persist/lib/storage';
@@ -32,15 +33,16 @@ const persistConfig = {
 
 const reducer = combineReducers({
   customizer: CustomizerReducer,
-  chatReducer: ChatsReducer,
-  emailReducer: EmailReducer,
-  notesReducer: NotesReducer,
-  contactsReducer: ContactsReducer,
+  // chatReducer: ChatsReducer,
+  // emailReducer: EmailReducer,
+  // notesReducer: NotesReducer,
+  // contactsReducer: ContactsReducer,
   ticketReducer: TicketReducer,
-  ecommerceReducer: EcommerceReducer,
-  userpostsReducer: UserProfileReducer,
-  blogReducer: BlogReducer,
-  novelprofileReducer: NovelprofileReducer
+  // ecommerceReducer: EcommerceReducer,
+  // userpostsReducer: UserProfileReducer,
+  // blogReducer: BlogReducer,
+  novelprofileReducer: NovelprofileReducer,
+  bookingsSliceReducer : BookingsSliceReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

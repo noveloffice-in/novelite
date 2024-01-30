@@ -1,0 +1,1 @@
+import{bM as s,bN as t}from"./index-f22446e5.js";function f(e,r){s(2,arguments);var n=t(e),i=t(r),a=n.getTime()-i.getTime();return a<0?-1:a>0?1:a}function o(e,r){if(e==null)throw new TypeError("assign requires that input parameter not be null or undefined");for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n]);return e}export{o as a,f as c};

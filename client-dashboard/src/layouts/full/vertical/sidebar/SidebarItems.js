@@ -21,16 +21,16 @@ const SidebarItems = () => {
 
   const fullName = useSelector((state) => state.novelprofileReducer.fullName);
   
-  if(fullName === "Guest"){
-    Menuitems.splice(3,1);
-  } else {
-    Menuitems.splice(3,1, {
-      id: uniqueId(),
-      title: 'Tickets',
-      icon: IconTicket,
-      href: '/tickets',
-    });
-  }
+  // if(fullName === "Guest"){
+  //   Menuitems.splice(3,1);
+  // } else {
+  //   Menuitems.splice(3,1, {
+  //     id: uniqueId(),
+  //     title: 'Tickets',
+  //     icon: IconTicket,
+  //     href: '/tickets',
+  //   });
+  // }
 
   return (
     <Box style={{paddingLeft:"20px", paddingRight:"24px"}}>

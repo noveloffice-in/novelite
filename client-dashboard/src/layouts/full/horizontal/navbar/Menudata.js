@@ -65,7 +65,7 @@ const Menuitems = [
         id: uniqueId(),
         title: 'Invoices',
         icon: IconFileDollar ,
-        href: '/dashboards/invoice',
+        href: 'invoice',
         chipColor: 'secondary',
       },
       {

@@ -1,4 +1,4 @@
-import { useFrappeAuth, useFrappeGetDoc } from 'frappe-react-sdk';
+import { useFrappeAuth, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
@@ -41,7 +41,11 @@ export default function Getdata(props) {
 
             }
         }
+
     }, [])
+
+    console.log(fullName);
+
 
     if (fullName !== 'Guest') {
         const getUserData = () => {
@@ -54,7 +58,7 @@ export default function Getdata(props) {
 
         const userData = getUserData();
 
-        const acc_type = userData?.account_type;
+        const acc_type = userData?.app_user_type;
         dispatch(setCompanyName(userData?.customer));
         // console.log("Customer = ", getUserData()?.customer);
         dispatch(setAccountType(acc_type))
@@ -67,6 +71,37 @@ export default function Getdata(props) {
             dispatch(setUserImage(""))
         }
         console.log("DATA = ", userData);
+
+        const getLeadID = () => {
+            const { data: customerData } = useFrappeGetDoc(
+                'Customer', `${userData?.customer}`
+            );
+            return customerData?.leads;
+        }
+
+        // const leadsIdArray = getLeadID()?.map((lead) => {
+        //     return lead.leads
+        // });
+
+        // console.log("Leads array = ", getLeadID());
+        dispatch(setLeads(getLeadID()));
+
+        // leadsIdArray?.forEach(leadID => {
+        //     const { data } = useFrappeGetDoc(
+        //         'Leads', `${leadID}`
+        //     );
+        //     if(data){
+        //         dispatch(setLocation(data?.confirmed_location)) 
+        //         dispatch(setCR(data?.complementary_table[0].cr)) 
+        //         dispatch(setMR(data?.complementary_table[0].mr)) 
+        //         dispatch(setMRandCR(data?.complementary_table[0].mr_and_cr)) 
+
+        //         console.log("datas = ", data?.complementary_table[0].mr_and_cr);
+        //     }
+
+        // });
+
+        // console.log("customerData = ", leadsIdArray);
     }
 
 

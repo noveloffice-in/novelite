@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd client-dashboard && yarn dev",
-    "build": "cd client-dashboard && yarn build"
+    "build": "cd client-dashboard && npm install"
   },
   "keywords": [],
   "author": "",

@@ -251,9 +251,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                 label="Property Location"
                 onChange={handleChange}
               >
-                {confirmedLocations?.map((location) => {
+                {confirmedLocations?.map((location, index) => {
                   return (
-                    <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
+                    <MenuItem key={location.shortName+index} value={location.shortName}>{location.fullName}</MenuItem>
                   )
                 })}
               </Select>
