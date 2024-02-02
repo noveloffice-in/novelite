@@ -1,1 +1,0 @@
-import{e as t,j as i,P as n}from"./index-13b2bff4.js";import{C as d}from"./Card-bde34c0f.js";const r=({children:s,className:a})=>{const o=t(e=>e.customizer);return i.jsx(d,{sx:{p:0,position:"relative"},className:a,elevation:o.isCardShadow?9:0,variant:o.isCardShadow?void 0:"outlined",children:s})};r.propTypes={children:n.node};const l=r;export{l as B};
