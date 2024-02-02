@@ -12,6 +12,13 @@ import QRCode from 'qrcode.react';
 import CryptoJS from 'crypto-js';
 import PaymentDetails from './PaymentDetails';
 
+//For Accordion
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+
 
 const secretKey = 'NovelOffice456';
 
@@ -31,6 +38,12 @@ export default function PaymentSummary() {
     const selectedSlots = useSelector((state) => state.bookingsSliceReducer.selectedSlots);
     let price = useSelector((state) => state.bookingsSliceReducer.price);
     const qrRef = React.useRef();
+
+    const [expanded, setExpanded] = React.useState('panel1');
+
+    const handleChange = (panel) => (event, newExpanded) => {
+        setExpanded(newExpanded ? panel : false);
+    };
 
 
     // let bookingData = {
@@ -103,14 +116,58 @@ export default function PaymentSummary() {
     //     }
     // }, []);
 
+    //-----------------------------------------------------------Accordion---------------------------------------------------------//
+    const Accordion = styled((props) => (
+        <MuiAccordion disableGutters elevation={0} square {...props} />
+    ))(({ theme }) => ({
+        border: `1px solid ${theme.palette.divider}`,
+        '&:not(:last-child)': {
+            borderBottom: 0,
+        },
+        '&::before': {
+            display: 'none',
+        },
+    }));
 
+    const AccordionSummary = styled((props) => (
+        <MuiAccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            {...props}
+        />
+    ))(({ theme }) => ({
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, .05)'
+                : 'rgba(0, 0, 0, .03)',
+        flexDirection: 'row-reverse',
+        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+            transform: 'rotate(90deg)',
+        },
+        '& .MuiAccordionSummary-content': {
+            marginLeft: theme.spacing(1),
+        },
+    }));
+
+    const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+        padding: theme.spacing(2),
+        borderTop: '1px solid rgba(0, 0, 0, .125)',
+    }));
+
+    function CustomizedAccordions() {
+        const [expanded, setExpanded] = React.useState('panel1');
+
+        const handleChange = (panel) => (event, newExpanded) => {
+            setExpanded(newExpanded ? panel : false);
+        };
+    }
+    //-----------------------------------------------------------END---------------------------------------------------------//
     return (
         <PageContainer title="Payment Summary - Novel Office">
             <Breadcrumb title="Payment Summary" items={BCrumb} />
 
             <Box my={3}>
                 <ChildCard>
-                    <PaymentDetails price={price} selectedSlots={selectedSlots}/>
+                    <PaymentDetails price={price} selectedSlots={selectedSlots} />
                 </ChildCard>
                 <Stack direction="row" justifyContent="center">
                     <Box ref={qrRef}>
@@ -124,6 +181,52 @@ export default function PaymentSummary() {
                         /> */}
                     </Box>
                 </Stack>
+            </Box>
+            {/* //-----------------------------------------------------------Accordion---------------------------------------------------------// */}
+            <Box>
+                <ChildCard>
+                    <div>
+                        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                <Typography>Collapsible Group Item #1</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                                    malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                    sit amet blandit leo lobortis eget.
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                            <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+                                <Typography>Collapsible Group Item #2</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                                    malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                    sit amet blandit leo lobortis eget.
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                            <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+                                <Typography>Collapsible Group Item #3</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                                    malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                    sit amet blandit leo lobortis eget.
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                    </div>
+                </ChildCard>
             </Box>
 
             <Box>
