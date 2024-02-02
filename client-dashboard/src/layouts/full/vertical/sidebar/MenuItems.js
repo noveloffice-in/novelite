@@ -86,14 +86,14 @@ const Menuitems = [
     navlabel: true,
     subheader: 'Services',
   },
-  // {
-  //   id: uniqueId(),
-  //   title: 'Bookings',
-  //   icon: IconBrandBooking ,
-  //   href: '/location',
-  //   // chip: 'Cabins',
-  //   chipColor: 'secondary',
-  // },
+  {
+    id: uniqueId(),
+    title: 'Bookings',
+    icon: IconBrandBooking ,
+    href: '/location',
+    // chip: 'Cabins',
+    chipColor: 'secondary',
+  },
   {
     id: uniqueId(),
     title: 'Invoices',

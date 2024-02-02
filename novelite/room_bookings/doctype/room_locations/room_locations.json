@@ -25,7 +25,6 @@
   {
    "fieldname": "image",
    "fieldtype": "Attach Image",
-   "hidden": 1,
    "label": "Image"
   },
   {
@@ -38,7 +37,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-29 10:24:20.211654",
+ "modified": "2024-01-31 09:43:05.525018",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Locations",

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import PageContainer from '../../../components/container/PageContainer';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
@@ -7,16 +7,44 @@ import ChildCard from '../../../components/shared/ChildCard';
 import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+//QR Code
+import QRCode from 'qrcode.react';
+import CryptoJS from 'crypto-js';
+import PaymentDetails from './PaymentDetails';
+
+
+const secretKey = 'NovelOffice456';
+
+const encryptData = (data) => {
+    return CryptoJS.AES.encrypt(data, secretKey).toString();
+};
+
+const decryptData = (ciphertext) => {
+    const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);
+};
+
 export default function PaymentSummary() {
     const roomName = useSelector((state) => state.bookingsSliceReducer.roomName);
     const roomType = useSelector((state) => state.bookingsSliceReducer.roomCategory);
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
     const selectedSlots = useSelector((state) => state.bookingsSliceReducer.selectedSlots);
     let price = useSelector((state) => state.bookingsSliceReducer.price);
-    price = price / 2;
-    let totalPrice = price * selectedSlots?.length;
-    let gst = totalPrice * (18 / 100);
-    let slots = selectedSlots.map((slot) => slot.split(','));
+    const qrRef = React.useRef();
+
+
+    // let bookingData = {
+    //     roomName: roomName,
+    //     roomType: roomType,
+    //     location: location,
+    //     slots: slots,
+    //     grandTotal: totalPrice + gst
+    // }
+
+    // let bookingArray = `${roomName}, ${roomType}, ${location}, ${slots}, ${totalPrice + gst}`;
+
+    // const encryptedData = encryptData(bookingArray);
+    // bookingData = JSON.stringify(bookingData)
 
 
     const BCrumb = [
@@ -46,92 +74,79 @@ export default function PaymentSummary() {
         },
     ];
 
+    const sendQRCodeToAPI = async () => {
+
+        // Assuming the first child of the div is the canvas
+        const canvas = qrRef.current.getElementsByTagName('canvas')[0];
+        if (!canvas) return; // Make sure the canvas exists
+
+        const imageData = canvas.toDataURL('image/png');
+
+        // Convert Base64 image to blob
+        const response = await fetch(imageData);
+        const blob = await response.blob();
+
+        // Use FormData to send the image file
+        const formData = new FormData();
+
+        //For printing purpose only
+        formData.append('file', blob, 'qrcode.png');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+    }
+
+    // useEffect(() => {
+    //     // Ensure qrRef.current is available
+    //     if (qrRef.current) {
+    //         sendQRCodeToAPI();
+    //     }
+    // }, []);
+
+
     return (
         <PageContainer title="Payment Summary - Novel Office">
-            <Breadcrumb title="Booking Slots" items={BCrumb} />
+            <Breadcrumb title="Payment Summary" items={BCrumb} />
 
             <Box my={3}>
                 <ChildCard>
-                    <Box p={2}>
-                        <Typography variant="h5" fontWeight={600} mb={3}>
-                            Payment Summary
-                        </Typography>
-                        <Stack direction="row" justifyContent="space-between" mb={3}>
-                            <Typography variant="h6" fontWeight={400}>
-                                Number of slots
-                            </Typography>
-                            <Typography variant="h6">{selectedSlots?.length}</Typography>
-                        </Stack>
-                        {/* Sub Total */}
-                        <Stack direction="row" justifyContent="space-between" mb={3}>
-                            <Typography variant="h6" fontWeight={400}>
-                                Total hours
-                            </Typography>
-                            <Typography variant="h6">{(selectedSlots?.length / 2)} hr</Typography>
-                        </Stack>
-                        {/* Discount */}
-                        <Stack direction="row" justifyContent="space-between" mb={3}>
-                            <Typography variant="h6" fontWeight={400}>
-                                Slots textimings
-                            </Typography>
-                            <Stack justifyContent="space-between">
-                                {
-                                    slots.map((time, index) => {
-                                        return (
-                                            <Typography variant="h6" color="primary" key={time + index} mb={0.5}>
-                                                {time}
-                                            </Typography>
-                                        )
-                                    })
-                                }
-                            </Stack>
-                        </Stack>
-                        {/* Sub Total */}
-                        <Stack direction="row" justifyContent="space-between">
-                            <Box></Box>
-                            <Box>
-                                <hr style={{width: "200px"}}/>
-                            </Box>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between" mb={1} mt={2}>
-                            <Typography variant="h6">Total</Typography>
-                            <Typography variant="h5" color="success">
-                                &#x20B9; {totalPrice}
-                            </Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between" mb={1}>
-                            <Typography variant="h6">GST (18%)</Typography>
-                            <Typography variant="h5" color="success">
-                                &#x20B9; {gst}
-                            </Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between" mb={1}>
-                            <Typography variant="h6">Grand Total </Typography>
-                            <Typography variant="h5" color="success">
-                                &#x20B9; {totalPrice + gst}
-                            </Typography>
-                        </Stack>
-                    </Box>
+                    <PaymentDetails price={price} selectedSlots={selectedSlots}/>
                 </ChildCard>
+                <Stack direction="row" justifyContent="center">
+                    <Box ref={qrRef}>
+                        {/* <QRCode
+                            // value={bookingData}
+                            value={encryptedData}
+                            size={256}
+                            level="H"
+                            bgColor="#ffffff"
+                            fgColor="#000000"
+                        /> */}
+                    </Box>
+                </Stack>
             </Box>
 
             <Box>
                 <ChildCard>
-                    <Stack direction="row" justifyContent="space-between" mb={3}>
-                        <Typography variant="h6" fontWeight={400}>
+                    <Stack direction={{ sm: "column", md: "row", lg: "row" }} justifyContent={{ sm: "center", md: "space-between", lg: "space-between" }} mb={2}>
+                        <Typography variant="h6" fontWeight={400} mb={2}>
                             Payment Type
                         </Typography>
-                        <Button variant="contained" >
-                            Add to Invoice
-                        </Button>
-                        <Button variant="contained" >
-                            Pay Now
-                        </Button>
+                        <Stack mb={2}>
+                            <Button variant="contained" >
+                                Add to Invoice
+                            </Button>
+                        </Stack>
+                        <Stack>
+                            <Button variant="contained" >
+                                Pay Now
+                            </Button>
+                        </Stack>
                     </Stack>
                 </ChildCard>
             </Box>
 
-            <Stack direction={'row'} justifyContent="space-between">
+            <Stack direction='row' justifyContent="space-between" mt={2}>
                 <Button
                     color="secondary"
                     variant="contained"

@@ -68,11 +68,11 @@ export default function BookingSlot() {
         },
         {
             to: '/location',
-            title: location,
+            title: 'Location',
         },
         {
             to: '/category',
-            title: roomType,
+            title: 'Category',
         },
         {
             to: '/bookings',
@@ -93,7 +93,7 @@ export default function BookingSlot() {
         fields: ['location', 'booking_timings', 'booking_date'],
         filters: [['booking_date', '=', filterDate], ['room', '=', roomName]],
         limit_start: 0,
-        limit: 100,
+        limit: 2000,
     });
 
     const { data: bookingSettings } = useFrappeGetDoc(

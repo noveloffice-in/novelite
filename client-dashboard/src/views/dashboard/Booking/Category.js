@@ -23,7 +23,7 @@ export default function Category() {
         },
         {
             to: '/location',
-            title: location,
+            title: 'Location',
         },
         {
             to: '/category',

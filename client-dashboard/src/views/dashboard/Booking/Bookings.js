@@ -25,11 +25,11 @@ export default function Bookings() {
         },
         {
             to: '/location',
-            title: location,
+            title: 'Location',
         },
         {
             to: '/category',
-            title: roomType,
+            title: 'Category',
         },
         {
             to: '/bookings',
@@ -39,11 +39,12 @@ export default function Bookings() {
 
     //--------------------------------------------------------Fetch Rooms------------------------------------------------------//
     const { data, error, isValidating, mutate } = useFrappeGetDocList('Rooms', {
-        fields: ['name', 'room_name', 'room_type', 'image'],
+        fields: ['name', 'room_name', 'room_type', 'image', 'status'],
         filters: [['location', '=', location], ['room_type', '=', roomType]],
         limit_start: 0,
         limit: 1000,
     });
+    
     //-----------------------------------------------------------END---------------------------------------------------------//
 
     return (
@@ -57,7 +58,7 @@ export default function Bookings() {
                     (data?.map((card, index) => {
                         return (
                             <Grid item xs={12} sm={4} lg={3} key={index}>
-                                <Card variant="outlined" sx={{ maxWidth: 345 }}>
+                                <Card variant="outlined" sx={{ maxWidth: 345, display : card.status === "Active" ? "block" : "none"  }}>
                                     <CardActionArea component={Link} to="/bookingslot" onClick={() => { dispatch(setRoomName(card.name)) }}>
                                         <CardMedia
                                             component="img"
