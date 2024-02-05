@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAccountType, setCompanyName, setUserImage } from '../store/apps/userProfile/NovelProfileSlice';
+import { setAccountType, setCompanyName, setLeadsID, setUserImage } from '../store/apps/userProfile/NovelProfileSlice';
 
 export default function Getdata(props) {
     const { Component } = props;
@@ -71,13 +71,21 @@ export default function Getdata(props) {
             dispatch(setUserImage(""))
         }
         console.log("DATA = ", userData);
-
+        
+        //Getting leads and setting only lead Ids in store
         const getLeadID = () => {
             const { data: customerData } = useFrappeGetDoc(
                 'Customer', `${userData?.customer}`
             );
             return customerData?.leads;
         }
+        
+        const leadsIDs = getLeadID()?.map((lead)=>{
+            return lead.leads
+        });
+
+        dispatch(setLeadsID(leadsIDs))
+        console.log(leadsIDs);
     }
 
 

@@ -16,6 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setSelectedSlotsStore } from '../../../store/apps/bookings/BookingsSlice';
 import { useMemo } from 'react';
+import { Stack } from '@mui/system';
 
 const style = {
     position: 'absolute',
@@ -29,7 +30,8 @@ const style = {
 
 export default function BookingSlot() {
 
-    const [filterDate, setFilterDate] = useState(`${String(new Date().getDate()).padStart(2, '0')}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${new Date().getFullYear()}`)
+    // const [filterDate, setFilterDate] = useState(`${String(new Date().getDate()).padStart(2, '0')}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${new Date().getFullYear()}`)
+    const [filterDate, setFilterDate] = useState(`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`)
     const [selectedSlots, setSelectedSlots] = useState([]);
     // const [slotsInterval, setSlotsInterval] = useState(30);
     const [dates, setDates] = useState([]);
@@ -38,22 +40,31 @@ export default function BookingSlot() {
     const roomType = useSelector((state) => state.bookingsSliceReducer.roomCategory);
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
     const accounType = useSelector((state) => state.novelprofileReducer.account_type);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
+    const leadsID = useSelector((state) => state.novelprofileReducer.leadsID);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let slotsInterval = 30;
     let advanceBookingDays = 7;
 
+    //Price Calculation
+    let price = useSelector((state) => state.bookingsSliceReducer.price) / 2;
+    const totalPrice = price * selectedSlots.length;
+    const gst = totalPrice * (18 / 100);
+    const grandTotal = totalPrice + gst;
 
     useEffect(() => {
         const datesArray = [];
         const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         for (let i = 0; i < advanceBookingDays; i++) {
             const date = new Date();
             date.setDate(date.getDate() + i);
-            const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            const formattedDay = `${String(date.getDate()).padStart(2, '0')}-${monthNames[date.getMonth()]}`;
             const dayOfWeek = dayNames[date.getDay()];
-            datesArray.push({ date: formattedDate, day: dayOfWeek });
+            datesArray.push({ date: formattedDate, day: dayOfWeek, formattedDate: formattedDay });
         }
         setDates(datesArray);
         setDayName(datesArray[0].day);
@@ -90,7 +101,8 @@ export default function BookingSlot() {
     let intervals = [];
 
     const { data, mutate } = useFrappeGetDocList('Room Bookings', {
-        fields: ['location', 'booking_timings', 'booking_date'],
+        fields: ['location', 'booking_timings', 'booking_date', 'room', 'qr_code'],
+        // filters :[['booking_date', '=', '2024-02-05']],
         filters: [['booking_date', '=', filterDate], ['room', '=', roomName]],
         limit_start: 0,
         limit: 2000,
@@ -132,7 +144,6 @@ export default function BookingSlot() {
             return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
         };
 
-
         // Convert fromTime and toTime to minutes
         const fromTimeInMinutes = timeToMinutes(fromTime);
         const toTimeInMinutes = timeToMinutes(toTime);
@@ -164,18 +175,24 @@ export default function BookingSlot() {
     const { createDoc, isCompleted, } = useFrappeCreateDoc();
 
     const bookSlot = () => {
+
         let selectedSlotsString = `${selectedSlots}`;
+        let leadsString = `${leadsID}`;
         let [day, month, year] = filterDate.split('-');
-        let formattedDate = `${year}-${month}-${day}`;
+        // let formattedDate = `${year}-${month}-${day}`;
+        let formattedDate = `${day}-${month}-${year}`;
 
         let bookingData = {
             booking_status: 'Blocked Temporarily',
             location,
             room: roomName,
+            price: grandTotal,
             room_type: roomType,
-            booking_timings: selectedSlotsString,
-            booking_date: formattedDate,
+            customer: companyName,
             client_type: accounType,
+            booking_date: formattedDate,
+            customer_lead_id: leadsString,
+            booking_timings: selectedSlotsString,
         }
 
         if (selectedSlots.length !== 0) {
@@ -191,6 +208,22 @@ export default function BookingSlot() {
                 })
         } else {
             notifyWarn('Please Select any slot to continue');
+        }
+    }
+
+    //-----------------------------------------------------------Formatted Price---------------------------------------------------------//
+    function formatPrice(price) {
+        // Check if the number has a decimal part
+        if (!Number.isInteger(price)) {
+            // Format numbers with decimals
+            return new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(price);
+        } else {
+            // Format whole numbers without decimals
+            let priceStr = price.toString();
+            return priceStr.length > 3 ? priceStr.slice(0, -3) + ',' + priceStr.slice(-3) : priceStr;
         }
     }
 
@@ -211,7 +244,7 @@ export default function BookingSlot() {
                 })
             } */}
 
-            <FormControl sx={{ minWidth: 170, mb: 2, mr: 4 }}>
+            <FormControl sx={{ minWidth: 130, mb: 2, mr: 4 }}>
                 <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -221,7 +254,7 @@ export default function BookingSlot() {
                 // onChange={(e) => handleDateChange(e.target.value) }
                 >
                     {dates?.map((el) => {
-                        return (<MenuItem value={el.date} key={el.date} onClick={() => handleDateChange(el)} >{el.date}</MenuItem>)
+                        return (<MenuItem value={el.date} key={el.date} onClick={() => handleDateChange(el)} >{el.formattedDate}</MenuItem>)
                     })}
                 </Select>
             </FormControl>
@@ -236,11 +269,21 @@ export default function BookingSlot() {
             />}
 
             {/* //--------------------------------------------------------Proceed------------------------------------------------------// */}
-            <Grid item xs={12} lg={6} display="flex" alignItems="stretch">
+            <Grid item xs={12} lg={6} display="flex" alignItems="stretch" mt={2}>
                 <ChildCard title="">
                     <Button variant="contained" color="primary" onClick={bookSlot} >
                         Proceed
                     </Button>
+                </ChildCard>
+                <ChildCard title="">
+                    <Stack>
+                        <Typography variant='h4' mb={0.5}>
+                            Price : &#x20B9; {formatPrice(totalPrice)}
+                        </Typography>
+                        <Typography variant='h6' color="primary">
+                            (* GST not included)
+                        </Typography>
+                    </Stack>
                 </ChildCard>
             </Grid>
 

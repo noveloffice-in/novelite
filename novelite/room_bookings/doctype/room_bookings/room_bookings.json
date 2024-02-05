@@ -27,8 +27,15 @@
   "guest_email",
   "guest_phone",
   "property_customer_details_section",
+  "customer",
+  "customer_lead_id",
   "booking_customer_details_section",
-  "billing_details_section"
+  "billing_details_section",
+  "price",
+  "qr_details_section",
+  "qr_code",
+  "qr_image",
+  "encrypted_data"
  ],
  "fields": [
   {
@@ -153,11 +160,53 @@
    "fieldname": "billing_details_section",
    "fieldtype": "Section Break",
    "label": "Billing Details"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Total Amount(With GST)"
+  },
+  {
+   "fieldname": "qr_code",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "QR Code"
+  },
+  {
+   "fieldname": "qr_image",
+   "fieldtype": "Image",
+   "label": "QR Image",
+   "options": "qr_code"
+  },
+  {
+   "fieldname": "encrypted_data",
+   "fieldtype": "Small Text",
+   "label": "Encrypted data",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "qr_details_section",
+   "fieldtype": "Section Break",
+   "label": "QR Details"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_lead_id",
+   "fieldtype": "Small Text",
+   "label": "Customer Lead ID",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-29 12:46:48.958281",
+ "modified": "2024-02-05 16:53:31.196678",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Bookings",
