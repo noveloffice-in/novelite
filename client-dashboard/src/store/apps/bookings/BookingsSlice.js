@@ -5,7 +5,9 @@ const initialState = {
     roomCategory:"",
     roomName: "",
     selectedSlots: [],
-    price:""
+    price:"",
+    date:"",
+    docTypeId:""
   };
 
   export const BookingsSlice = createSlice({
@@ -26,10 +28,16 @@ const initialState = {
       },
       setPrice: (state, action) => {
         state.price = action.payload;
+      },
+      setDate: (state, action) => {
+        state.date = action.payload;
+      },
+      setDocTypeId: (state, action) => {
+        state.docTypeId = action.payload;
       }
     },
   });
 
-  export const {setBookingLocation, setRoomCategory, setRoomName, setSelectedSlotsStore, setPrice} = BookingsSlice.actions;
+  export const {setBookingLocation, setRoomCategory, setRoomName, setSelectedSlotsStore, setPrice, setDate, setDocTypeId} = BookingsSlice.actions;
 
   export default BookingsSlice.reducer

@@ -79,11 +79,11 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [tittle, setTittle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [clientLocation, setClientLocation] = useState("");
   const [ticketData, setTicketData] = useState({
     subject: "",
     description: "",
-    location: filterLocation
+    location: filterLocation,
+    creation_via: "Ticket"
   });
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
@@ -199,7 +199,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     );
   }
 
-  //----------------------------------------------------------Rise a Ticket-----------------------------------------------//
+  //----------------------------------------------------------Raise a Ticket-----------------------------------------------//
   const { createDoc, isCompleted, } = useFrappeCreateDoc();
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
   const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });

@@ -14,7 +14,7 @@ import Slots from './Slots';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setSelectedSlotsStore } from '../../../store/apps/bookings/BookingsSlice';
+import { setSelectedSlotsStore, setDate } from '../../../store/apps/bookings/BookingsSlice';
 import { useMemo } from 'react';
 import { Stack } from '@mui/system';
 
@@ -199,7 +199,8 @@ export default function BookingSlot() {
             createDoc('Room Bookings', bookingData)
                 .then(() => {
                     // console.log('Booking created Successfully');
-                    dispatch(setSelectedSlotsStore(selectedSlots))
+                    dispatch(setSelectedSlotsStore(selectedSlots));
+                    dispatch(setDate(formattedDate));
                     setSelectedSlots([]);
                     mutate();
                     navigate("/payment_summary");
@@ -258,7 +259,6 @@ export default function BookingSlot() {
                     })}
                 </Select>
             </FormControl>
-
             {/* //--------------------------------------------------------Slots------------------------------------------------------// */}
 
             {data && <Slots
