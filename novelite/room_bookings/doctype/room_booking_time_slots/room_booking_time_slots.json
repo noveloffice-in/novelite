@@ -7,7 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "from_time",
-  "to_time"
+  "to_time",
+  "enter_time",
+  "exit_time"
  ],
  "fields": [
   {
@@ -21,12 +23,24 @@
    "fieldtype": "Time",
    "in_list_view": 1,
    "label": "To Time"
+  },
+  {
+   "fieldname": "exit_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Exit Time"
+  },
+  {
+   "fieldname": "enter_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Enter Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-24 15:53:18.134106",
+ "modified": "2024-02-08 17:52:16.439105",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Booking Time Slots",

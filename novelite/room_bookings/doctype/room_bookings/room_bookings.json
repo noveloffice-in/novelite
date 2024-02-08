@@ -12,12 +12,13 @@
   "booking_status",
   "column_break_krohd",
   "booking_date",
-  "booking_timings",
   "booked_timings",
+  "booking_timings",
+  "exit_time",
+  "room_type",
   "room_info_section",
   "location",
   "column_break_9hbmk",
-  "room_type",
   "column_break_pg3qx",
   "room",
   "client_details_section",
@@ -135,7 +136,6 @@
   {
    "fieldname": "booked_timings",
    "fieldtype": "Table",
-   "hidden": 1,
    "label": "Booking Timings",
    "options": "Room Booking Time Slots"
   },
@@ -202,11 +202,16 @@
    "fieldtype": "Small Text",
    "label": "Customer Lead ID",
    "read_only": 1
+  },
+  {
+   "fieldname": "exit_time",
+   "fieldtype": "Data",
+   "label": "Exit Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-06 16:20:35.467366",
+ "modified": "2024-02-08 17:53:06.935658",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Bookings",
@@ -230,6 +235,5 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
- "track_seen": 1,
- "track_views": 1
+ "track_seen": 1
 }

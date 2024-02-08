@@ -5,6 +5,7 @@ import frappe
 from frappe import _
 from frappe.utils.password import get_decrypted_password
 
+import datetime
 import qrcode
 from io import BytesIO
 import base64
@@ -84,9 +85,7 @@ def login():
         return {"status": "error", "message": str(e)}
     
 
-
-
-# Function to generate a QR code based on provided data
+#-------------------- Function to generate a QR code based on provided data--------------------------------
 def generate_qrcode(data):
     qr = qrcode.QRCode(
         version=1,
@@ -141,3 +140,34 @@ def create_qr_codes(data):
         # document.qr_code = file_data.file_url
         # document.save()
         return img
+
+#--------------------------- Function to validate meeting Room Login---------------------------------------
+@frappe.whitelist(allow_guest=True)
+def allowGuest(id):
+    # id = "B-NTP - Kudlu Gate-2024-02-07-44284"
+    curTime = datetime.datetime.now().strftime('%H:%M')
+    doc = frappe.get_doc('Room Bookings', id)
+    time_slots = doc.booking_timings
+    result = False
+    split_slots = time_slots.split(',')
+    for i in split_slots:
+        # st = i.split(' - ')
+        start_time, end_time = i.split(' - ')
+        if start_time <= curTime <= end_time:
+            result = True
+            break
+
+    if result:
+        return True
+    else:
+        return False
+    
+#--------------------------------- Function to validate exit Time-------------------------------------------
+@frappe.whitelist(allow_guest=True)
+def exitTime(id):
+    curTime = datetime.datetime.now().strftime('%H:%M')
+    doc = frappe.get_doc('Room Bookings', id)
+    doc.exit_time = curTime
+    doc.save()
+    frappe.db.commit()
+    return True

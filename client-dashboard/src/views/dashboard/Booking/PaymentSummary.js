@@ -76,45 +76,41 @@ export default function PaymentSummary() {
         limit: 2000,
     });
 
-    // Function to compare if two arrays are equal
-    const arraysEqual = (a, b) => {
-        if (a.length !== b.length) return false;
-        for (let i = 0; i < a.length; i++) {
-            if (a[i] !== b[i]) return false;
-        }
-        return true;
-    };
-
-    // Find the object with matching booking_timings
-    const matchingObject = bookingData?.find(item => {
-        // Split the booking_timings string into an array and sort it
-        const timingsArray = item.booking_timings.split(',').sort();
-        // Sort the selectedSlots array as well for a proper comparison
-        const sortedSelectedSlots = [...selectedSlots].sort();
-        // Compare the arrays
-        return arraysEqual(timingsArray, sortedSelectedSlots);
-    });
-
-    if (matchingObject) {
-        let docTypeId = matchingObject.name;
-        dispatch(setDocTypeId(docTypeId));
-        axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `${docTypeId}, ${location}, ${date}` })
-            .then((res) => {
-                updateDoc('Room Bookings', docTypeId, { qr_code: `data:image/png;base64,${res.data.message}` })
-                    .then(() => {
-                        console.log("Added QR code to Doc");
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-            })
-        console.log("Booking Data = ", matchingObject);
-    }
-
-
     useEffect(() => {
+        // Function to check if two sets are equal
+        function areSetsEqual(set1, set2) {
+            if (set1.size !== set2.size) return false;
+            for (let item of set1) {
+                if (!set2.has(item)) return false;
+            }
+            return true;
+        }
 
-    }, [])
+        // Convert selectedSlots to a Set for comparison
+        const selectedSlotsSet = new Set(selectedSlots);
 
+        // Find the matching object
+        const matchingObject = bookingData?.find(item => {
+            // Convert booking_timings string into an array and then to a Set
+            const timingsSet = new Set(item.booking_timings.split(','));
+            // Compare the two sets
+            return areSetsEqual(timingsSet, selectedSlotsSet);
+        });
+
+        if (matchingObject) {
+            let docTypeId = matchingObject.name;
+            dispatch(setDocTypeId(docTypeId));
+            axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `${docTypeId}, ${location}, ${date}` })
+                .then((res) => {
+                    updateDoc('Room Bookings', docTypeId, { qr_code: `data:image/png;base64,${res.data.message}` })
+                        .then(() => {
+                            console.log("Added QR code to Doc");
+                        }).catch((error) => {
+                            console.log(error);
+                        })
+                })
+        }
+    }, [bookingData])
 
     //-----------------------------------------------------------Accordion---------------------------------------------------------//
     const [expanded, setExpanded] = React.useState('panel1');
