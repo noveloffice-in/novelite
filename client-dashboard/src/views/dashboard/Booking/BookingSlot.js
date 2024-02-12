@@ -101,16 +101,36 @@ export default function BookingSlot() {
     let intervals = [];
 
     const { data, mutate } = useFrappeGetDocList('Room Bookings', {
-        fields: ['location', 'booking_timings', 'booking_date', 'room', 'qr_code'],
+        fields: ['name', 'location', 'booking_timings', 'booking_date', 'room', 'qr_code'],
         // filters :[['booking_date', '=', '2024-02-05']],
         filters: [['booking_date', '=', filterDate], ['room', '=', roomName]],
         limit_start: 0,
         limit: 2000,
     });
 
-    const { data: bookingSettings } = useFrappeGetDoc(
-        'Room Booking Settings', 'Room Booking Settings'
-    );
+    // const { data: bookingSettings } = useFrappeGetDoc(
+    //     'Room Booking Settings', 'Room Booking Settings'
+    // );
+
+    /**
+    * ! -----------------------------------------------Delete This later-----------------------------------------------------
+    * ? Delete This later 
+    * TODO Delete This later 
+    * @param data gives only one doc data
+    */
+    // if(data){
+    //     let childArray = [];
+    //     childArray = data.forEach((booking)=>{
+    //         const { data: allData } = useFrappeGetDoc(
+    //             'Room Bookings', `${booking.name}`
+    //         );
+    //         console.log('allData = ', allData?.booked_timings);
+    //     })
+    // }
+    /** 
+     * ! -----------------------------------------------Delete This later-----------------------------------------------------
+     */
+
 
     if (dates.length !== 0) {
         let slotsDuration = bookingSettings?.availability_of_slots.find((el) => el.day_of_week == dayName);

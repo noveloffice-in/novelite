@@ -253,13 +253,13 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               >
                 {confirmedLocations?.map((location, index) => {
                   return (
-                    <MenuItem key={location.shortName+index} value={location.shortName}>{location.fullName}</MenuItem>
+                    <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
                   )
                 })}
               </Select>
             </FormControl>) :
             (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
-            }
+          }
         </Box>
       </Box>
 
@@ -286,9 +286,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         <Table>
           <TableHead>
             <TableRow>
-              {/* <TableCell>
-                <Typography variant="h6">S No</Typography>
-              </TableCell> */}
               <TableCell>
                 <Typography variant="h6">Ticket</Typography>
               </TableCell>
@@ -309,7 +306,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           <TableBody>
             {tickets && tickets.map((ticket) => (
               <TableRow key={ticket.subject} hover>
-                {/* <TableCell>{index + 1}</TableCell> */}
                 <TableCell onClick={() => { handleOpen(ticket.subject, ticket.description, ticket.status) }} style={{ cursor: "pointer" }}>
                   <Box>
                     <Typography variant="h6" fontWeight="500" wrap>
@@ -458,25 +454,25 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             </Box>
             <Tooltip disableFocusListener disableTouchListener placement="right-end" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
               {confirmedLocations?.length >= 2 ?
-              (<Box>
-                <FormControl fullWidth sx={{ mt: 3 }} >
-                  <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={filterLocation}
-                    label="Property Location"
-                    onChange={handleChange}
-                  >
-                    {confirmedLocations?.map((location) => {
-                      return (
-                        <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>) :
-              (<Typography variant='h4' sx={{ mt: 3 }}>This customer is not linked to any Location</Typography>)
+                (<Box>
+                  <FormControl fullWidth sx={{ mt: 3 }} >
+                    <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={filterLocation}
+                      label="Property Location"
+                      onChange={handleChange}
+                    >
+                      {confirmedLocations?.map((location) => {
+                        return (
+                          <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </Box>) :
+                (<Typography variant='h4' sx={{ mt: 3 }}>This customer is not linked to any Location</Typography>)
               }
             </Tooltip>
             <Button variant="contained" sx={{ mt: 3 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1}>
