@@ -171,3 +171,93 @@ def exitTime(id):
     doc.save()
     frappe.db.commit()
     return True
+
+
+@frappe.whitelist(allow_guest=True)
+def getAllData():
+    data = frappe.db.sql('''
+        SELECT 
+            rb.name, rb.room, rb.location, bt.from_time, bt.to_time, rb.booking_date 
+        FROM 
+            `tabRoom Bookings` rb
+        JOIN 
+            `tabRoom Booking Time Slots` bt ON rb.name = bt.parent;
+        ''', as_dict=True)
+    
+    converted_data = []
+    for row in data:
+        from_time = row['from_time']
+        to_time = row['to_time']
+        booking_date = row['booking_date']
+
+        from_hours = from_time.seconds // 3600
+        from_minutes = (from_time.seconds // 60) % 60
+        to_hours = to_time.seconds // 3600
+        to_minutes = (to_time.seconds // 60) % 60
+
+        from_time_str = '{:02d}:{:02d}'.format(from_hours, from_minutes)
+        to_time_str = '{:02d}:{:02d}'.format(to_hours, to_minutes)
+
+        converted_data.append({
+            'name': row['name'],
+            'room': row['room'],
+            'from_time': from_time_str,
+            'to_time': to_time_str,
+            'booking_date': booking_date
+            # Add other fields as needed
+        })
+        
+    return converted_data
+
+# @frappe.whitelist(allow_guest=True)
+# def addDataToDoc(data):
+#     item_info = frappe.new_doc("Room Bookings")
+#     item_info.booking_date = data['booking_date']
+#     item_info.booking_status = data['booking_status']
+#     item_info.client_type = data['client_type']
+#     item_info.customer = data['customer']
+#     item_info.customer_lead_id = data['customer_lead_id']
+#     item_info.location = data['location']
+#     item_info.price = data['price']
+#     item_info.room = data['room']
+#     item_info.room_type = data['room_type']
+
+#     item_info.save()
+#     return "Adding data Successfully"
+
+@frappe.whitelist(allow_guest=True)
+def addDataToDoc(data):
+    # for data in datas:
+    item_info = frappe.new_doc("Room Bookings")
+    item_info.booking_date = data['booking_date']
+    item_info.booking_status = data['booking_status']
+    item_info.client_type = data['client_type']
+    item_info.customer = data['customer']
+    item_info.customer_lead_id = data['customer_lead_id']
+    item_info.location = data['location']
+    item_info.price = data['price']
+    item_info.room = data['room']
+    item_info.room_type = data['room_type']
+    
+    # Save the item_info before adding booked_timings
+    item_info.insert()
+    
+    # Split booking_timings string into individual timings
+    timings_list = data['booking_timings'].split(',')
+    
+    # Add each timing to the booked_timings table
+    for timing_str in timings_list:
+        from_time_str, to_time_str = timing_str.split(' - ')
+        from_time_obj = datetime.strptime(from_time_str, '%H:%M').time()
+        to_time_obj = datetime.strptime(to_time_str, '%H:%M').time()
+        
+        item_info.append("booked_timings", {
+            "from_time": from_time_obj,
+            "to_time": to_time_obj
+        })
+        
+    # Save the item_info again after adding booked_timings
+    item_info.save()
+        
+    return "Data added successfully"
+

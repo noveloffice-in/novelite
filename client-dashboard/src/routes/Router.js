@@ -137,15 +137,15 @@ const Router = [
 
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData  Component={Noveldashboard} /> },
-      // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
-      // { path: '/category', exact: true, element: < Protected  Component={Category} /> },
-      // { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
-      // { path: '/bookingslot', exact: true, element: < Protected  Component={BookingSlot} /> },
-      // { path: '/payment_summary', exact: true, element: < Protected  Component={PaymentSummary} /> },
-      // { path: '/checkout', exact: true, element: < Protected  Component={Checkout}  /> },
+      { path: '/location', exact: true, element: < Protected  Component={Location} /> },
+      { path: '/category', exact: true, element: < Protected  Component={Category} /> },
+      { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
+      { path: '/bookingslot', exact: true, element: < Protected  Component={BookingSlot} /> },
+      { path: '/payment_summary', exact: true, element: < Protected  Component={PaymentSummary} /> },
+      { path: '/checkout', exact: true, element: < Protected  Component={Checkout}  /> },
       { path: '/tickets', exact: true, element: < Protected  Component={NovelTickets} /> },
       { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
-      // { path: '/invoice', exact: true, element: < Protected  Component={SalesInvoice} /> },
+      { path: '/invoice', exact: true, element: < Protected  Component={SalesInvoice} /> },
       
       // { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
       // { path: '/apps/chats', element: <Chats /> },

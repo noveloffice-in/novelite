@@ -5,7 +5,7 @@ import ChildCard from 'src/components/shared/ChildCard';
 import NovelTicketFilter from './NovelTicketFilter';
 import NovelTicketsList from './NovelTicketsList';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
 
 const BCrumb = [
     {
@@ -37,6 +37,11 @@ export default function NovelTickets() {
         setFilterLocation("ALL");
     }
 
+    //-> -------------------------------------------Checking Socket---------------------------------------------------------
+    useFrappeDocTypeEventListener('Room Bookings', (event)=>{
+        console.log("Event = "+ event);
+    })
+
     //--------------------------------------------------------Getting total count-------------------------------------------//
     const { data } = useFrappeGetDocCount(
         'Issue',
@@ -47,12 +52,13 @@ export default function NovelTickets() {
 
 
     //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
+    // Fetch the location of customers from leads
     const getLeadsId = () => {
         const { data, error, isValidating, mutate } = useFrappeGetDoc(
             'Customer',
             `${companyName}`
         );
-        console.log("CompanyName = ", companyName);
+        // console.log("CompanyName = ", companyName);
         return data?.leads.map(lead => lead.confirmed_location);
     }
 

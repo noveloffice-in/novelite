@@ -15,12 +15,14 @@ let persistor = persistStore(store);
 
 // replace console.* for disable log on production
 if (process.env.NODE_ENV === 'production') {
-  console.log = () => {}
-  console.error = () => {}
-  console.debug = () => {}
+  console.log = () => { }
+  console.error = () => { }
+  console.debug = () => { }
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+  //, Uncommment this when you want to use socket.io
+  // <FrappeProvider socketPort={import.meta.env.VITE_SOCKET_PORT ?? ''}>
   <FrappeProvider>
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>

@@ -11,12 +11,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFrappeCreateDoc, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import { useDispatch, useSelector } from 'react-redux';
 import Slots from './Slots';
+import { setSelectedSlotsStore, setDate } from '../../../store/apps/bookings/BookingsSlice';
+import { Stack } from '@mui/system';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setSelectedSlotsStore, setDate } from '../../../store/apps/bookings/BookingsSlice';
-import { useMemo } from 'react';
-import { Stack } from '@mui/system';
 
 const style = {
     position: 'absolute',
@@ -101,19 +100,19 @@ export default function BookingSlot() {
     let intervals = [];
 
     const { data, mutate } = useFrappeGetDocList('Room Bookings', {
-        fields: ['name', 'location', 'booking_timings', 'booking_date', 'room', 'qr_code'],
+        fields: ['name', 'location', 'booking_timings', 'booking_date', 'room'],
         // filters :[['booking_date', '=', '2024-02-05']],
         filters: [['booking_date', '=', filterDate], ['room', '=', roomName]],
         limit_start: 0,
         limit: 2000,
     });
 
-    // const { data: bookingSettings } = useFrappeGetDoc(
-    //     'Room Booking Settings', 'Room Booking Settings'
-    // );
+    const { data: bookingSettings } = useFrappeGetDoc(
+        'Room Booking Settings', 'Room Booking Settings'
+    );
 
     /**
-    * ! -----------------------------------------------Delete This later-----------------------------------------------------
+    * ! -----------------------------------------------Delete This later------------------------------------------------------ //
     * ? Delete This later 
     * TODO Delete This later 
     * @param data gives only one doc data
@@ -127,9 +126,7 @@ export default function BookingSlot() {
     //         console.log('allData = ', allData?.booked_timings);
     //     })
     // }
-    /** 
-     * ! -----------------------------------------------Delete This later-----------------------------------------------------
-     */
+    // ! -----------------------------------------------Delete This later----------------------------------------------------- //
 
 
     if (dates.length !== 0) {

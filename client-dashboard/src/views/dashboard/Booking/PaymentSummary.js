@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import PageContainer from '../../../components/container/PageContainer';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { Box, Stack } from '@mui/system';
 import ChildCard from '../../../components/shared/ChildCard';
-import { Button, Typography } from '@mui/material';
+import { Button, CardContent, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PaymentDetails from './PaymentDetails';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 //For Accordion
 import { styled } from '@mui/material/styles';
@@ -14,9 +17,23 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useFrappeGetCall, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 import { setDocTypeId } from '../../../store/apps/bookings/BookingsSlice';
+
+//For Modal
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: 'none',
+    boxShadow: 24,
+    p: 4,
+};
 
 //-----------------------------------------------------------Accordion---------------------------------------------------------//
 const Accordion = styled((props) => (
@@ -60,14 +77,44 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 export default function PaymentSummary() {
 
     let price = useSelector((state) => state.bookingsSliceReducer.price);
+    const date = useSelector((state) => state.bookingsSliceReducer.date);
     const roomName = useSelector((state) => state.bookingsSliceReducer.roomName);
     const roomType = useSelector((state) => state.bookingsSliceReducer.roomCategory);
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
-    const date = useSelector((state) => state.bookingsSliceReducer.date);
     const selectedSlots = useSelector((state) => state.bookingsSliceReducer.selectedSlots);
     const { updateDoc, error } = useFrappeUpdateDoc();
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [checkBox, setCheckBox] = useState(false);
     const dispatch = useDispatch();
 
+    //-----------------------------------------------------------BCrumb---------------------------------------------------------//
+    const BCrumb = [
+        {
+            to: '/dashboard',
+            title: 'Home',
+        },
+        {
+            to: '/location',
+            title: location,
+        },
+        {
+            to: '/category',
+            title: roomType,
+        },
+        {
+            to: '/bookings',
+            title: roomName,
+        },
+        {
+            to: '/bookingslot',
+            title: 'Booking Slots',
+        },
+        {
+            to: '/payment_summary',
+            title: 'Payment Summary',
+        },
+    ];
     //-----------------------------------------------------------Getting Booking Data---------------------------------------------------------//
     const { data: bookingData } = useFrappeGetDocList('Room Bookings', {
         fields: ['location', 'booking_timings', 'booking_date', 'name'],
@@ -100,7 +147,7 @@ export default function PaymentSummary() {
         if (matchingObject) {
             let docTypeId = matchingObject.name;
             dispatch(setDocTypeId(docTypeId));
-            axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `${docTypeId}, ${location}, ${date}` })
+            axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `id: ${docTypeId}, location:${location}, booking_date:${date}, booking_timings:${selectedSlots}, room_type:${roomType}, room:${roomName}` })
                 .then((res) => {
                     updateDoc('Room Bookings', docTypeId, { qr_code: `data:image/png;base64,${res.data.message}` })
                         .then(() => {
@@ -110,7 +157,36 @@ export default function PaymentSummary() {
                         })
                 })
         }
-    }, [bookingData])
+
+        //* -----For timer------
+        // Calculate the end time if not already set, or retrieve it from localStorage
+        let endTime = localStorage.getItem('endTime');
+        if (!endTime) {
+            endTime = new Date().getTime() + 10 * 60 * 1000; // 10 minutes from now
+            localStorage.setItem('endTime', endTime);
+        }
+
+        // Update timer every second
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = endTime - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                localStorage.removeItem('endTime'); // Clear endTime if the timer is over
+                setTimeLeft(0);
+            } else {
+                setTimeLeft(distance);
+            }
+        }, 1000);
+
+        // Clear interval on component unmount
+        return () => clearInterval(interval);
+    }, [bookingData, selectedSlots])
+
+    // Format timeLeft into minutes and seconds
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
     //-----------------------------------------------------------Accordion---------------------------------------------------------//
     const [expanded, setExpanded] = React.useState('panel1');
@@ -119,38 +195,37 @@ export default function PaymentSummary() {
         setExpanded(newExpanded ? panel : false);
     };
 
-    const BCrumb = [
-        {
-            to: '/dashboard',
-            title: 'Home',
-        },
-        {
-            to: '/location',
-            title: location,
-        },
-        {
-            to: '/category',
-            title: roomType,
-        },
-        {
-            to: '/bookings',
-            title: roomName,
-        },
-        {
-            to: '/bookingslot',
-            title: 'Booking Slots',
-        },
-        {
-            to: '/payment_summary',
-            title: 'Payment Summary',
-        },
-    ];
+    //-----------------------------------------------------------Modal---------------------------------------------------------//
+    const handleOpen = () => setOpen(true)
+
+    const handleClose = () => { setOpen(false); setCheckBox(false) };
+
+    //-----------------------------------------------------------CheckBox---------------------------------------------------------//
+    const handleCheckBox = (e) => setCheckBox(e.target.checked)
+
+    const handleConfirmBookings = () => {
+        console.log(checkBox);
+    }
 
     //-----------------------------------------------------------END---------------------------------------------------------//
     return (
         <PageContainer title="Payment Summary - Novel Office">
             <Breadcrumb title="Payment Summary" items={BCrumb} />
-
+            <Box bgcolor={'warning' + '.light'} textAlign="center">
+                <Stack justifyContent='center' alignItems='center' flexDirection='row'>
+                    <Box color={'warning' + '.main'}>
+                        <WarningAmberOutlinedIcon sx={{ marginRight: "0.5rem", marginBottom: "-0.4rem" }} />
+                    </Box>
+                    <Typography
+                        color={'warning' + '.main'}
+                        m={1}
+                        variant="h5"
+                        fontWeight={600}
+                    >
+                        Selected Slots will be blocked for {minutes.toLocaleString('en-US', { minimumIntegerDigits: 2 })}:{seconds.toLocaleString('en-US', { minimumIntegerDigits: 2 })} mins
+                    </Typography>
+                </Stack>
+            </Box>
             <Box my={3}>
                 <ChildCard>
                     {/* //-----------------------------------------------------------PaymentDetails---------------------------------------------------------// */}
@@ -174,23 +249,20 @@ export default function PaymentSummary() {
                                     2)&nbsp; Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. <br />
                                     3)&nbsp; Suspendisse malesuada lacus ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </Typography>
-                                <Button variant="contained" >
+                                <Button variant="contained" onClick={handleOpen}>
                                     Add to Invoice
                                 </Button>
                             </AccordionDetails>
                         </Accordion>
                         <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                             <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-                                <Typography>Pay now</Typography>
+                                <Typography>Pay now (Comming Soon)</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography mb={2}>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                                    malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-                                    sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
+                                    Comming Soon
                                 </Typography>
-                                <Button variant="contained" >
+                                <Button variant="contained" disabled>
                                     Pay Now
                                 </Button>
                             </AccordionDetails>
@@ -198,6 +270,26 @@ export default function PaymentSummary() {
 
                     </Stack>
                 </ChildCard>
+                {/* ---------------------------------------Modal Start---------------------------------  */}
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography mb={2}>
+                            1)&nbsp; Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
+                            2)&nbsp; Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. <br />
+                            3)&nbsp; Suspendisse malesuada lacus ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            <FormControlLabel required control={<Checkbox onChange={(e) => { handleCheckBox(e) }} />} label="I agree to terms and conditions" />
+                        </Typography>
+                        <Button variant="contained" onClick={handleConfirmBookings} disabled={!checkBox}>
+                            Confirm Bookings
+                        </Button>
+                    </Box>
+                </Modal>
+                {/* ---------------------------------------Modal Ends---------------------------------  */}
             </Box>
 
 

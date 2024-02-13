@@ -47,7 +47,7 @@ export default function PaymentDetails({ price, selectedSlots, tittle }) {
             {/* Discount */}
             <Stack direction="row" justifyContent="space-between" mb={3}>
                 <Typography variant="h6" fontWeight={400}>
-                    Slots textimings
+                    Slots timings
                 </Typography>
                 <Stack justifyContent="space-between">
                     {

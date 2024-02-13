@@ -237,9 +237,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   return (
     <Box mt={4}>
       {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
-      <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
-        <Box>
-        </Box>
+      <Box display="flex" justifyContent={{xs:'center', md:'end', ls:'end'}} alignItems={'center'}>
+        {/* <Box>
+        </Box> */}
         <Box sx={{ mb: 2 }} >
           {confirmedLocations?.length >= 2 ?
             (<FormControl sx={{ m: 1, minWidth: 170 }}>
@@ -271,11 +271,11 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             <AddIcon />
           </Button>
         </Box>
-        <Box sx={{ ml: 'auto' }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
+        <Box sx={{ ml: 'auto', width: {xs: "8rem", md:"12rem", ls:"12rem"} }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
           <TextField
             size="small"
             label="Search"
-            fullWidth
+            // fullWidth
             onChange={(e) => dispatch(SearchTicket(e.target.value))}
           />
         </Box>
