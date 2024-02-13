@@ -256,7 +256,7 @@ export default function PaymentSummary() {
                         </Accordion>
                         <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                             <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-                                <Typography>Pay now (Comming Soon)</Typography>
+                                <Typography>Pay now (Coming Soon)</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography mb={2}>

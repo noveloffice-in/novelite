@@ -1,1 +1,0 @@
-import{aT as e,aU as a}from"./index-2906e08f.js";import{j as o,C as t}from"./Typography-209bc2bc.js";const s=e(),r=o({themeId:a,defaultTheme:s,defaultClassName:"MuiBox-root",generateClassName:t.generate}),c=r;export{c as B};
