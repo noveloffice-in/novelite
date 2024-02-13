@@ -6,6 +6,8 @@ from frappe import _
 from frappe.utils.password import get_decrypted_password
 
 import datetime
+from datetime import datetime
+
 import qrcode
 from io import BytesIO
 import base64
@@ -267,6 +269,7 @@ def addDataToDoc():
     item_info.price = data.get('price')
     item_info.room = data.get('room')
     item_info.room_type = data.get('room_type')
+    item_info.booking_timings = data.get('booking_timings')
 
     # Save the item_info before adding booked_timings
     item_info.insert()
@@ -274,7 +277,7 @@ def addDataToDoc():
     # Split booking_timings string into individual timings
     timings_list = data.get('booking_timings').split(',')
 
-    # Add each timing to the booked_timings table
+    # # Add each timing to the booked_timings table
     for timing_str in timings_list:
         from_time_str, to_time_str = timing_str.strip().split(' - ')
         from_time_obj = datetime.strptime(from_time_str, '%H:%M').time()
@@ -282,7 +285,9 @@ def addDataToDoc():
 
         item_info.append("booked_timings", {
             "from_time": from_time_obj,
-            "to_time": to_time_obj
+            "to_time": to_time_obj,
+            "enter_time":"00:00:00",
+            "exit_time":"00:00:00"
         })
 
     # Save the item_info again after adding booked_timings

@@ -3,6 +3,7 @@ import { Box } from '@mui/system'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useTheme } from '@mui/material/styles';
+import { useFrappeGetCall } from 'frappe-react-sdk';
 
 export default function Slots({ slotsData, selectedSlots, setSelectedSlots, intervals }) {
     const theme = useTheme(); // Access the current theme
@@ -48,12 +49,22 @@ export default function Slots({ slotsData, selectedSlots, setSelectedSlots, inte
 
     // console.log("slotsData = ", slotsData);
 
+    //,This is from API which is newly created, Data is fetched from child table
+
+    const { data, error, isLoading, mutate } = useFrappeGetCall('/novelite.api.api.getAllData');
+    let slotsDataArray = data?.message.map((ele)=>{
+        // console.log("New Data = ", `${ele.from_time} - ${ele.to_time}`);
+        return `${ele.from_time} - ${ele.to_time}`
+    })
+
+    console.log("slotsDataArray = "+ slotsDataArray);
+
     //--------------------------------------------------------Checking Booked Dates and disbling------------------------------------------------------//
 
     const isSlotBooked = (slotId) => {
         let mergedArray = [];
-        slotsData?.forEach((element) => {
-            mergedArray = mergedArray.concat(element.booking_timings.split(','));
+        slotsDataArray?.forEach((element) => {
+            mergedArray = mergedArray.concat(element.split(','));
         })
         return mergedArray?.some(slot => slot === slotId);
     };
