@@ -126,9 +126,9 @@ def create_qr_codes(data):
     #             data += f"{fieldname}: {value}\n"
 
         # frappe.response['message'] = data
-        # enc_msg = encrypt_message(data)
+        enc_msg = encrypt_message(data)
         # document.encrypted_data = enc_msg
-        img = generate_qrcode(data)
+        img = generate_qrcode(enc_msg)
         # img_binary = base64.b64decode(img)
         # file_data = frappe.get_doc({
         #     'doctype': 'File',
