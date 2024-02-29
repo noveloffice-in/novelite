@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'production') {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   //, Uncommment this when you want to use socket.io
-  // <FrappeProvider socketPort={import.meta.env.VITE_SOCKET_PORT ?? ''}>
-  <FrappeProvider>
+  <FrappeProvider socketPort={import.meta.env.VITE_SOCKET_PORT ?? ''}>
+  {/* <FrappeProvider>  */}
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>
         <PersistGate persistor={persistor}>

@@ -44,7 +44,7 @@ export default function Getdata(props) {
 
     }, [])
 
-    console.log(fullName);
+    // console.log(fullName);
 
 
     if (fullName !== 'Guest') {
@@ -70,7 +70,7 @@ export default function Getdata(props) {
         } else {
             dispatch(setUserImage(""))
         }
-        console.log("DATA = ", userData);
+        // console.log("DATA = ", userData);
         
         //Getting leads and setting only lead Ids in store
         const getLeadID = () => {
@@ -85,7 +85,7 @@ export default function Getdata(props) {
         });
 
         dispatch(setLeadsID(leadsIDs))
-        console.log(leadsIDs);
+        // console.log(leadsIDs);
     }
 
 

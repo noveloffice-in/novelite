@@ -84,7 +84,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     description: "",
     location: filterLocation,
     creation_via: "Ticket"
-  });
+  }); 
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -95,13 +95,14 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
 
   const handleChange = (event) => {
-    setFilterLocation(event.target.value);
-    dispatch(setLocation(event.target.value));
-    ticketData.location = event.target.value;
+    let changedLocation = event.target.value;
+    setFilterLocation(changedLocation);
+    dispatch(setLocation(changedLocation));
+    ticketData.location = changedLocation;
     setTicketData({ ...ticketData });
-    console.log("Location = ", event.target.value);
+    console.log("Location = ", changedLocation);
     if (event.target.value !== 'Property Location') {
-      localStorage.setItem('location', event.target.value);
+      localStorage.setItem('location', changedLocation);
     }
   };
 

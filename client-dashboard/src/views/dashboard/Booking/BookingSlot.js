@@ -40,6 +40,7 @@ export default function BookingSlot() {
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
     const accounType = useSelector((state) => state.novelprofileReducer.account_type);
     const companyName = useSelector((state) => state.novelprofileReducer.companyName);
+    const confirmed_location = useSelector((state) => state.novelprofileReducer.location);
     const leadsID = useSelector((state) => state.novelprofileReducer.leadsID);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -216,7 +217,7 @@ export default function BookingSlot() {
     const bookSlot = () => {
 
         let selectedSlotsString = `${selectedSlots}`;
-        let leadsString = `${leadsID}`;
+        let leadsString = `${leadsID}-${confirmed_location}`;
         let [day, month, year] = filterDate.split('-');
         // let formattedDate = `${year}-${month}-${day}`;
         let formattedDate = `${day}-${month}-${year}`;
@@ -230,7 +231,7 @@ export default function BookingSlot() {
             client_type: accounType,
             booking_date: formattedDate,
             customer_lead_id: leadsString,
-            booking_timings: selectedSlotsString,
+            time_slots: selectedSlotsString,
             booking_status: 'Blocked Temporarily',
         }
 

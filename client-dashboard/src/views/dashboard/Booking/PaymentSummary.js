@@ -17,7 +17,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 import { setDocTypeId } from '../../../store/apps/bookings/BookingsSlice';
 
@@ -82,11 +82,11 @@ export default function PaymentSummary() {
     const roomType = useSelector((state) => state.bookingsSliceReducer.roomCategory);
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
     const selectedSlots = useSelector((state) => state.bookingsSliceReducer.selectedSlots);
-    const { updateDoc, error } = useFrappeUpdateDoc();
-    const [timeLeft, setTimeLeft] = useState(0);
     const [open, setOpen] = useState(false);
-    const [checkBox, setCheckBox] = useState(false);
     const dispatch = useDispatch();
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [checkBox, setCheckBox] = useState(false);
+    const { updateDoc, error } = useFrappeUpdateDoc();
 
     //-----------------------------------------------------------BCrumb---------------------------------------------------------//
     const BCrumb = [
@@ -123,6 +123,12 @@ export default function PaymentSummary() {
         limit: 2000,
     });
 
+    const handleTodoUpdate = () => {
+        console.log('ToDo updated:');
+    };
+
+    useFrappeEventListener('todo_update', handleTodoUpdate);
+
     useEffect(() => {
         // Function to check if two sets are equal
         function areSetsEqual(set1, set2) {
@@ -147,7 +153,7 @@ export default function PaymentSummary() {
         if (matchingObject) {
             let docTypeId = matchingObject.name;
             dispatch(setDocTypeId(docTypeId));
-            axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `id: ${docTypeId}, location:${location}, booking_date:${date}, booking_timings:${selectedSlots}, room_type:${roomType}, room:${roomName}` })
+            axios.post('/api/method/novelite.api.api.create_qr_codes', { data: `{"id":"${docTypeId}", "location":"${location}", "booking_date":"${date}", "booking_timings":"${selectedSlots}", "room_type":"${roomType}", "room":"${roomName}"}` })
                 .then((res) => {
                     updateDoc('Room Bookings', docTypeId, { qr_code: `data:image/png;base64,${res.data.message}` })
                         .then(() => {

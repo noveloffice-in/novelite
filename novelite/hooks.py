@@ -11,8 +11,8 @@ app_license = "MIT"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/novelite/css/novelite.css"
-# app_include_js = "/assets/novelite/js/novelite.js"
+app_include_css = "/assets/novelite/css/novelite.css"
+app_include_js = "/assets/novelite/js/novelite.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/novelite/css/novelite.css"
@@ -118,13 +118,20 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
+doc_events = {
 #	"*": {
 #		"on_update": "method",
 #		"on_cancel": "method",
 #		"on_trash": "method"
 #	}
-# }
+    # "*": {
+    #     "after_insert": "novelite.api.messages.emit_todo_update",
+    # }
+    "Comment": {
+        "after_insert": "novelite.messages.on_comment"
+    }
+# "after_insert": "my_custom_app.my_custom_app.doctype.my_custom_doctype.my_custom_script.on_comment"
+}
 
 # Scheduled Tasks
 # ---------------

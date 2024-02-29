@@ -8,29 +8,25 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "summary_section",
-  "booking_status",
-  "column_break_krohd",
-  "booking_date",
-  "booked_timings",
-  "booking_timings",
-  "exit_time",
-  "room_type",
-  "room_info_section",
-  "location",
-  "column_break_9hbmk",
-  "column_break_pg3qx",
-  "room",
-  "client_details_section",
+  "property_customer_details_section",
   "client_type",
-  "guest_details_section",
+  "customer",
+  "customer_lead_id",
   "guest_name",
   "guest_email",
   "guest_phone",
-  "property_customer_details_section",
-  "customer",
-  "customer_lead_id",
-  "booking_customer_details_section",
+  "room_info_section",
+  "location",
+  "room_type",
+  "room",
+  "summary_section",
+  "booking_status",
+  "booking_date",
+  "time_slots",
+  "booked_timings",
+  "booking_timings",
+  "column_break_mocwb",
+  "client_details_section",
   "billing_details_section",
   "price",
   "qr_details_section",
@@ -53,10 +49,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_krohd",
-   "fieldtype": "Column Break"
-  },
-  {
    "columns": 11,
    "fieldname": "booking_date",
    "fieldtype": "Date",
@@ -75,10 +67,6 @@
    "label": "Location",
    "options": "Room Locations",
    "reqd": 1
-  },
-  {
-   "fieldname": "column_break_9hbmk",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "room",
@@ -101,34 +89,24 @@
    "reqd": 1
   },
   {
-   "depends_on": "eval:doc.client_type == \"Guest\";",
-   "fieldname": "guest_details_section",
-   "fieldtype": "Section Break",
-   "label": "Guest Details"
-  },
-  {
-   "depends_on": "eval:doc.client_type == \"Property Customer\";",
    "fieldname": "property_customer_details_section",
    "fieldtype": "Section Break",
-   "label": "Property Customer Details"
+   "label": "Customer Details"
   },
   {
-   "depends_on": "eval:doc.client_type == \"Booking Customer\";",
-   "fieldname": "booking_customer_details_section",
-   "fieldtype": "Section Break",
-   "label": "Booking Customer Details"
-  },
-  {
+   "depends_on": "eval:doc.client_type == \"Guest\";",
    "fieldname": "guest_name",
    "fieldtype": "Data",
    "label": "Guest Name"
   },
   {
+   "depends_on": "eval:doc.client_type == \"Guest\";",
    "fieldname": "guest_email",
    "fieldtype": "Data",
    "label": "Guest Email"
   },
   {
+   "depends_on": "eval:doc.client_type == \"Guest\";",
    "fieldname": "guest_phone",
    "fieldtype": "Phone",
    "label": "Guest Phone"
@@ -142,8 +120,7 @@
   {
    "fieldname": "booking_timings",
    "fieldtype": "Small Text",
-   "label": "Booking Timings",
-   "reqd": 1
+   "label": "Booking Timings"
   },
   {
    "fieldname": "room_type",
@@ -151,10 +128,6 @@
    "label": "Room Type",
    "options": "Room Type",
    "reqd": 1
-  },
-  {
-   "fieldname": "column_break_pg3qx",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "billing_details_section",
@@ -191,27 +164,32 @@
    "label": "QR Details"
   },
   {
+   "depends_on": "eval:doc.client_type == \"Property Customer\";",
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer",
-   "read_only": 1
+   "options": "Customer"
   },
   {
+   "depends_on": "eval:doc.client_type == \"Property Customer\";",
    "fieldname": "customer_lead_id",
-   "fieldtype": "Small Text",
-   "label": "Customer Lead ID",
-   "read_only": 1
+   "fieldtype": "Data",
+   "label": "Customer Lead ID"
   },
   {
-   "fieldname": "exit_time",
-   "fieldtype": "Data",
-   "label": "Exit Time"
+   "fieldname": "column_break_mocwb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_slots",
+   "fieldtype": "Table MultiSelect",
+   "label": "Time Slots",
+   "options": "Time Slots Link"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-08 17:53:06.935658",
+ "modified": "2024-02-22 10:56:32.132200",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Bookings",

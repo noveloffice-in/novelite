@@ -4,8 +4,9 @@ import PageContainer from '../../../components/container/PageContainer';
 import ChildCard from 'src/components/shared/ChildCard';
 import NovelTicketFilter from './NovelTicketFilter';
 import NovelTicketsList from './NovelTicketsList';
-import { useDispatch, useSelector } from 'react-redux';
-import { useFrappeDocTypeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
+import { useSelector } from 'react-redux';
+import { useFrappeDocTypeEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
+import io from 'socket.io-client';
 
 const BCrumb = [
     {
@@ -20,9 +21,8 @@ const BCrumb = [
 export default function NovelTickets() {
 
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
-    const fullName = useSelector((state) => state.novelprofileReducer.fullName);
-    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
     const userLocation = useSelector((state) => state.novelprofileReducer.location);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
 
     const [filterLocation, setFilterLocation] = useState(userLocation);
 
@@ -31,16 +31,74 @@ export default function NovelTickets() {
         if (location !== 'Property Location') {
             setFilterLocation(location);
         }
-    }, [userLocation]);
+    }, [userLocation, setFilterLocation]);
 
     if (filterLocation === null) {
         setFilterLocation("ALL");
     }
 
     //-> -------------------------------------------Checking Socket---------------------------------------------------------
-    useFrappeDocTypeEventListener('Room Bookings', (event)=>{
-        console.log("Event = "+ event);
+    useFrappeEventListener('comment_added', (event) => {
+        console.log("Event = " + event);
     })
+
+    useFrappeDocTypeEventListener('Comment', (d)=>{
+        console.log("Event D = ", d);
+    })
+
+    //? Where should we use useSWRSubscription
+
+    // socket.io("connect", ()=>{
+    //     console.log("Socket.io  is Connected");
+    // })
+
+    // useEffect(() => {
+    //     // Assuming your Frappe server is running on the same host but different port
+    //     const socket = io('http://localhost:9000');
+
+    //     socket.on('connect', () => {
+    //         console.log('Connected to Frappe WebSocket server');
+    //     });
+
+    //     // Listen for the todo_update event
+    //     socket.on('todo_update', (data) => {
+    //         console.log('Document Update:', data);
+    //         // Perform actions based on the update
+    //     });
+
+    //     // Cleanup on unmount
+    //     return () => {
+    //         socket.off('todo_update');
+    //         socket.disconnect();
+    //     };
+    // }, []);
+
+    // useDocumentUpdateListener();
+
+
+    // socket.on('message', (message) => {
+    //     console.log("Message from server is = ", message);
+    // })
+    //-> ----------------------------------------Checking Server side events----------------------------------------------------
+
+    // const [messages, setMessages] = useState([]);
+
+    // useEffect(() => {
+    //     const eventSource = new EventSource('http://10.80.4.54:8000/api/method/novelite.api.messages.stream');
+
+    //     eventSource.onmessage = (event) => {
+    //         console.log("Event = ", event);
+    //         const eventData = JSON.parse(event.data);
+    //         setMessages(eventData.message);
+    //     };
+
+    //     return () => {
+    //         eventSource.close();
+    //     };
+    // }, []);
+
+    // console.log("Messages = ", messages);
+
 
     //--------------------------------------------------------Getting total count-------------------------------------------//
     const { data } = useFrappeGetDocCount(
@@ -52,7 +110,7 @@ export default function NovelTickets() {
 
 
     //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
-    // Fetch the location of customers from leads
+    // Fetch location of customers from leads
     const getLeadsId = () => {
         const { data, error, isValidating, mutate } = useFrappeGetDoc(
             'Customer',
@@ -83,9 +141,6 @@ export default function NovelTickets() {
         }
     });
     confirmedLocations?.unshift({ shortName: "ALL", fullName: "ALL" });
-
-    // console.log("confirmedLocations = ", confirmedLocations);
-    // var confirmedLocations = ['NOM','NTP', 'NMS'];
 
     //-----------------------------------------------------------END---------------------------------------------------------//
 

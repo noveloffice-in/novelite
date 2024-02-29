@@ -2,6 +2,7 @@ import React from 'react';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import NovelDashCarousel from './NovelDashCarousel';
+import { useFrappeDocTypeEventListener, useFrappeEventListener } from 'frappe-react-sdk';
 
 export default function noveldashboard() {
 
@@ -15,7 +16,16 @@ export default function noveldashboard() {
     },
   ];
 
-  //--------------------------------------------------------For slider-----------------------------------------//
+  //--------------------------------------------------------Events-----------------------------------------------------//
+  useFrappeEventListener('comment_added', (event) => {
+    console.log("Event = " + event);
+  })
+
+  useFrappeDocTypeEventListener('Comment', (d) => {
+    console.log("Event D = ", d);
+  })
+
+  //? Where should we use useSWRSubscription
 
 
   return (
