@@ -17,7 +17,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappePostCall, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 import { setDocTypeId } from '../../../store/apps/bookings/BookingsSlice';
 
@@ -87,6 +87,7 @@ export default function PaymentSummary() {
     const [timeLeft, setTimeLeft] = useState(0);
     const [checkBox, setCheckBox] = useState(false);
     const { updateDoc, error } = useFrappeUpdateDoc();
+    const {call, result, error: psotError} = useFrappePostCall();
 
     //-----------------------------------------------------------BCrumb---------------------------------------------------------//
     const BCrumb = [

@@ -16,13 +16,13 @@ export default function TicketChatSender({ id, mutate }) {
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
     const { createDoc, isCompleted, } = useFrappeCreateDoc();
 
-    useEffect(()=>{
-        let checkMsg = setInterval(()=>{
-            mutate();
-        }, 2000);
+    // useEffect(()=>{
+        // let checkMsg = setInterval(()=>{
+        //     mutate();
+        // }, 2000);
 
-        return ()=> clearInterval(checkMsg);
-    },[])
+    //     return ()=> clearInterval(checkMsg);
+    // },[])
 
     const onEmojiClick = (_event, emojiObject) => {
         setChosenEmoji(emojiObject);
@@ -50,11 +50,11 @@ export default function TicketChatSender({ id, mutate }) {
             comment_by: fullName,
             content: msg
         }
-        console.log("Message = ", message);
+        // console.log("Message = ", message);
 
         createDoc('Comment', message)
             .then(() => {
-                console.log('Ticket created Successfully');
+                // console.log('Comment Added');
                 mutate();
             }).catch((err) => {
                 console.log("inside catch " + JSON.stringify(err.message));

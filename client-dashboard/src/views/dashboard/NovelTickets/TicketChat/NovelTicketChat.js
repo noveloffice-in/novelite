@@ -4,7 +4,7 @@ import { Divider, Box } from '@mui/material';
 import PageContainer from '../../../../components/container/PageContainer';
 import AppCard from 'src/components/shared/AppCard';
 import TicketChatContent from '../TicketChatContent';
-import { useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList } from 'frappe-react-sdk';
 import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
@@ -24,10 +24,10 @@ export default function NovelTicketChat() {
   //     });
   //   });
 
-    // return ()=>{
-    //   //Turning OFF
-    //   socket.off("connect");
-    // }
+  // return ()=>{
+  //   //Turning OFF
+  //   socket.off("connect");
+  // }
   // },[])
 
 
@@ -44,8 +44,20 @@ export default function NovelTicketChat() {
   });
   // console.log("DocInfo = ", data);
 
+  useFrappeDocTypeEventListener('Issue', (e) => {
+    console.log(e);
+  })
+
+  useFrappeDocumentEventListener('Issue', id, (d) => {
+    console.log("Event D = ", d);
+  })
+
+  useFrappeEventListener('comment_added', (event) => {
+    console.log("Event = " + event);
+  })
+
   return (
-    <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{marginTop:'5px'}}>
+    <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
       <AppCard>
         {/* ------------------------------------------- */}
         {/* Left part */}

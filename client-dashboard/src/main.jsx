@@ -20,7 +20,6 @@ if (import.meta.env.MODE === 'production') {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  //, Uncommment this when you want to use socket.io
   <FrappeProvider socketPort={import.meta.env.VITE_SOCKET_PORT ? import.meta.env.VITE_SOCKET_PORT : undefined}>
   {/* <FrappeProvider>  */}
     <Provider store={store}>

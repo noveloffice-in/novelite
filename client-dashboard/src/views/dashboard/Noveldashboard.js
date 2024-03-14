@@ -2,7 +2,7 @@ import React from 'react';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import NovelDashCarousel from './NovelDashCarousel';
-import { useFrappeDocTypeEventListener, useFrappeEventListener } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener } from 'frappe-react-sdk';
 
 export default function noveldashboard() {
 
@@ -17,16 +17,13 @@ export default function noveldashboard() {
   ];
 
   //--------------------------------------------------------Events-----------------------------------------------------//
-  useFrappeEventListener('comment_added', (event) => {
-    console.log("Event = " + event);
-  })
-
-  useFrappeDocTypeEventListener('Comment', (d) => {
+  useFrappeDocumentEventListener('Issue', "ISS-2024-00115", (d) => {
     console.log("Event D = ", d);
   })
 
-  //? Where should we use useSWRSubscription
-
+  useFrappeEventListener('comment_added', (event) => {
+    console.log("Event = " + event);
+  })
 
   return (
     <PageContainer title="Dashboard - Novel Office" description="this is Cards page">

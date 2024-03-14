@@ -129,7 +129,7 @@ doc_events = {
     # }
     "Comment": {
         "after_insert": "novelite.messages.on_comment"
-    }
+    },
 # "after_insert": "my_custom_app.my_custom_app.doctype.my_custom_doctype.my_custom_script.on_comment"
 }
 

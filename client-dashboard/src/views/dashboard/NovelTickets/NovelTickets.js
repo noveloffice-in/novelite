@@ -5,7 +5,7 @@ import ChildCard from 'src/components/shared/ChildCard';
 import NovelTicketFilter from './NovelTicketFilter';
 import NovelTicketsList from './NovelTicketsList';
 import { useSelector } from 'react-redux';
-import { useFrappeDocTypeEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
 import io from 'socket.io-client';
 
 const BCrumb = [
@@ -38,13 +38,9 @@ export default function NovelTickets() {
     }
 
     //-> -------------------------------------------Checking Socket---------------------------------------------------------
-    useFrappeEventListener('comment_added', (event) => {
-        console.log("Event = " + event);
-    })
+    
 
-    useFrappeDocTypeEventListener('Comment', (d)=>{
-        console.log("Event D = ", d);
-    })
+
 
     //? Where should we use useSWRSubscription
 
