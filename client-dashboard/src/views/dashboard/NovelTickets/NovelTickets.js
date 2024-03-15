@@ -142,7 +142,7 @@ export default function NovelTickets() {
 
     return (
         <PageContainer title="Tickets - Novel Office" description="this is Note page">
-            <Breadcrumb title="Tickets app" items={BCrumb} />
+            <Breadcrumb title="Tickets" items={BCrumb} />
             <ChildCard>
                 <NovelTicketFilter userEmail={userEmail} filterLocation={filterLocation} />
                 <NovelTicketsList userEmail={userEmail} totalPages={totalPages} confirmedLocations={confirmedLocations}

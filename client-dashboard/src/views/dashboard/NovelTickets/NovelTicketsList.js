@@ -29,12 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 //For Modal
-import Modal from '@mui/material/Modal';
-import { useFrappeCreateDoc, useFrappeGetDocList } from 'frappe-react-sdk';
-
-//Toastify 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useFrappeGetDocList } from 'frappe-react-sdk';
 
 //For Client Location
 import InputLabel from '@mui/material/InputLabel';
@@ -45,46 +40,17 @@ import Select from '@mui/material/Select';
 import Zoom from '@mui/material/Zoom';
 import { Link } from 'react-router-dom';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
+import RiseTicket from './RiseTicket';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: 'none',
-  boxShadow: 24,
-  p: 4,
-};
-const style1 = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: 'none',
-  boxShadow: 24,
-  p: 4,
-  maxWidth: 500
-};
 
 const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilterLocation, filterLocation }) => {
   const dispatch = useDispatch();
 
   //Dialouge component
   const [open1, setOpen1] = useState(false);
-  const [open, setOpen] = useState(false);
   const [toolTip, setToolTip] = useState(false);
   const [start, setStart] = useState(0);
-  const [tittle, setTittle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
-  const [ticketData, setTicketData] = useState({
-    subject: "",
-    description: "",
-    location: filterLocation,
-    creation_via: "Ticket"
-  });
+  const [ticketLocation, setTicketlocation] = useState(filterLocation);
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -98,8 +64,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     let changedLocation = event.target.value;
     setFilterLocation(changedLocation);
     dispatch(setLocation(changedLocation));
-    ticketData.location = changedLocation;
-    setTicketData({ ...ticketData });
+    setTicketlocation(changedLocation);
     console.log("Location = ", changedLocation);
     if (event.target.value !== 'Property Location') {
       localStorage.setItem('location', changedLocation);
@@ -124,7 +89,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     tickets = data;
   }
 
-  //------------------------------------------------------Modal, Dialog, Tooltip-----------------------------------------------//
+  //------------------------------------------------------Dialog, Tooltip-----------------------------------------------//
 
   //Dialog
   const handleClickOpen = () => {
@@ -134,16 +99,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const handleClose1 = () => {
     setOpen1(false);
   };
-
-  //Modal
-  const handleOpen = (tittle, description, status) => {
-    setOpen(true);
-    setTittle(tittle);
-    setDescription(description);
-    setStatus(status);
-  }
-
-  const handleClose = () => setOpen(false);
 
   //ToolTip
   const handleTooltipClose = () => {
@@ -198,39 +153,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         state.ticketReducer.ticketSearch,
       ),
     );
-  }
-
-  //----------------------------------------------------------Raise a Ticket-----------------------------------------------//
-  const { createDoc, isCompleted, } = useFrappeCreateDoc();
-  const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
-  const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
-
-  const handleTicketDataChange = (e) => {
-    const ticketTittle = document.querySelector('#standard-basic')?.value.trim();
-    const ticketDescription = document.querySelector('#outlined-multiline-static')?.value.trim();
-
-    if (ticketTittle !== "" && ticketDescription !== "") {
-      ticketData.subject = ticketTittle;
-      ticketData.description = ticketDescription;
-      setTicketData({ ...ticketData });
-    }
-  }
-
-  const riseTicket = () => {
-    if (ticketData.subject === "" || ticketData.description === "") {
-      notifyWarn("Please fill the details");
-    } else if (ticketData.location === 'ALL' || ticketData.location === '') {
-      notifyWarn("Please Select the Location");
-    } else {
-      const create = createDoc('Issue', ticketData).then(() => {
-        notifySuccess('Ticket created Successfully');
-        setOpen1(false);
-        mutate();
-      }).catch((err) => {
-        console.log("inside catch " + JSON.stringify(err.message));
-        notifyError(err.message);
-      })
-    }
   }
 
   //-----------------------------------------------------------END---------------------------------------------------------//
@@ -309,11 +231,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               <TableRow key={ticket.subject} hover>
                 <TableCell>
                   <Box>
-                    <Tooltip disableFocusListener disableTouchListener placement="right" TransitionComponent={Zoom} title="Click to view Ticket Details">
-                      <Typography variant="h6" fontWeight="500" wrap onClick={() => { handleOpen(ticket.subject, ticket.description, ticket.status) }} style={{ cursor: "pointer" }}>
-                        {ticket.subject}
-                      </Typography>
-                    </Tooltip>
+                    <Typography variant="h6" fontWeight="500" wrap>
+                      {ticket.subject}
+                    </Typography>
 
                     <Typography
                       color="textSecondary"
@@ -367,7 +287,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                     </Badge>
                   </TableCell>)
                   :
-                  (<TableCell component={Link} to={`/tickets_chat/${ticket.name}/${ticket.subject}`} >
+                  (<TableCell component={Link} to={`/tickets_chat/${ticket.name}/${ticket.subject}/${ticket.status}/${ticket.description}`} >
                     <Badge color="secondary" badgeContent={0}>
                       <Tooltip disableFocusListener disableTouchListener placement="right" TransitionComponent={Zoom} title="Click to view/comment">
                         <CommentOutlinedIcon />
@@ -385,46 +305,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         <Pagination count={totalPages} color="primary" onChange={pageChange} />
       </Box>
 
-      {/* ---------------------------------------Modal Start---------------------------------  */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box>
-            <Typography id="modal-modal-title" variant="h6" component="h2" style={{ textDecoration: 'underline' }}>
-              Ticket Name:
-            </Typography>
-            <Typography id="modal-modal-title">
-              {tittle}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography id="modal-modal-title" variant="h6" component="h2" style={{ textDecoration: 'underline', marginTop: '0.5rem' }}>
-              Ticket Description:
-            </Typography>
-            <Typography id="modal-modal-description" >
-              {description ? description : "No Description"}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography id="modal-modal-title" variant="h6" component="h2" style={{ textDecoration: 'underline', marginTop: '0.5rem' }}>
-              Ticket Status:
-            </Typography>
-            <Typography id="modal-modal-description">
-              {status}
-            </Typography>
-          </Box>
-          <DialogActions>
-            <Button onClick={handleClose}>Close</Button>
-          </DialogActions>
-        </Box>
-      </Modal>
-      {/* ---------------------------------------Modal Ends----------------------------------- */}
-
-
       {/* ---------------------------------------Dialog Start---------------------------------- */}
       <Dialog
         fullWidth
@@ -434,72 +314,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       >
         <DialogTitle>Raise a Ticket</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            {description}
-          </DialogContentText> */}
-          <Box
-            noValidate
-            component="form"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              m: 'auto',
-              width: '90%',
-            }}
-          >
-            <Box >
-              <TextField id="standard-basic" label="Ticket Title" variant="standard" style={{ width: '100%' }} onChange={(e) => { handleTicketDataChange(e) }} />
-            </Box>
-            <Box sx={{ mt: 3 }} >
-              <TextField
-                id="outlined-multiline-static"
-                label="Ticket Description"
-                multiline
-                rows={4}
-                style={{ width: '100%' }}
-                onChange={(e) => { handleTicketDataChange(e) }}
-              />
-            </Box>
-            <Tooltip disableFocusListener disableTouchListener placement="right-end" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
-              {confirmedLocations?.length >= 2 ?
-                (<Box>
-                  <FormControl fullWidth sx={{ mt: 3 }} >
-                    <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={filterLocation}
-                      label="Property Location"
-                      onChange={handleChange}
-                    >
-                      {confirmedLocations?.map((location) => {
-                        return (
-                          <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </FormControl>
-                </Box>) :
-                (<Typography variant='h4' sx={{ mt: 3 }}>This customer is not linked to any Location</Typography>)
-              }
-            </Tooltip>
-            <Button variant="contained" sx={{ mt: 3 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1}>
-              Submit
-            </Button>
-          </Box>
-
-          <ToastContainer
-            position="top-center"
-            autoClose={1000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
+          <RiseTicket confirmedLocations={confirmedLocations} ticketLocation={ticketLocation} handleChange={handleChange}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>

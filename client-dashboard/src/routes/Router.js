@@ -122,9 +122,11 @@ const SalesInvoice = Loadable(lazy(() => import('../views/dashboard/SalesInvoice
 const BookingSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookingSlot')));
 const PaymentSummary = Loadable(lazy(() => import('../views/dashboard/Booking/PaymentSummary')));
 const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout')));
-const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
+// const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
-const NovelTicketChat = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketChat/NovelTicketChat')));
+const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
+
+// const NovelTicketChat = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketChat/NovelTicketChat')));
 const Upcoming = Loadable(lazy(() => import('../views/dashboard/Upcoming/Upcoming')));
 const UpcomingParent = Loadable(lazy(() => import('../views/dashboard/Upcoming/UpcomingParent')));
 
@@ -148,7 +150,8 @@ const Router = [
       { path: '/payment_summary', exact: true, element: < Protected  Component={PaymentSummary} /> },
       { path: '/checkout', exact: true, element: < Protected  Component={Checkout}  /> },
       { path: '/tickets', exact: true, element: < Protected  Component={NovelTickets} /> },
-      { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
+      // { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
+      { path: '/tickets_chat/:id/:title/:status/:description', exact: true, element: <  Protected  Component={TicketDetails} /> },
       { path: '/invoice', exact: true, element: < Protected  Component={SalesInvoice} /> },
       
       // { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
