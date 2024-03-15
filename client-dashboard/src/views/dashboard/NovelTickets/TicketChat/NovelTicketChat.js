@@ -52,8 +52,8 @@ export default function NovelTicketChat() {
     console.log("Event D = ", d);
   })
 
-  useFrappeEventListener('comment_added', (event) => {
-    console.log("Event = " + event);
+  useFrappeEventListener('comment_added', (data) => {
+    console.log("Event = " + data);
   })
 
   return (

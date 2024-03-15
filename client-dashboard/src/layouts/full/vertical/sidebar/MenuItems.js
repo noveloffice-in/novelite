@@ -88,11 +88,9 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Bookings',
-    icon: IconBrandBooking ,
-    href: '/location',
-    // chip: 'Upcomming',
-    chipColor: 'secondary',
+    title: 'Tickets',
+    icon: IconTicket,
+    href: '/tickets',
   },
   {
     id: uniqueId(),
@@ -103,9 +101,19 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Tickets',
-    icon: IconTicket,
-    href: '/tickets',
+    title: 'Bookings',
+    icon: IconBrandBooking ,
+    href: '/location',
+    chip: 'Upcoming',
+    chipColor: 'secondary',
+  },
+  {
+    id: uniqueId(),
+    title: 'Gate Pass',
+    icon: IconChartDonut3 ,
+    href: '/gatepass',
+    chip: 'Upcoming',
+    chipColor: 'secondary',
   },
   // {
   //   navlabel: true,

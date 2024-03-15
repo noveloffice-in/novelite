@@ -125,6 +125,8 @@ const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout
 const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const NovelTicketChat = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketChat/NovelTicketChat')));
+const Upcoming = Loadable(lazy(() => import('../views/dashboard/Upcoming/Upcoming')));
+const UpcomingParent = Loadable(lazy(() => import('../views/dashboard/Upcoming/UpcomingParent')));
 
 
 const Router = [
@@ -137,7 +139,9 @@ const Router = [
 
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData  Component={Noveldashboard} /> },
-      { path: '/location', exact: true, element: < Protected  Component={Location} /> },
+      // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
+      { path: '/location', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
+      { path: '/gatepass', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
       { path: '/category', exact: true, element: < Protected  Component={Category} /> },
       { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
       { path: '/bookingslot', exact: true, element: < Protected  Component={BookingSlot} /> },

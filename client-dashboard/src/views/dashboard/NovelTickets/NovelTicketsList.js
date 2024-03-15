@@ -17,9 +17,9 @@ import {
   Badge,
   FormControl,
 } from '@mui/material';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
-import SpeakerNotesOffIcon from '@mui/icons-material/SpeakerNotesOff';
+import CommentsDisabledOutlinedIcon from '@mui/icons-material/CommentsDisabledOutlined';
 import { SearchTicket, getTickets } from '../../../store/apps/tickets/TicketSlice';
 
 //Dialouge
@@ -84,7 +84,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     description: "",
     location: filterLocation,
     creation_via: "Ticket"
-  }); 
+  });
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -238,7 +238,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   return (
     <Box mt={4}>
       {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
-      <Box display="flex" justifyContent={{xs:'center', md:'end', ls:'end'}} alignItems={'center'}>
+      <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
         {/* <Box>
         </Box> */}
         <Box sx={{ mb: 2 }} >
@@ -272,7 +272,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             <AddIcon />
           </Button>
         </Box>
-        <Box sx={{ ml: 'auto', width: {xs: "8rem", md:"12rem", ls:"12rem"} }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
+        <Box sx={{ ml: 'auto', width: { xs: "8rem", md: "12rem", ls: "12rem" } }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
           <TextField
             size="small"
             label="Search"
@@ -300,18 +300,21 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                 <Typography variant="h6">Date</Typography>
               </TableCell> */}
               <TableCell>
-                <Typography variant="h6">Chat</Typography>
+                <Typography variant="h6">Comment</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tickets && tickets.map((ticket) => (
               <TableRow key={ticket.subject} hover>
-                <TableCell onClick={() => { handleOpen(ticket.subject, ticket.description, ticket.status) }} style={{ cursor: "pointer" }}>
+                <TableCell>
                   <Box>
-                    <Typography variant="h6" fontWeight="500" wrap>
-                      {ticket.subject}
-                    </Typography>
+                    <Tooltip disableFocusListener disableTouchListener placement="right" TransitionComponent={Zoom} title="Click to view Ticket Details">
+                      <Typography variant="h6" fontWeight="500" wrap onClick={() => { handleOpen(ticket.subject, ticket.description, ticket.status) }} style={{ cursor: "pointer" }}>
+                        {ticket.subject}
+                      </Typography>
+                    </Tooltip>
+
                     <Typography
                       color="textSecondary"
                       noWrap
@@ -358,13 +361,17 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                 {ticket.status === 'Closed' ?
                   (<TableCell >
                     <Badge color="secondary" badgeContent={0}>
-                      <SpeakerNotesOffIcon />
+                      <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Comment is disabled">
+                        <CommentsDisabledOutlinedIcon />
+                      </Tooltip>
                     </Badge>
                   </TableCell>)
                   :
                   (<TableCell component={Link} to={`/tickets_chat/${ticket.name}/${ticket.subject}`} >
                     <Badge color="secondary" badgeContent={0}>
-                      <ChatBubbleOutlineIcon />
+                      <Tooltip disableFocusListener disableTouchListener placement="right" TransitionComponent={Zoom} title="Click to view/comment">
+                        <CommentOutlinedIcon />
+                      </Tooltip>
                     </Badge>
                   </TableCell>)
                 }

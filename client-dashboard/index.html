@@ -9,6 +9,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Enable this for production
+      // window.csrf_token = '{{ frappe.session.csrf_token }}';
+
+      // if (!window.frappe) window.frappe = {};
+  
+      // frappe.boot = JSON.parse({{ boot }});
+  
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

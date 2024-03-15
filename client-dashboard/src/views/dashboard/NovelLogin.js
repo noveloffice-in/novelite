@@ -88,6 +88,9 @@ export default function NovelLogin() {
                 dispatch(setUser(response.full_name));
                 console.log("Login User Name = ", response.full_name);
                 dispatch(setUserEmail(userEmail));
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ email: userEmail }));
+                }
 
                 console.log("inside then " + JSON.stringify(response));
 
