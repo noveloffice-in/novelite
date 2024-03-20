@@ -38,7 +38,7 @@ export default function NovelTickets() {
     }
 
     //-> -------------------------------------------Checking Socket---------------------------------------------------------
-    
+
 
 
 
@@ -120,19 +120,23 @@ export default function NovelTickets() {
     confirmedLocations = confirmedLocations?.map(location => {
         switch (location) {
             case 'NTP':
-                return { shortName: location, fullName: 'NTP-Kudlu Gate' };
+                return { shortName: location, fullName: 'Novel Tech Park - Kudlu Gate' };
             case 'NOM':
-                return { shortName: location, fullName: 'NOM-Marathahalli' };
+                return { shortName: location, fullName: 'Novel Office Marathahalli' };
             case 'NOC':
-                return { shortName: location, fullName: 'NOC-MG Road' };
+                return { shortName: location, fullName: 'Novel Office Central - MG Road' };
             case 'NOQ':
-                return { shortName: location, fullName: 'NOQ-Brigade Road' };
+                return { shortName: location, fullName: 'Novel Office Queens- Queens Road' };
             case 'NOW':
-                return { shortName: location, fullName: 'NOW-Whitefield' };
+                return { shortName: location, fullName: 'Novel Office WorkHub- Whitefield' };
             case 'NBP':
-                return { shortName: location, fullName: 'NBP-Adugodi' };
+                return { shortName: location, fullName: 'Novel Business Park - Adugodi' };
             case 'NOB':
-                return { shortName: location, fullName: 'NBP-ITPL' };
+                return { shortName: location, fullName: 'Novel Office Brigade' };
+            case 'BTP1F':
+                return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
+            case 'BTP3F':
+                return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
             default: return { shortName: location, fullName: location };
         }
     });

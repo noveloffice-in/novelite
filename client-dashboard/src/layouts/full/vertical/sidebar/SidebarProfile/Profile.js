@@ -6,6 +6,7 @@ import { IconPower } from '@tabler/icons';
 import {Link, useNavigate} from "react-router-dom";
 import { useFrappeAuth } from 'frappe-react-sdk';
 import { setUser } from '../../../../../store/apps/userProfile/NovelProfileSlice';
+import Cookies from 'js-cookie';
 
 export const Profile = () => {
   const customizer = useSelector((state) => state.customizer);
@@ -32,6 +33,7 @@ export const Profile = () => {
     logout();
     dispatch(setUser(undefined));
     localStorage.clear();
+    Cookies.remove(getUserCookie);
     setTimeout(() => {
       navigate("/Login");
     }, 500);

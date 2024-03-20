@@ -211,7 +211,7 @@ def getAllData():
         
     return converted_data
 
-
+# This is for adding data to child table 
 # @frappe.whitelist(allow_guest=True)
 # def addDataToDoc(data):
 #     # for data in datas:
@@ -230,7 +230,7 @@ def getAllData():
 #     item_info.insert()
     
 #     # Split booking_timings string into individual timings
-#     timings_list = data['booking_timings'].split(',')
+#     timings_list = data['time_slots'].split(',')
     
 #     # Add each timing to the booked_timings table
 #     for timing_str in timings_list:
@@ -250,6 +250,7 @@ def getAllData():
 
 # @frappe.whitelist(methods=['POST'])
 
+# This is for normal fields not for child table 
 @frappe.whitelist(allow_guest=True)
 def addDataToDoc():
     # Get the data from the HTTP request
@@ -260,21 +261,20 @@ def addDataToDoc():
 
     # Now you can continue with your existing logic to process the data
     item_info = frappe.new_doc("Room Bookings")
+    item_info.room = data.get('room')
+    item_info.price = data.get('price')
+    item_info.customer = data.get('customer')
+    item_info.location = data.get('location')
+    item_info.room_type = data.get('room_type')
+    item_info.client_type = data.get('client_type')
     item_info.booking_date = data.get('booking_date')
     item_info.booking_status = data.get('booking_status')
-    item_info.client_type = data.get('client_type')
-    item_info.customer = data.get('customer')
     item_info.customer_lead_id = data.get('customer_lead_id')
-    item_info.location = data.get('location')
-    item_info.price = data.get('price')
-    item_info.room = data.get('room')
-    item_info.room_type = data.get('room_type')
-    item_info.booking_timings = data.get('booking_timings')
-
+    # item_info.booking_timings = data.get('booking_timings')
     # Save the item_info before adding booked_timings
     item_info.insert()
 
-    # Split booking_timings string into individual timings
+    # # Split booking_timings string into individual timings
     timings_list = data.get('booking_timings').split(',')
 
     # # Add each timing to the booked_timings table

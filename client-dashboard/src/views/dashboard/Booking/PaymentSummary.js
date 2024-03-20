@@ -17,7 +17,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappePostCall, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetCall, useFrappeGetDocList, useFrappePostCall, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 import { setDocTypeId } from '../../../store/apps/bookings/BookingsSlice';
 
@@ -87,7 +87,7 @@ export default function PaymentSummary() {
     const [timeLeft, setTimeLeft] = useState(0);
     const [checkBox, setCheckBox] = useState(false);
     const { updateDoc, error } = useFrappeUpdateDoc();
-    const {call, result, error: psotError} = useFrappePostCall();
+    const { call, result, error: psotError } = useFrappePostCall();
 
     //-----------------------------------------------------------BCrumb---------------------------------------------------------//
     const BCrumb = [
@@ -117,20 +117,32 @@ export default function PaymentSummary() {
         },
     ];
     //-----------------------------------------------------------Getting Booking Data---------------------------------------------------------//
-    const { data: bookingData } = useFrappeGetDocList('Room Bookings', {
-        fields: ['location', 'booking_timings', 'booking_date', 'name'],
-        filters: [['booking_date', '=', date], ['room', '=', roomName]],
-        limit_start: 0,
-        limit: 2000,
-    });
-
-    const handleTodoUpdate = () => {
-        console.log('ToDo updated:');
-    };
-
-    useFrappeEventListener('todo_update', handleTodoUpdate);
-
+    /** 
+    * ,This is from API which is newly created, Data is fetched from child table
+    * @param slotsNew is all the data fetched
+    * */
+    const { data: slotsNew, isLoading } = useFrappeGetCall('/novelite.api.api.getAllData');
     useEffect(() => {
+        let bookingData = undefined;
+
+        if (slotsNew) {
+            bookingData = Object.values(slotsNew.message.reduce((acc, { name, room, from_time, to_time, booking_date }) => {
+                // If the name already exists in accumulator, append the time range to booking_timings
+                if (acc[name]) {
+                    acc[name].booking_timings += `,${from_time} - ${to_time}`;
+                } else {
+                    // Otherwise, create a new entry in the accumulator
+                    acc[name] = {
+                        name,
+                        room,
+                        booking_timings: `${from_time} - ${to_time}`,
+                        booking_date
+                    };
+                }
+                return acc;
+            }, {}));
+        }
+
         // Function to check if two sets are equal
         function areSetsEqual(set1, set2) {
             if (set1.size !== set2.size) return false;
@@ -189,7 +201,7 @@ export default function PaymentSummary() {
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
-    }, [bookingData, selectedSlots])
+    }, [slotsNew, selectedSlots])
 
     // Format timeLeft into minutes and seconds
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));

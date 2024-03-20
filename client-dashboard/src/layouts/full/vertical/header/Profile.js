@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFrappeAuth } from 'frappe-react-sdk';
 import CustomToggle from '../../../../views/dashboard/CustomToggle';
 import { setUser } from '../../../../store/apps/userProfile/NovelProfileSlice';
+import Cookies from 'js-cookie';
 
 const Profile = () => {
 
@@ -47,6 +48,7 @@ const Profile = () => {
   const handleLogout = () => {
     logout();
     dispatch(setUser(undefined));
+    Cookies.remove(getUserCookie);
     localStorage.clear();
     setTimeout(() => {
       navigate("/Login");

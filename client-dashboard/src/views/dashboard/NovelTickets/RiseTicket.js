@@ -1,7 +1,7 @@
-import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogContentText } from '@mui/material'
+import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogContentText, DialogTitle } from '@mui/material'
 import { Box } from '@mui/system'
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,16 +26,17 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
         location: ticketLocation,
         issue: "",
         issueType: "",
-        userName: "",
+        name: "",
         contactNumber: "",
         email: "",
+        alternateEmail: "",
         creation_via: "Ticket"
     });
 
     const issueOptions = {
-        "IT": ["Hardware", "Software", "Network"],
-        "Parking": ["Availability", "Access", "Security"],
-        "Security and Access": ["Keycard Issue", "Surveillance", "Visitor Access"],
+        "IT": ["Hardware", "Software", "Network", "Other"],
+        "Parking": ["Availability", "Access", "Security", "Other"],
+        "Security and Access": ["Keycard Issue", "Surveillance", "Visitor Access", "Other"],
     };
 
     const [issueName, setIssueName] = useState([
@@ -55,41 +56,41 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
     const [issueTypeDropdown, setIssueTypeDropdown] = useState(issueOptions[issueDropdown] ? issueOptions[issueDropdown][0] : "");
     const [issueTypeOptions, setIssueTypeOptions] = useState(issueOptions[issueDropdown] || []);
 
+    useEffect(() => {
+        if (issueDropdown !== "Other" && issueTypeDropdown !== "Other") {
+            setTicketData(prevState => ({
+                ...prevState,
+                subject: `${issueDropdown} - ${issueTypeDropdown}`
+            }));
+        }
+    }, [issueDropdown, issueTypeDropdown]);
+
     //----------------------------------------------------------Issue and Issue Type Dropdown change-----------------------------------------------//
     const handleIssueDropdownChange = (e) => {
         const selectedIssue = e.target.value;
         setIssueDropdown(selectedIssue);
-        if (selectedIssue !== "Other") {
-            const newIssueTypeOptions = issueOptions[selectedIssue];
-            setIssueTypeOptions(newIssueTypeOptions);
-            setIssueTypeDropdown(newIssueTypeOptions[0]);
-            // Update ticketData for issue and issueType
-            setTicketData(prevState => ({
-                ...prevState,
-                issue: selectedIssue,
-                issueType: newIssueTypeOptions[0]
-            }));
-        } else {
-            setIssueTypeOptions([]);
-            setIssueTypeDropdown("");
-            // Update ticketData for issue and clear issueType
-            setTicketData(prevState => ({
-                ...prevState,
-                issue: selectedIssue,
-                issueType: ""
-            }));
-        }
+        const newIssueTypeOptions = issueOptions[selectedIssue] || ["Other"];
+        setIssueTypeOptions(newIssueTypeOptions);
+        setIssueTypeDropdown(newIssueTypeOptions[0]);
+        updateTicketData("issue", selectedIssue);
+        updateTicketData("issueType", newIssueTypeOptions[0]);
     };
 
     const handleIssueTypeDropdownChange = (e) => {
-        setIssueTypeDropdown(e.target.value);
+        const selectedIssueType = e.target.value;
+        setIssueTypeDropdown(selectedIssueType);
+        updateTicketData("issueType", selectedIssueType);
     };
-    //----------------------------------------------------------Contact-----------------------------------------------//
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        updateTicketData(name, value);
+    };
+
+    const updateTicketData = (field, value) => {
         setTicketData(prevState => ({
             ...prevState,
-            [name]: value
+            [field]: value
         }));
     };
 
@@ -107,6 +108,11 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
     };
 
     const riseTicket = () => {
+        const updatedTicketData = {
+            ...ticketData,
+            issueType: issueTypeDropdown,
+        };
+        console.log(updatedTicketData);
         if (ticketData.subject === "" || ticketData.description === "") {
             notifyWarn("Please fill the details");
         } else if (ticketData.location === 'ALL' || ticketData.location === '') {
@@ -140,24 +146,15 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                     flexDirection: 'column',
                     m: 'auto',
                     width: '90%',
-                }}
-            >
-                <TextField
-                    id="standard-basic"
-                    label="Ticket Title"
-                    variant="standard"
-                    style={{ width: '100%' }}
-                    name="subject"
-                    value={ticketData.subject} 
-                    onChange={handleTicketDataChange}
-                />
+                }}>
 
-                <Tooltip disableFocusListener disableTouchListener placement="right-end" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
+                <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
                     {confirmedLocations?.length >= 2 ?
                         (<Box>
                             <FormControl fullWidth sx={{ mt: 2 }} >
                                 <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
                                 <Select
+                                    disabled = {confirmedLocations?.length === 2}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={ticketLocation}
@@ -176,7 +173,6 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                     }
                 </Tooltip>
 
-
                 <FormControl fullWidth sx={{ mt: 2 }}>
                     <InputLabel>Issue</InputLabel>
                     <Select value={issueDropdown} label="Issue" onChange={handleIssueDropdownChange}>
@@ -187,21 +183,31 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                 </FormControl>
                 {issueDropdown !== "Other" && (
                     <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel>Issue Type</InputLabel>
-                    <Select
-                        value={issueTypeDropdown}
-                        label="Issue Type"
-                        onChange={handleIssueTypeDropdownChange}
-                    >
-                        {issueTypeOptions.map(issueType => (
-                            <MenuItem key={issueType} value={issueType}>{issueType}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                        <InputLabel>Issue Type</InputLabel>
+                        <Select
+                            value={issueTypeDropdown}
+                            label="Issue Type"
+                            onChange={handleIssueTypeDropdownChange}
+                        >
+                            {issueTypeOptions.map(issueType => (
+                                <MenuItem key={issueType} value={issueType}>{issueType}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 )}
 
-                <Box sx={{ mt: 2 }} >
+                {issueTypeDropdown === "Other" ? (
+                    <TextField
+                        label="Ticket Title"
+                        variant="standard"
+                        sx={{ width: '100%', mt: 2, ml:1 }}
+                        name="subject"
+                        value={ticketData.subject}
+                        onChange={handleInputChange}
+                    />
+                ) : null}
 
+                <Box sx={{ mt: 2 }} >
                     <TextField
                         id="outlined-multiline-static"
                         label="Ticket Description"
@@ -209,18 +215,23 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                         rows={2}
                         style={{ width: '100%' }}
                         name="description"
-                        value={ticketData.description} 
+                        value={ticketData.description}
                         onChange={handleTicketDataChange}
                     />
                 </Box>
 
-                <DialogContentText sx={{ mt: 2 }}>
-                    Contact Details
-                </DialogContentText>
+                <DialogTitle sx={{ ml: "-2.2em", mb:"-1rem" }}>Contact Details</DialogTitle>
 
-                <TextField label="User Name" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="userName" onChange={handleInputChange} />
-                <TextField label="Contact Number" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />
-                <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
+                <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
+                    <Box>
+                        <TextField label="Name" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="name" onChange={handleInputChange} />
+                        <TextField label="Contact Number" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />
+                    </Box>
+                    <Box>
+                        <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
+                        <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
+                    </Box>
+                </Box>
 
                 <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1}>
                     Submit

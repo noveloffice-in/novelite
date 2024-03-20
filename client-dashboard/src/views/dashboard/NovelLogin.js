@@ -239,7 +239,7 @@ export default function NovelLogin() {
                                             <Stack>
                                                 <Box>
                                                     <CustomFormLabel htmlFor="userEmail">Email</CustomFormLabel>
-                                                    <CustomTextField id="userEmail" variant="outlined" autoComplete="userEmail" placeholder="sample@email.com" fullWidth onChange={handleLoginChange} />
+                                                    <CustomTextField id="userEmail" variant="outlined" autoComplete="userEmail" placeholder="example@gmail.com" fullWidth onChange={handleLoginChange} />
                                                 </Box>
                                                 <Box>
                                                     <CustomFormLabel htmlFor="password">Password</CustomFormLabel>

@@ -10,6 +10,7 @@ import './utils/i18n';
 import { FrappeProvider } from "frappe-react-sdk";
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import './index.css'
 
 let persistor = persistStore(store);
 

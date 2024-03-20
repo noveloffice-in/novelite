@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -51,6 +51,14 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [toolTip, setToolTip] = useState(false);
   const [start, setStart] = useState(0);
   const [ticketLocation, setTicketlocation] = useState(filterLocation);
+
+  useEffect(() => {
+    if (confirmedLocations?.length == 2) {
+      setFilterLocation(confirmedLocations[1].shortName);
+      setTicketlocation(confirmedLocations[1].shortName);
+      console.log("Locations = ", confirmedLocations[1]);
+    }
+  }, [])
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -165,22 +173,23 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         </Box> */}
         <Box sx={{ mb: 2 }} >
           {confirmedLocations?.length >= 2 ?
-            (<FormControl sx={{ m: 1, minWidth: 170 }}>
-              <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
-              <Select
-                labelId="demo-simple-select-autowidth-label"
-                id="demo-simple-select-autowidth"
-                value={filterLocation}
-                label="Property Location"
-                onChange={handleChange}
-              >
-                {confirmedLocations?.map((location, index) => {
-                  return (
-                    <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>) :
+            confirmedLocations?.length === 2 ?
+              "" : (<FormControl sx={{ m: 1, minWidth: 170 }}>
+                <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-label"
+                  id="demo-simple-select-autowidth"
+                  value={filterLocation}
+                  label="Property Location"
+                  onChange={handleChange}
+                >
+                  {confirmedLocations?.map((location, index) => {
+                    return (
+                      <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>) :
             (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
           }
         </Box>
@@ -210,11 +219,11 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="h6">Ticket</Typography>
+                <Typography variant="h6">Ticket ID</Typography>
               </TableCell>
-              {/* <TableCell>
-                <Typography variant="h6">Assigned To</Typography>
-              </TableCell> */}
+              <TableCell>
+                <Typography variant="h6">Ticket Name</Typography>
+              </TableCell>
               <TableCell>
                 <Typography variant="h6">Status</Typography>
               </TableCell>
@@ -222,20 +231,21 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                 <Typography variant="h6">Date</Typography>
               </TableCell> */}
               <TableCell>
-                <Typography variant="h6">Comment</Typography>
+                <Typography variant="h6">Updates</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tickets && tickets.map((ticket) => (
-              <TableRow key={ticket.subject} hover>
-                <TableCell>
-                  <Box>
-                    <Typography variant="h6" fontWeight="500" wrap>
-                      {ticket.subject}
-                    </Typography>
+              <Tooltip disableFocusListener disableTouchListener placement="top-end" TransitionComponent={Zoom} title="Click to view updates">
+                <TableRow key={ticket.subject} hover component={Link} to={`/ticket_details/${ticket.name}/${ticket.subject}/${ticket.status}/${ticket.description}`}>
+                  <TableCell>
+                    <Box>
+                      <Typography variant="h6" fontWeight="500" wrap>
+                        {ticket.name}
+                      </Typography>
 
-                    <Typography
+                      {/* <Typography
                       color="textSecondary"
                       noWrap
                       sx={{ maxWidth: '250px' }}
@@ -243,59 +253,50 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                       fontWeight="400"
                     >
                       {ticket.ticketDescription}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                {/* <TableCell>
-                  <Stack direction="row" gap="10px" alignItems="center">
-                    <Avatar
-                      src={ticket.thumb}
-                      alt={ticket.thumb}
-                      width="35"
+                    </Typography> */}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box>
+                      <Typography variant="h6" fontWeight="500" wrap >
+                        {ticket.subject}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
                       sx={{
-                        borderRadius: '100%',
+                        backgroundColor:
+                          ticket.status === 'Open'
+                            ? (theme) => theme.palette.success.light
+                            : ticket.status === 'Closed'
+                              ? (theme) => theme.palette.error.light
+                              : ticket.status === 'On Hold'
+                                ? (theme) => theme.palette.warning.light
+                                : ticket.status === 'Pending',
                       }}
+                      size="small"
+                      label={ticket.status === 'Open' ? 'New' : `${ticket.status}`}
                     />
-                    <Typography variant="h6">{ticket.AgentName}</Typography>
-                  </Stack>
-                </TableCell> */}
-                <TableCell>
-                  <Chip
-                    sx={{
-                      backgroundColor:
-                        ticket.status === 'Open'
-                          ? (theme) => theme.palette.success.light
-                          : ticket.status === 'Closed'
-                            ? (theme) => theme.palette.error.light
-                            : ticket.status === 'On Hold'
-                              ? (theme) => theme.palette.warning.light
-                              : ticket.status === 'Pending',
-                    }}
-                    size="small"
-                    label={ticket.status === 'Open' ? 'New' : `${ticket.status}`}
-                  />
-                </TableCell>
-                {/* <TableCell>
+                  </TableCell>
+                  {/* <TableCell>
                   <Typography>{ticket.creation.split(" ")[0]}</Typography>
                 </TableCell> */}
-                {ticket.status === 'Closed' ?
-                  (<TableCell >
-                    <Badge color="secondary" badgeContent={0}>
-                      <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Comment is disabled">
+                  {ticket.status === 'Closed' ?
+                    (<TableCell >
+                      <Badge color="secondary" badgeContent={0}>
                         <CommentsDisabledOutlinedIcon />
-                      </Tooltip>
-                    </Badge>
-                  </TableCell>)
-                  :
-                  (<TableCell component={Link} to={`/tickets_chat/${ticket.name}/${ticket.subject}/${ticket.status}/${ticket.description}`} >
-                    <Badge color="secondary" badgeContent={0}>
-                      <Tooltip disableFocusListener disableTouchListener placement="right" TransitionComponent={Zoom} title="Click to view/comment">
+                      </Badge>
+                    </TableCell>)
+                    :
+                    (<TableCell >
+                      <Badge color="secondary" badgeContent={0}>
                         <CommentOutlinedIcon />
-                      </Tooltip>
-                    </Badge>
-                  </TableCell>)
-                }
-              </TableRow>
+                      </Badge>
+                    </TableCell>)
+                  }
+                </TableRow>
+              </Tooltip>
             ))}
           </TableBody>
         </Table>
@@ -314,7 +315,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       >
         <DialogTitle>Raise a Ticket</DialogTitle>
         <DialogContent>
-          <RiseTicket confirmedLocations={confirmedLocations} ticketLocation={ticketLocation} handleChange={handleChange}/>
+          <RiseTicket confirmedLocations={confirmedLocations} ticketLocation={ticketLocation} handleChange={handleChange} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>

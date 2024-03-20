@@ -6,14 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Novel Office</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/novelite/client-dashboard/assets/index-04377d97.js"></script>
+    <script type="module" crossorigin src="/assets/novelite/client-dashboard/assets/index-3566f683.js"></script>
     <link rel="stylesheet" href="/assets/novelite/client-dashboard/assets/index-d3b31bbb.css">
   </head>
   <body>
     <div id="root"></div>
-    <script>window.csrf_token = `{{ frappe.session.csrf_token}}`;
-      if(!window.frappe) window.frappe = {};
-      frappe.boot = JSON.parse({{boot}});
+    <script>
+      // Enable this for production
+      // window.csrf_token = '{{ frappe.session.csrf_token }}';
+
+      // if (!window.frappe) window.frappe = {};
+  
+      // frappe.boot = JSON.parse({{ boot }});
+  
     </script>
     
   </body>

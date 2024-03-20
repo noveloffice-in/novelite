@@ -122,7 +122,7 @@ const SalesInvoice = Loadable(lazy(() => import('../views/dashboard/SalesInvoice
 const BookingSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookingSlot')));
 const PaymentSummary = Loadable(lazy(() => import('../views/dashboard/Booking/PaymentSummary')));
 const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout')));
-// const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
+const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
 
@@ -141,8 +141,8 @@ const Router = [
 
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData  Component={Noveldashboard} /> },
-      // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
-      { path: '/location', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
+      { path: '/location', exact: true, element: < Protected  Component={Location} /> },
+      // { path: '/location', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
       { path: '/gatepass', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
       { path: '/category', exact: true, element: < Protected  Component={Category} /> },
       { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
@@ -151,7 +151,7 @@ const Router = [
       { path: '/checkout', exact: true, element: < Protected  Component={Checkout}  /> },
       { path: '/tickets', exact: true, element: < Protected  Component={NovelTickets} /> },
       // { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
-      { path: '/tickets_chat/:id/:title/:status/:description', exact: true, element: <  Protected  Component={TicketDetails} /> },
+      { path: '/ticket_details/:id/:title/:status/:description', exact: true, element: <  Protected  Component={TicketDetails} /> },
       { path: '/invoice', exact: true, element: < Protected  Component={SalesInvoice} /> },
       
       // { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },

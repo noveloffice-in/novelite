@@ -96,7 +96,7 @@ TablePaginationActions.propTypes = {
 export default function Table1({ data }) {
 
     const [page, setPage] = useState(0);
-    const [statusFilter, setStatusFilter] = useState("Pending");
+    const [statusFilter, setStatusFilter] = useState("All");
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [filterData, setFilterData] = useState(data);
 

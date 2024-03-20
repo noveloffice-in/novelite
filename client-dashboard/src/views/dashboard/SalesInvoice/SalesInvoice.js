@@ -39,7 +39,7 @@ const SalesInvoice = () => {
       <Breadcrumb title="Sales Invoice" items={BCrumb} />
 
       {/* Table */}
-      <Table data={data} />
+      {data && <Table data={data} />}
 
     </PageContainer>
   );

@@ -231,7 +231,7 @@ export default function BookingSlot() {
             client_type: accounType,
             booking_date: formattedDate,
             customer_lead_id: leadsString,
-            time_slots: selectedSlotsString,
+            booking_timings: selectedSlotsString,
             booking_status: 'Blocked Temporarily',
         }
 
@@ -312,7 +312,7 @@ export default function BookingSlot() {
                 </Select>
             </FormControl>
             {/* //--------------------------------------------------------Slots------------------------------------------------------// */}
-
+                    
             {!isLoading && <Slots
                 slotsData={result}
                 intervals={intervals}

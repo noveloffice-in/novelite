@@ -1,47 +1,106 @@
 import React from 'react';
 import PageContainer from '../../components/container/PageContainer';
-import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
-import NovelDashCarousel from './NovelDashCarousel';
-import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener } from 'frappe-react-sdk';
+import NovelDashCarousel from './DashboardElements/NovelDashCarousel';
+import WelcomeCardNovel from './DashboardElements/WelcomeCardNovel';
+import { useSelector } from 'react-redux';
+import Queries from './DashboardElements/Queries';
+import ImagesSlider from './DashboardElements/ImagesSlider';
+import { Grid, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import NovelEvents from './DashboardElements/NovelEvents';
+
+//Images
+import ntp from '../../assets/images/dashboard/ntp.png'
+import nob from '../../assets/images/dashboard/nob.png'
+import nom from '../../assets/images/dashboard/nom.png'
+import img from '../../assets/images/dashboard/img.png'
+import img2 from '../../assets/images/dashboard/img2.png'
+
+const listings = [
+  {
+    image: nom,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: ntp,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: nob,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: ntp,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: ntp,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: ntp,
+    buildingName: "NOM",
+    location: "Marathalli"
+  },
+  {
+    image: ntp,
+    buildingName: "NOM",
+    location: "Marathalli"
+  }
+]
+
+const event = [
+  {
+    image: img,
+    eventName: "cricket"
+  },
+  {
+    image: img2,
+    eventName: "cricket"
+  }
+]
 
 export default function noveldashboard() {
 
-  const BCrumb = [
-    {
-      to: '/dashboard',
-      title: 'Home',
-    },
-    {
-      title: 'Dashboard',
-    },
-  ];
-
-  //--------------------------------------------------------Events-----------------------------------------------------//
-  useFrappeDocumentEventListener('Issue', "ISS-2024-00115", (d) => {
-    console.log("Event D = ", d);
-  })
-
-  useFrappeEventListener('comment_added', (event) => {
-    console.log("Event = " + event);
-  })
+  const userName = useSelector((state) => state.novelprofileReducer.fullName)
 
   return (
     <PageContainer title="Dashboard - Novel Office" description="this is Cards page">
-      <Breadcrumb title="Welcome to Novel Office" items={BCrumb} />
-      <NovelDashCarousel />
+      <WelcomeCardNovel title={userName} />
+      <Queries />
+      
+      <Typography variant='h3'mt={3} ml={2} >Featured listings</Typography>
+      <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
+        <Grid container spacing={2} margin="auto" gap={0}>
+          {
+            listings.map((listing, index) => {
+              return (
+                <Grid item xs={12} sm={4} lg={3}>
+                  <ImagesSlider image={listing.image} name={listing.buildingName} />
+                </Grid>
+              )
+            })
+          }
+        </Grid>
+      </Box>
 
-      {/* <Stack overflow="hidden" direction={'row'}>
-        <Box>
-          <SliderBox>
-            <img src={sliderImg} alt="slide" height={'500px'} />
-          </SliderBox>
-        </Box>
-        <Box>
-          <SliderBox>
-            <img src={sliderImg} alt="slide"  height={'500px'}/>
-          </SliderBox>
-        </Box>
-      </Stack> */}
+      <Typography variant='h3'mt={3} ml={2} >Upcoming Events</Typography>
+      <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
+        <Grid container spacing={2} margin="auto">
+          {event.map((event, index) => {
+            return (
+              <Grid item xs={12} sm={6} lg={6}>
+                <NovelEvents image={event.image} name={event.eventName} />
+              </Grid>
+            )
+          })}
+        </Grid>
+      </Box>
     </PageContainer>
   )
 }
