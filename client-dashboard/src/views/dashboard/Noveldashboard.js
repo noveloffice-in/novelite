@@ -86,7 +86,7 @@ export default function noveldashboard() {
           {
             listings.map((listing, index) => {
               return (
-                <Grid item xs={12} sm={4} lg={3}>
+                <Grid item xs={12} sm={4} lg={3} key={listing.buildingName}>
                   <ImagesSlider key={listing.location} image={listing.image} name={listing.buildingName} location={listing.location} />
                 </Grid>
               )
@@ -100,7 +100,7 @@ export default function noveldashboard() {
         <Grid container spacing={2}>
           {event.map((event, index) => {
             return (
-              <Grid item xs={12} sm={6} lg={6}>
+              <Grid item xs={12} sm={6} lg={6} key={event.eventName}>
                 <NovelEvents key={event.eventName} image={event.image} name={event.eventName} date={event.date} />
               </Grid>
             )
