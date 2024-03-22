@@ -10,8 +10,9 @@ import {
     styled,
     Skeleton,
 } from '@mui/material';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import { IconMapPin } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
+import './ImageSlider.css'
 
 const CoverImgStyle = styled(CardContent)({
     position: 'absolute',
@@ -30,7 +31,7 @@ const CoverBox = styled(Box)({
     position: 'absolute',
 });
 
-export default function ImagesSlider({image, name}) {
+export default function ImagesSlider({image, name, location}) {
     const CoverImgBg = styled(BlankCard)({
         p: 0,
         height: '220px',
@@ -52,57 +53,42 @@ export default function ImagesSlider({image, name}) {
 
     return (
         <>
-            <Grid
-                item
-                xs={12}
-                md={12}
-                sm={12}
-                display="flex"
-                alignItems="center"
-                mt={2}
-            >
+            <Box>
                 {isLoading ? (
                     <>
                         <Skeleton
                             variant="square"
                             animation="wave"
                             borderRadius="1rem"
-                            width={300}
-                            height={240}
+                            minWidth= 'auto'
+                            height={220}
                             sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
                         ></Skeleton>
                     </>
                 ) : (
-                    <CoverImgBg className="hoverCard">
-                        <Typography>
-                            <CoverBox
-                                sx={{ backgroundColor: (theme) => alpha(theme.palette.grey[900], 0.6), height: '6rem', top: '140px' }}
-                            />
-                        </Typography>
+                    //, Add this if you want hover effect (className="hoverCard")
+                    <CoverImgBg>
                         <CoverImgStyle>
                             <Box
-                                height={'100%'}
-                                display={'flex'}
-                                justifyContent="space-between"
+                                height='100%'
+                                display='flex'
+                                justifyContent="flex-end"
                                 flexDirection="column"
                             >
-                                <Box>
-                                </Box>
-                                <Box>
+                                <Box sx={{ backgroundColor: (theme) => alpha(theme.palette.grey[900], 0.6), padding: "0.8rem" }}>
                                     <Box>
                                         <Typography
                                             gutterBottom
-                                            variant="h4"
+                                            variant="h6"
                                             color="inherit"
                                             sx={{ textDecoration: 'none' }}
-                                            component={Link}
                                         >
                                             {name}
                                         </Typography>
                                     </Box>
-                                    <Stack direction="row" gap={3} alignItems="center">
-                                        <Stack direction="row" gap={1} alignItems="center">
-                                            <LocationOnOutlinedIcon size="18" /> {name}
+                                    <Stack direction="row" alignItems="center">
+                                        <Stack direction="row" alignItems="center" gap={0.2} >
+                                            <IconMapPin size="18" /> {location}
                                         </Stack>
                                     </Stack>
                                 </Box>
@@ -110,7 +96,7 @@ export default function ImagesSlider({image, name}) {
                         </CoverImgStyle>
                     </CoverImgBg>
                 )}
-            </Grid>
+            </Box>
         </>
     );
 };

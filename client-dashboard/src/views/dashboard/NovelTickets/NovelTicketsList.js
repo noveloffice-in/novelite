@@ -198,7 +198,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       {/* --------------------------------New Ticket Button and Search---------------------------------  */}
       <Box display="flex" justifyContent={'space-between'} alignItems={'center'} >
         <Box>
-          <Button variant="contained" onClick={handleClickOpen}>
+          <Button variant="contained" onClick={handleClickOpen} sx={{ml:1}}>
             New &nbsp;
             <AddIcon />
           </Button>

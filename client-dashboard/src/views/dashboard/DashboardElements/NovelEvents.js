@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import BlankCard from '../../../components/shared/BlankCard';
+import { IconCalendarDue } from '@tabler/icons';
 
 const CoverImgStyle = styled(CardContent)({
     position: 'absolute',
@@ -30,7 +31,7 @@ const CoverBox = styled(Box)({
     position: 'absolute',
 });
 
-export default function NovelEvents({image, name}) {
+export default function NovelEvents({image, name, date}) {
     const CoverImgBg = styled(BlankCard)({
         p: 0,
         height: '220px',
@@ -52,57 +53,41 @@ export default function NovelEvents({image, name}) {
 
     return (
         <Box mt={2}>
-            <Grid
-                item
-                xs={12}
-                md={12}
-                sm={12}
-                display="flex"
-                alignItems="center"
-                mt={2}
-            >
+            <Box>
                 {isLoading ? (
                     <>
                         <Skeleton
                             variant="square"
                             animation="wave"
                             borderRadius="1rem"
-                            width={300}
-                            height={240}
+                            minWidth='auto'
+                            height={220}
                             sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
                         ></Skeleton>
                     </>
                 ) : (
-                    <CoverImgBg className="hoverCard">
-                        <Typography>
-                            <CoverBox
-                                sx={{ backgroundColor: (theme) => alpha(theme.palette.grey[900], 0.5), height: '6rem', top: '140px' }}
-                            />
-                        </Typography>
+                    <CoverImgBg>
                         <CoverImgStyle>
                             <Box
                                 height={'100%'}
                                 display={'flex'}
-                                justifyContent="space-between"
+                                justifyContent="flex-end"
                                 flexDirection="column"
                             >
-                                <Box>
-                                </Box>
-                                <Box>
+                                <Box sx={{ backgroundColor: (theme) => alpha(theme.palette.grey[900], 0.6), padding:'0.8rem'}}>
                                     <Box>
                                         <Typography
                                             gutterBottom
-                                            variant="h4"
+                                            variant="h6"
                                             color="inherit"
                                             sx={{ textDecoration: 'none' }}
-                                            component={Link}
                                         >
                                             {name}
                                         </Typography>
                                     </Box>
                                     <Stack direction="row" gap={3} alignItems="center">
                                         <Stack direction="row" gap={1} alignItems="center">
-                                            <LocationOnOutlinedIcon size="18" /> {name}
+                                            <IconCalendarDue size="18" /> {date}
                                         </Stack>
                                     </Stack>
                                 </Box>
@@ -110,7 +95,7 @@ export default function NovelEvents({image, name}) {
                         </CoverImgStyle>
                     </CoverImgBg>
                 )}
-            </Grid>
+            </Box>
         </Box>
     )
 }

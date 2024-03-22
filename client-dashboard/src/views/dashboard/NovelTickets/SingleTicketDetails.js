@@ -34,7 +34,7 @@ export default function SingleTicketDetails() {
 function Left({ id, title, status, description }) {
   return (
     <ChildCard sx={{ width: '50%' }}>
-      <Box>
+      <Box p={2}>
         <Typography variant="h4">Ticket Details</Typography>
         <Box>
           <Box p={3}>
@@ -149,8 +149,8 @@ function Right({ id }) {
           },
         }}
       >
-        <Box>
-          <Typography variant="h4" sx={{ mt: "-1.3rem", mb: "1rem" }}>Updates</Typography>
+        <Box p={2}>
+          <Typography variant="h4" sx={{ mt: "-1.3rem" }}  mb={2}>Updates</Typography>
           <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
             {data?.map((comment) => {
               return (

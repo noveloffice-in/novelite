@@ -75,7 +75,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     }
 
     return (
-        <Grid container spacing={3} textAlign="center">
+        <Grid container spacing={3} textAlign="center" p={1}>
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={openIssues() !== 0 ? () => dispatch(setVisibilityFilter('Open')) : undefined}

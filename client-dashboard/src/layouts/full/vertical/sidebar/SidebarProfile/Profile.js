@@ -1,71 +1,67 @@
 import React from 'react';
-import { Box, Avatar, Typography, IconButton, Tooltip, useMediaQuery } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import { IconPower } from '@tabler/icons';
-import {Link, useNavigate} from "react-router-dom";
-import { useFrappeAuth } from 'frappe-react-sdk';
-import { setUser } from '../../../../../store/apps/userProfile/NovelProfileSlice';
-import Cookies from 'js-cookie';
+import { Box, IconButton, useMediaQuery, Link } from '@mui/material';
+import { useSelector } from 'react-redux';
+import {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconWorld
+} from '@tabler/icons';
+import XIcon from '@mui/icons-material/X';
+
+const SocialIcons = [
+  {
+    name: 'Facebook',
+    icon: <IconBrandFacebook size="18" color="#1877F2" />,
+    link: "https://www.facebook.com/NovelOfficeIND/?utm_source=Ticket_Booking&utm_medium=App"
+  },
+  {
+    name: 'Website',
+    icon: <IconWorld size="18" color="#4dbbea" />,
+    link: "https://noveloffice.in/?utm_source=Ticket_Booking&utm_medium=App"
+  },
+  {
+    name: 'Instagram',
+    icon: <IconBrandInstagram size="18" color="#D7336D" />,
+    link: "https://www.instagram.com/noveloffice.in?igsh=cGwxdjVrcnh6dzRp&utm_source=Ticket_Booking&utm_medium=App"
+  },
+  {
+    name: 'Twitter',
+    icon: <XIcon sx={{fontSize:'medium'}} color="secondary" />,
+    link: "https://twitter.com/Novel_Office?utm_source=Ticket_Booking&utm_medium=App"
+  },
+  {
+    name: 'LinkedIn',
+    icon: <IconBrandLinkedin size="18" color="#006097" />,
+    link: "https://www.linkedin.com/company/novel-office-india/?utm_source=Ticket_Booking&utm_medium=App"
+  }
+];
 
 export const Profile = () => {
   const customizer = useSelector((state) => state.customizer);
-  const userImage = useSelector((state) => state.novelprofileReducer.userImage);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const hideMenu = lgUp ? customizer.isCollapse && !customizer.isSidebarHover : '';
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const {
-    currentUser,
-    isValidating,
-    isLoading,
-    login,
-    logout,
-    error,
-    updateCurrentUser,
-    getUserCookie,
-} = useFrappeAuth();
-
-  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
-
-  const handleLogout = ()=>{
-    logout();
-    dispatch(setUser(undefined));
-    localStorage.clear();
-    Cookies.remove(getUserCookie);
-    setTimeout(() => {
-      navigate("/Login");
-    }, 500);
-  }
 
   return (
-    // <Box
-    //   display={'flex'}
-    //   alignItems="center"
-    //   gap={2}
-    //   sx={{ m: 3, p: 2, bgcolor: `${'secondary.light'}` }}
-    // >
-    //   {!hideMenu ? (
-    //     <>
-    //       <Avatar alt="Remy Sharp" src={userImage !== "" ? userImage : img1} />
-
-    //       <Box>
-    //         <Typography variant="h6"  color="textPrimary">{fullName.split(' ')[0]}</Typography>
-    //         {/* <Typography variant="caption" color="textSecondary">Designer</Typography> */}
-    //       </Box>
-    //       <Box sx={{ ml: 'auto' }}>
-    //         <Tooltip title="Logout" placement="top">
-    //           <IconButton color="primary" onClick={handleLogout} aria-label="logout" size="small">
-    //             <IconPower size="20" />
-    //           </IconButton>
-    //         </Tooltip>
-    //       </Box>
-    //     </>
-    //   ) : (
-    //     ''
-    //   )}
-    // </Box>
-    <></>
+    <Box
+      display={'flex'}
+      alignItems="center"
+      justifyContent="center"
+      gap={2}
+      sx={{ m: 3, p: 2, bgcolor: `${'secondary.light'}` }}
+    >
+      {!hideMenu ? (
+        <>
+          <Box>
+            {SocialIcons.map((sicon) => {
+              return <IconButton key={sicon.name}> <Link href={sicon.link} target="_blank">{sicon.icon}</Link> </IconButton>;
+            })}
+          </Box>
+        </>
+      ) : (
+        ''
+      )}
+    </Box>
+    // <></>
   );
 };

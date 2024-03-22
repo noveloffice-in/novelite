@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent, Typography, Button, Box, Grid } from '@mui/material';
-import busiessImg from "../../../assets/images/dashboard/business-3d-pondering-businessman-in-dark-blue-suit 1.png"
+import busiessImg from "../../../assets/images/dashboard/business-3d-pondering-businessman-in-dark-blue-suit 1 (1).png"
+import { Link } from 'react-router-dom';
 
 export default function Queries() {
     return (
@@ -8,16 +9,16 @@ export default function Queries() {
             elevation={0}
             sx={{
                 backgroundColor: (theme) => theme.palette.secondary.light,
-                py: 0,
+                pt: 1,
                 overflow: 'hidden',
                 position: 'relative',
             }}
         >
-            <CardContent sx={{ p: '1rem' }}>
-                <Grid container spacing={3} justifyContent="space-between">
+            <CardContent sx={{ p: 2 }}>
+                <Grid container spacing={3} justifyContent="space-around">
                 <Grid item sm={4}>
-                        <Box mb="-30px">
-                            <img src={busiessImg} alt={busiessImg} />
+                        <Box mb="-20px">
+                            <img src={busiessImg} alt={busiessImg} style={{height:"12rem"}} />
                         </Box>
                     </Grid>
                     <Grid item sm={6} display="flex" alignItems="center">
@@ -25,13 +26,13 @@ export default function Queries() {
                             sx={{
                                 textAlign: {
                                     xs: 'center',
-                                    sm: 'right',
+                                    sm: 'center',
                                 },
                             }}
                         >
-                            <Typography variant="h4" my={2}>Have Queries?</Typography>
+                            <Typography variant='h3' sx={{fontSize: {xs:"1.5rem", sm:"2rem", lg:"2rem"}}} my={2}>Facing Issues?</Typography>
 
-                            <Button variant="contained" color="secondary">
+                            <Button variant="contained" color="secondary" component={Link} to='/tickets'>
                                 Raise a Ticket
                             </Button>
                         </Box>

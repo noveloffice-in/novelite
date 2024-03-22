@@ -4,11 +4,11 @@ export default function UpcomingParent({ Component }) {
 
     let bookings = {
         heading: "Bookings feature upcoming",
-        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,"
+        content: "You'll soon be able to conveniently reserve meeting and conference rooms directly within the app. Stay tuned for this exciting feature update!"
     }
     let gatepass = {
         heading: "Gate Pass feature upcoming",
-        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,"
+        content: "The gate pass feature will soon be seamlessly integrated into our web app, offering enhanced convenience for all users. Stay tuned for this exciting addition to manage your access with ease!"
     }
 
     if (window.location.href.split("/")[4] === 'location') {

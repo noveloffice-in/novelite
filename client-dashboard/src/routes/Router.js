@@ -141,8 +141,8 @@ const Router = [
 
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData  Component={Noveldashboard} /> },
-      { path: '/location', exact: true, element: < Protected  Component={Location} /> },
-      // { path: '/location', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
+      // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
+      { path: '/location', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
       { path: '/gatepass', exact: true, element: < UpcomingParent  Component={Upcoming} /> },
       { path: '/category', exact: true, element: < Protected  Component={Category} /> },
       { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
