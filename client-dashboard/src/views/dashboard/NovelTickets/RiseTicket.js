@@ -34,19 +34,30 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
     });
 
     const issueOptions = {
-        "IT": ["Hardware", "Software", "Network", "Other"],
-        "Parking": ["Availability", "Access", "Security", "Other"],
-        "Security and Access": ["Keycard Issue", "Surveillance", "Visitor Access", "Other"],
+        "IT and Network": ["Internet not working/Slow Internet", "LAN Port/LAN Cable/Patch Cord issue", "Computer/Sytem", "EPAbx Setup", "GSM Issue", "Server", "Other"],
+        "Parking": ["Request Additional Parking", "New Parking Sticker/New Parking User", "P.S. Lost", "Pay and Park", "P.S. Downsize", "Other"],
+        "Security and Access": ["Access card Damaged", "Access card not working", "Access card lost", "New Access card", "Temporary Access Cards", "Other"],
+        "Gate Pass": ["MAF", "Other"],
+        "Documents and Accounts": ["Rental Agreement", "NOC", "Utility Bill", "Property Tax", "Property Agreement", "Other"],
+        "Accounts and Billing": ["Incorrect Invoice", "Duplicate Charges", "GST Inclusion", "Unknown Charges", "TDS", "Credit Note", "Other"],
+        "House Keeping": ["Cleaning Required", "Foul Odour", "Food Spill", "Dust Bin Clearing", "Cardboard Removal", "Carpet Cleaning", "Other"],
+        "Office Space Modification": ["Desk Expansion / Downsize", "Chair Issues", "Layout Change", "Ammenities : Pedestal, Storage Box 4Ft & 6Ft, Frosting, White Board", "Beading Issue", "Sound Issue", "Door Issues", "Carpet Issues", "Blinds Issue", "Other"],
+        "Restroom/Common Area": ["Washroom", "Cleaning", "Tap Leakage", "Tissue Paper Replacement", "Foul Smell", "Wet Floor", "Soap Refill", "Faucet Leak", "Other"],
+        "AC": ["Too Hot", "Too Cold", "AC not Working", "Facade Area Issues", "Other"],
+        "Electrical" :["Light Not Working", "Light Flickering", "Dim Light Replacement", "Power Socket Issue", "Access Controller", "Acess Controller repair", "Elevator/Lift not working", "Extra UPS / RAW Requirement", "Emergency Light", "Frequent Power Outage", "Other"],
+        "Meeting Room/ Conference Room Booking" :["Book Meeting  Room", "Book Conference Room", "Other"]
     };
 
     const [issueName, setIssueName] = useState([
-        "IT",
+        "IT and Network",
         "Parking",
         "Security and Access",
-        "Documents",
+        "Gate Pass",
+        "Documents and Accounts",
         "Accounts and Billing",
+        "House Keeping",
         "Office Space Modification",
-        "Plumbing",
+        "Restroom/Common Area",
         "AC",
         "Electrical",
         "Meeting Room/ Conference Room Booking",
@@ -154,7 +165,7 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                             <FormControl fullWidth sx={{ mt: 2 }} >
                                 <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
                                 <Select
-                                    disabled = {confirmedLocations?.length === 2}
+                                    disabled={confirmedLocations?.length === 2}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={ticketLocation}
@@ -200,7 +211,7 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                     <TextField
                         label="Ticket Title"
                         variant="standard"
-                        sx={{ width: '100%', mt: 2, ml:1 }}
+                        sx={{ width: '100%', mt: 2, ml: 1 }}
                         name="subject"
                         value={ticketData.subject}
                         onChange={handleInputChange}
@@ -220,7 +231,7 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                     />
                 </Box>
 
-                <DialogTitle sx={{ ml: "-2.2em", mb:"-1rem" }}>Contact Details</DialogTitle>
+                <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Contact Details</DialogTitle>
 
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
                     <Box>

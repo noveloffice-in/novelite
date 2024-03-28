@@ -19,7 +19,6 @@ const SidebarItems = () => {
   const hideMenu = lgUp ? customizer.isCollapse && !customizer.isSidebarHover : '';
   const dispatch = useDispatch();
 
-  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
   
   // if(fullName === "Guest"){
   //   Menuitems.splice(3,1);

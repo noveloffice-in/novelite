@@ -121,6 +121,14 @@ const Menuitems = [
   // },
   // {
   //   id: uniqueId(),
+  //   title: 'Notifications',
+  //   icon: IconPackage,
+  //   chip: '0',
+  //   chipColor: 'secondary',
+  //   href: '/notifications',
+  // },
+  // {
+  //   id: uniqueId(),
   //   title: 'Contacts',
   //   icon: IconPackage,
   //   chip: '2',

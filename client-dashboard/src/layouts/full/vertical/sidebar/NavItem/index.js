@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useFrappeGetDocCount } from 'frappe-react-sdk';
 
 const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
   const customizer = useSelector((state) => state.customizer);
@@ -45,6 +46,26 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
       },
     },
   }));
+
+  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
+  let noti = localStorage.getItem('noti') || 0;
+
+  const { data, mutate } = useFrappeGetDocCount(
+    'Notifications CD',
+    [['read', '=', 'no'], ['customer_name', '=', fullName]],
+    false,
+  );
+
+  setTimeout(() => {
+    mutate()
+  }, 1000);
+
+  if (data > noti) {
+    // alert("new notification");
+    localStorage.setItem('noti', data);
+    noti = data;
+    console.log("data.length = ", data);
+  }
 
   return (
     <List component="li" disablePadding key={item.id}>
@@ -85,7 +106,7 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
             color={item.chipColor}
             variant={item.variant ? item.variant : 'filled'}
             size="small"
-            label={item.chip}
+            label={item.title === "Notifications" ? data : item.chip}
           />
         )}
       </ListItemStyled>
