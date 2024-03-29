@@ -50,15 +50,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [open1, setOpen1] = useState(false);
   const [toolTip, setToolTip] = useState(false);
   const [start, setStart] = useState(0);
-  const [ticketLocation, setTicketlocation] = useState(filterLocation);
-
-  useEffect(() => {
-    if (confirmedLocations?.length == 2) {
-      setFilterLocation(confirmedLocations[1].shortName);
-      setTicketlocation(confirmedLocations[1].shortName);
-      console.log("Locations = ", confirmedLocations[1]);
-    }
-  }, [])
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -72,7 +63,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     let changedLocation = event.target.value;
     setFilterLocation(changedLocation);
     dispatch(setLocation(changedLocation));
-    setTicketlocation(changedLocation);
     console.log("Location = ", changedLocation);
     if (event.target.value !== 'Property Location') {
       localStorage.setItem('location', changedLocation);
@@ -173,23 +163,22 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         </Box> */}
         <Box sx={{ mb: 2 }} >
           {confirmedLocations?.length >= 2 ?
-            confirmedLocations?.length === 2 ?
-              "" : (<FormControl sx={{ m: 1, minWidth: 170 }}>
-                <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
-                <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
-                  value={filterLocation}
-                  label="Property Location"
-                  onChange={handleChange}
-                >
-                  {confirmedLocations?.map((location, index) => {
-                    return (
-                      <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
-                    )
-                  })}
-                </Select>
-              </FormControl>) :
+            (<FormControl sx={{ m: 1, minWidth: 170 }}>
+              <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                value={filterLocation}
+                label="Property Location"
+                onChange={handleChange}
+              >
+                {confirmedLocations?.map((location, index) => {
+                  return (
+                    <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>) :
             (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
           }
         </Box>
@@ -198,7 +187,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       {/* --------------------------------New Ticket Button and Search---------------------------------  */}
       <Box display="flex" justifyContent={'space-between'} alignItems={'center'} >
         <Box>
-          <Button variant="contained" onClick={handleClickOpen} sx={{ml:1}}>
+          <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
             New &nbsp;
             <AddIcon />
           </Button>
@@ -315,7 +304,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       >
         <DialogTitle>Raise a Ticket</DialogTitle>
         <DialogContent>
-          <RiseTicket confirmedLocations={confirmedLocations} ticketLocation={ticketLocation} handleChange={handleChange} />
+          <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>

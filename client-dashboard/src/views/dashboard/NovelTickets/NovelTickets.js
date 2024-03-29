@@ -37,65 +37,6 @@ export default function NovelTickets() {
         setFilterLocation("ALL");
     }
 
-    //-> -------------------------------------------Checking Socket---------------------------------------------------------
-
-
-
-
-    //? Where should we use useSWRSubscription
-
-    // socket.io("connect", ()=>{
-    //     console.log("Socket.io  is Connected");
-    // })
-
-    // useEffect(() => {
-    //     // Assuming your Frappe server is running on the same host but different port
-    //     const socket = io('http://localhost:9000');
-
-    //     socket.on('connect', () => {
-    //         console.log('Connected to Frappe WebSocket server');
-    //     });
-
-    //     // Listen for the todo_update event
-    //     socket.on('todo_update', (data) => {
-    //         console.log('Document Update:', data);
-    //         // Perform actions based on the update
-    //     });
-
-    //     // Cleanup on unmount
-    //     return () => {
-    //         socket.off('todo_update');
-    //         socket.disconnect();
-    //     };
-    // }, []);
-
-    // useDocumentUpdateListener();
-
-
-    // socket.on('message', (message) => {
-    //     console.log("Message from server is = ", message);
-    // })
-    //-> ----------------------------------------Checking Server side events----------------------------------------------------
-
-    // const [messages, setMessages] = useState([]);
-
-    // useEffect(() => {
-    //     const eventSource = new EventSource('http://10.80.4.54:8000/api/method/novelite.api.messages.stream');
-
-    //     eventSource.onmessage = (event) => {
-    //         console.log("Event = ", event);
-    //         const eventData = JSON.parse(event.data);
-    //         setMessages(eventData.message);
-    //     };
-
-    //     return () => {
-    //         eventSource.close();
-    //     };
-    // }, []);
-
-    // console.log("Messages = ", messages);
-
-
     //--------------------------------------------------------Getting total count-------------------------------------------//
     const { data } = useFrappeGetDocCount(
         'Issue',
@@ -141,6 +82,23 @@ export default function NovelTickets() {
         }
     });
     confirmedLocations?.unshift({ shortName: "ALL", fullName: "ALL" });
+
+    let allLocations = [
+        { shortName: "NTP", fullName: "Novel Tech Park - Kudlu Gate" },
+        { shortName: "NOM", fullName: "Novel Office Marathahalli" },
+        { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
+        { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
+        { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
+        { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
+        { shortName: "NOB", fullName: "Novel Office Brigade" },
+        { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+    ]
+
+    allLocations.forEach((element) => {
+        if (!confirmedLocations?.some(confirmedLocation => confirmedLocation.shortName === element.shortName)) {
+            confirmedLocations?.push(element);
+        }
+    })
 
     //-----------------------------------------------------------END---------------------------------------------------------//
 

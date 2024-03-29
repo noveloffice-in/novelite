@@ -6,6 +6,8 @@ import Zoom from '@mui/material/Zoom';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 
 
 const style = {
@@ -19,33 +21,38 @@ const style = {
     p: 4,
 };
 
-export default function RiseTicket({ confirmedLocations, ticketLocation, handleChange }) {
+export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate }) {
+
+    const dispatch = useDispatch();
+    const customerName = useSelector((state) => state.novelprofileReducer.fullName);
+
     const [ticketData, setTicketData] = useState({
         subject: "",
         description: "",
-        location: ticketLocation,
+        location: localStorage.getItem('location') || filterLocation,
         issue: "",
         issueType: "",
         name: "",
         contactNumber: "",
         email: "",
         alternateEmail: "",
-        creation_via: "Ticket"
+        customer: customerName,
+        creation_via: "Ticket",
     });
 
     const issueOptions = {
-        "IT and Network": ["Internet not working/Slow Internet", "LAN Port/LAN Cable/Patch Cord issue", "Computer/Sytem", "EPAbx Setup", "GSM Issue", "Server", "Other"],
-        "Parking": ["Request Additional Parking", "New Parking Sticker/New Parking User", "P.S. Lost", "Pay and Park", "P.S. Downsize", "Other"],
+        "IT and Network": ["Internet not working | Slow Internet", "LAN Port | LAN Cable | Patch Cord issue", "Computer | Sytem", "EPAbx Setup", "GSM Issue", "Server", "Other"],
+        "Parking": ["Request Additional Parking", "New Parking Sticker | New Parking User", "P.S. Lost", "Pay and Park", "P.S. Downsize", "Other"],
         "Security and Access": ["Access card Damaged", "Access card not working", "Access card lost", "New Access card", "Temporary Access Cards", "Other"],
         "Gate Pass": ["MAF", "Other"],
         "Documents and Accounts": ["Rental Agreement", "NOC", "Utility Bill", "Property Tax", "Property Agreement", "Other"],
         "Accounts and Billing": ["Incorrect Invoice", "Duplicate Charges", "GST Inclusion", "Unknown Charges", "TDS", "Credit Note", "Other"],
         "House Keeping": ["Cleaning Required", "Foul Odour", "Food Spill", "Dust Bin Clearing", "Cardboard Removal", "Carpet Cleaning", "Other"],
-        "Office Space Modification": ["Desk Expansion / Downsize", "Chair Issues", "Layout Change", "Ammenities : Pedestal, Storage Box 4Ft & 6Ft, Frosting, White Board", "Beading Issue", "Sound Issue", "Door Issues", "Carpet Issues", "Blinds Issue", "Other"],
-        "Restroom/Common Area": ["Washroom", "Cleaning", "Tap Leakage", "Tissue Paper Replacement", "Foul Smell", "Wet Floor", "Soap Refill", "Faucet Leak", "Other"],
+        "Office Space Modification": ["Desk Expansion | Downsize", "Chair Issues", "Layout Change", "Ammenities : Pedestal, Storage Box 4Ft & 6Ft, Frosting, White Board", "Beading Issue", "Sound Issue", "Door Issues", "Carpet Issues", "Blinds Issue", "Other"],
+        "Restroom | Common Area": ["Washroom", "Cleaning", "Tap Leakage", "Tissue Paper Replacement", "Foul Smell", "Wet Floor", "Soap Refill", "Faucet Leak", "Other"],
         "AC": ["Too Hot", "Too Cold", "AC not Working", "Facade Area Issues", "Other"],
-        "Electrical" :["Light Not Working", "Light Flickering", "Dim Light Replacement", "Power Socket Issue", "Access Controller", "Acess Controller repair", "Elevator/Lift not working", "Extra UPS / RAW Requirement", "Emergency Light", "Frequent Power Outage", "Other"],
-        "Meeting Room/ Conference Room Booking" :["Book Meeting  Room", "Book Conference Room", "Other"]
+        "Electrical": ["Light Not Working", "Light Flickering", "Dim Light Replacement", "Power Socket Issue", "Access Controller", "Acess Controller repair", "Elevator | Lift not working", "Extra UPS | RAW Requirement", "Emergency Light", "Frequent Power Outage", "Other"],
+        "Meeting Room | Conference Room Booking": ["Book Meeting  Room", "Book Conference Room", "Other"]
     };
 
     const [issueName, setIssueName] = useState([
@@ -108,6 +115,7 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
     //----------------------------------------------------------Raise a Ticket-----------------------------------------------//
     const { createDoc, isCompleted, } = useFrappeCreateDoc();
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+    const notifyError = (msg) => toast.error(msg, { toastId: "error" });
     const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
 
     const handleTicketDataChange = (e) => {
@@ -135,14 +143,25 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
             };
             console.log(updatedTicketData);
             notifySuccess('Ticket created Successfully');
-            //, const create = createDoc('Issue', ticketData).then(() => {
-            //     notifySuccess('Ticket created Successfully');
-            //     setOpen1(false);
-            //     mutate();
-            // }).catch((err) => {
-            //     console.log("inside catch " + JSON.stringify(err.message));
-            //     notifyError(err.message);
-            // })
+            const create = createDoc('Issue', ticketData).then(() => {
+                notifySuccess('Ticket created Successfully');
+                setTimeout(() => {
+                    setOpen1(false);
+                    mutate();
+                }, 1000);
+            }).catch((err) => {
+                console.log("inside catch " + JSON.stringify(err.message));
+                notifyError(err.message);
+            })
+        }
+    }
+    const handleLocationChange = (e) => {
+        let changedLocation = e.target.value;
+        setFilterLocation(changedLocation);
+        dispatch(setLocation(changedLocation));
+        console.log("Location = ", changedLocation);
+        if (event.target.value !== 'Property Location') {
+            localStorage.setItem('location', changedLocation);
         }
     }
 
@@ -165,12 +184,12 @@ export default function RiseTicket({ confirmedLocations, ticketLocation, handleC
                             <FormControl fullWidth sx={{ mt: 2 }} >
                                 <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
                                 <Select
-                                    disabled={confirmedLocations?.length === 2}
+                                    // disabled={confirmedLocations?.length === 2}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={ticketLocation}
+                                    value={filterLocation}
                                     label="Property Location"
-                                    onChange={handleChange}
+                                    onChange={handleLocationChange}
                                 >
                                     {confirmedLocations?.map((location) => {
                                         return (

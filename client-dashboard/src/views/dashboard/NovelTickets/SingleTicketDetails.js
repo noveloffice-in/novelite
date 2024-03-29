@@ -22,6 +22,8 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 export default function SingleTicketDetails() {
   const { id, title, status, description } = useParams();
 
+  console.log("All details = ",id ," ", title ," ", status ," ", description );
+
   return (
     <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
       <Left id={id} title={title} status={status} description={description} />

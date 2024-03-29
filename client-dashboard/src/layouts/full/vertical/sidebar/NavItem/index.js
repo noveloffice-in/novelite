@@ -56,9 +56,9 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
     false,
   );
 
-  setTimeout(() => {
-    mutate()
-  }, 1000);
+  // setTimeout(() => {
+  //   mutate()
+  // }, 1000);
 
   if (data > noti) {
     // alert("new notification");
