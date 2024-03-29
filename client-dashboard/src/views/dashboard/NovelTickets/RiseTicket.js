@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
+import axios from 'axios';
 
 
 const style = {
@@ -64,10 +65,10 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         "Accounts and Billing",
         "House Keeping",
         "Office Space Modification",
-        "Restroom/Common Area",
+        "Restroom | Common Area",
         "AC",
         "Electrical",
-        "Meeting Room/ Conference Room Booking",
+        "Meeting Room | Conference Room Booking",
         "Other"
     ]);
     const [issueDropdown, setIssueDropdown] = useState(issueName[0]);
@@ -142,13 +143,24 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 issueType: issueTypeDropdown,
             };
             console.log(updatedTicketData);
-            notifySuccess('Ticket created Successfully');
-            const create = createDoc('Issue', ticketData).then(() => {
+
+            //,Frappe Hook to create Issue 
+            // const create = createDoc('Issue', ticketData).then(() => {
+            //     notifySuccess('Ticket created Successfully');
+            //     setTimeout(() => {
+            //         setOpen1(false);
+            //         mutate();
+            //     }, 1000);
+
+            //,Custom api to create an Issue
+            axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
+            .then((res)=>{
+                console.log("Response = ", res);
                 notifySuccess('Ticket created Successfully');
-                setTimeout(() => {
-                    setOpen1(false);
-                    mutate();
-                }, 1000);
+                    setTimeout(() => {
+                        setOpen1(false);
+                        mutate();
+                    }, 1000);
             }).catch((err) => {
                 console.log("inside catch " + JSON.stringify(err.message));
                 notifyError(err.message);
