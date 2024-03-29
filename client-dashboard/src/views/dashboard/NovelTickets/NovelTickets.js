@@ -33,10 +33,6 @@ export default function NovelTickets() {
         }
     }, [userLocation, setFilterLocation]);
 
-    if (filterLocation === null) {
-        setFilterLocation("ALL");
-    }
-
     //--------------------------------------------------------Getting total count-------------------------------------------//
     const { data } = useFrappeGetDocCount(
         'Issue',
@@ -58,6 +54,13 @@ export default function NovelTickets() {
     }
 
     var confirmedLocations = getLeadsId();
+    if (filterLocation === null) {
+        if(confirmedLocations.length !== 0){
+            setFilterLocation(confirmedLocations[0]);
+        } else {
+            setFilterLocation("ALL");
+        }
+    }
     confirmedLocations = confirmedLocations?.map(location => {
         switch (location) {
             case 'NTP':
