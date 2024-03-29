@@ -294,3 +294,112 @@ def addDataToDoc():
     item_info.save()
     
     return "Data added successfully"
+
+
+# @frappe.whitelist(allow_guest=True)
+# def issue():
+#     data = frappe.request.json
+    
+#     if data is None:
+#         frappe.throw("No data provided")  # Handle case where no data is provided
+
+#     # Now you can continue with your existing logic to process the data
+#     issue_info = frappe.new_doc("Issue")
+#     issue_info.subject = data.get('subject')
+#     issue_info.customer = data.get('customer')
+#     issue_info.issue_type = data.get('issue')
+#     issue_info.issue_subtype = data.get('issueType')
+#     issue_info.location = data.get('location')
+#     issue_info.description = data.get('description')
+    
+#     issue = data.get('issue')
+    
+
+#     CR = [
+#         "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
+#         "Office Space Modification", "Other"]
+    
+#     FL = [
+#         "Parking", "House Keeping", "Restroom/Common Area"
+#         ]
+#     # IT = ["IT and Network"]
+#     # FC = ["AC"]
+#     # EL = ["Electrical"]
+#     # FD = ["Meeting Room/ Conference Room Booking"]
+
+
+#     if issue:
+#         if issue in CR:
+#             dept = "CR"
+#         elif issue in FL:
+#             dept = "FL"
+#         elif issue == "IT and Network":
+#             dept = "IT"
+#         elif issue == "Electrical":
+#             dept = "EL"
+#         elif issue == "Meeting Room/ Conference Room Booking":
+#             dept = "FD"
+#         else:
+#             if issue == "AC":
+#                 dept = "FC"
+#     issue_info.append("departments", {
+#             "department": dept,
+#             "status": "Open"
+#         })
+#     issue_info.save()
+
+
+@frappe.whitelist(allow_guest=True)
+def issue():
+    data = frappe.request.json
+    
+    if data is None:
+        frappe.throw("No data provided")  # Handle case where no data is provided
+
+    # Now you can continue with your existing logic to process the data
+    issue_info = frappe.new_doc("Issue")
+    issue_info.subject = data.get('subject')
+    issue_info.customer = data.get('customer')
+    issue_info.issue_type = data.get('issue')
+    issue_info.issue_subtype = data.get('issueType')
+    issue_info.location = data.get('location')
+    issue_info.description = data.get('description')
+    
+    issue = data.get('issue')
+    
+    CR = [
+        "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
+        "Office Space Modification", "Other"]
+    
+    FL = [
+        "Parking", "House Keeping", "Restroom | Common Area"
+    ]
+    # Define other departments as needed
+    departments = {
+        "CR": CR,
+        "FL": FL,
+        "IT": ["IT and Network"],
+        "FC": ["AC"],
+        "EL": ["Electrical"],
+        "FD": ["Meeting Room | Conference Room Booking"]
+    }
+
+    dept = None
+    for department, issues in departments.items():
+        if issue in issues:
+            dept = department
+            break
+    
+    if dept:
+        issue_info.append("departments", {
+            "department": dept,
+            "status": "Open"
+        })
+    else:
+        frappe.throw("Issue department not found")
+
+    try:
+        issue_info.save()
+        # frappe.throw("Adding to doc")
+    except Exception as e:
+        frappe.throw(str(e))
