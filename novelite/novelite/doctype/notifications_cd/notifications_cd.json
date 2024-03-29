@@ -28,6 +28,7 @@
    "default": "no",
    "fieldname": "send_to_all",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Send to all",
    "options": "yes\nno"
   },
@@ -35,13 +36,14 @@
    "default": "no",
    "fieldname": "read",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Read",
    "options": "yes\nno"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-22 13:36:50.560641",
+ "modified": "2024-03-22 15:36:13.933417",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Notifications CD",
