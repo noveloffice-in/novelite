@@ -33,7 +33,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         location: localStorage.getItem('location') || filterLocation,
         issue: "IT and Network",
         issueType: "Internet not working | Slow Internet",
-        name: "",
+        contactName: "",
         contactNumber: "",
         email: "",
         alternateEmail: "",
@@ -132,17 +132,23 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             ...ticketData,
             issueType: issueTypeDropdown,
         };
-        console.log(updatedTicketData);
-        if (ticketData.subject === "" || ticketData.description === "") {
-            notifyWarn("Please fill the details");
-        } else if (ticketData.location === 'ALL' || ticketData.location === '') {
+        if (updatedTicketData.subject === "") {
+            notifyWarn("Please fill the ticket Subject");
+        } else if(updatedTicketData.description === ""){
+            notifyWarn("Please fill the ticket description");
+        } else if(updatedTicketData.contactName === ""){
+            notifyWarn("Please fill the contact Name");
+        } else if(updatedTicketData.contactNumber === ""){
+            notifyWarn("Please fill the contact Number");
+        } else if(updatedTicketData.contactNumber.length > 13){
+            notifyWarn("Please enter only 10 numbers");
+        } else if (updatedTicketData.location === 'ALL' || updatedTicketData.location === '') {
             notifyWarn("Please Select the Location");
         } else {
             const updatedTicketData = {
                 ...ticketData,
                 issueType: issueTypeDropdown,
             };
-            console.log(updatedTicketData);
 
             //,Frappe Hook to create Issue 
             // const create = createDoc('Issue', ticketData).then(() => {
@@ -151,7 +157,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             //         setOpen1(false);
             //         mutate();
             //     }, 1000);
-
+            
             //,Custom api to create an Issue
             axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
             .then((res)=>{
@@ -253,6 +259,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     <TextField
                         id="outlined-multiline-static"
                         label="Ticket Description"
+                        required
                         multiline
                         rows={2}
                         style={{ width: '100%' }}
@@ -266,8 +273,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
                     <Box>
-                        <TextField label="Name" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="name" onChange={handleInputChange} />
-                        <TextField label="Contact Number" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />
+                        <TextField label="Contact Name" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactName" onChange={handleInputChange} />
+                        <TextField label="Contact Number" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />
                     </Box>
                     <Box>
                         <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />

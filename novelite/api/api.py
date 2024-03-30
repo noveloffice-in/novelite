@@ -251,7 +251,7 @@ def getAllData():
 # @frappe.whitelist(methods=['POST'])
 
 # This is for normal fields not for child table 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def addDataToDoc():
     # Get the data from the HTTP request
     data = frappe.request.json
@@ -296,60 +296,7 @@ def addDataToDoc():
     return "Data added successfully"
 
 
-# @frappe.whitelist(allow_guest=True)
-# def issue():
-#     data = frappe.request.json
-    
-#     if data is None:
-#         frappe.throw("No data provided")  # Handle case where no data is provided
-
-#     # Now you can continue with your existing logic to process the data
-#     issue_info = frappe.new_doc("Issue")
-#     issue_info.subject = data.get('subject')
-#     issue_info.customer = data.get('customer')
-#     issue_info.issue_type = data.get('issue')
-#     issue_info.issue_subtype = data.get('issueType')
-#     issue_info.location = data.get('location')
-#     issue_info.description = data.get('description')
-    
-#     issue = data.get('issue')
-    
-
-#     CR = [
-#         "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
-#         "Office Space Modification", "Other"]
-    
-#     FL = [
-#         "Parking", "House Keeping", "Restroom/Common Area"
-#         ]
-#     # IT = ["IT and Network"]
-#     # FC = ["AC"]
-#     # EL = ["Electrical"]
-#     # FD = ["Meeting Room/ Conference Room Booking"]
-
-
-#     if issue:
-#         if issue in CR:
-#             dept = "CR"
-#         elif issue in FL:
-#             dept = "FL"
-#         elif issue == "IT and Network":
-#             dept = "IT"
-#         elif issue == "Electrical":
-#             dept = "EL"
-#         elif issue == "Meeting Room/ Conference Room Booking":
-#             dept = "FD"
-#         else:
-#             if issue == "AC":
-#                 dept = "FC"
-#     issue_info.append("departments", {
-#             "department": dept,
-#             "status": "Open"
-#         })
-#     issue_info.save()
-
-
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def issue():
     data = frappe.request.json
     
@@ -358,13 +305,16 @@ def issue():
 
     # Now you can continue with your existing logic to process the data
     issue_info = frappe.new_doc("Issue")
-    issue_info.subject = data.get('subject')
-    issue_info.customer = data.get('customer')
-    issue_info.issue_type = data.get('issue')
-    issue_info.issue_subtype = data.get('issueType')
-    issue_info.location = data.get('location')
-    issue_info.description = data.get('description')
-    
+    issue_info.subject = data.get('subject', "")
+    issue_info.customer = data.get('customer', "")
+    issue_info.issue_type = data.get('issue', "")
+    issue_info.issue_subtype = data.get('issueType', "")
+    issue_info.location = data.get('location', "")
+    issue_info.description = data.get('description', "")
+    issue_info.contact_name = data.get('contactName', "")
+    issue_info.contact_phone = data.get('contactNumber', "")
+    issue_info.contact_email = data.get('email', "")
+    issue_info.contact_email_alternative = data.get('alternateEmail', "")
     issue = data.get('issue')
     
     CR = [
