@@ -140,7 +140,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             notifyWarn("Please fill the contact Name");
         } else if(updatedTicketData.contactNumber === ""){
             notifyWarn("Please fill the contact Number");
-        } else if(updatedTicketData.contactNumber.length > 13){
+        } else if(updatedTicketData.contactNumber.length > 10){
             notifyWarn("Please enter only 10 numbers");
         } else if (updatedTicketData.location === 'ALL' || updatedTicketData.location === '') {
             notifyWarn("Please Select the Location");
