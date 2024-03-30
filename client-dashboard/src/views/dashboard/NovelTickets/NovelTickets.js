@@ -54,54 +54,56 @@ export default function NovelTickets() {
     }
 
     var confirmedLocations = getLeadsId();
-    if (filterLocation === null) {
-        if(confirmedLocations.length !== 0){
-            setFilterLocation(confirmedLocations[0]);
-        } else {
-            setFilterLocation("ALL");
+    if (confirmedLocations) {
+        if (filterLocation === null) {
+            if (confirmedLocations.length !== 0) {
+                setFilterLocation(confirmedLocations[0]);
+            } else {
+                setFilterLocation("ALL");
+            }
         }
+        confirmedLocations = confirmedLocations?.map(location => {
+            switch (location) {
+                case 'NTP':
+                    return { shortName: location, fullName: 'Novel Tech Park - Kudlu Gate' };
+                case 'NOM':
+                    return { shortName: location, fullName: 'Novel Office Marathahalli' };
+                case 'NOC':
+                    return { shortName: location, fullName: 'Novel Office Central - MG Road' };
+                case 'NOQ':
+                    return { shortName: location, fullName: 'Novel Office Queens- Queens Road' };
+                case 'NOW':
+                    return { shortName: location, fullName: 'Novel Office WorkHub- Whitefield' };
+                case 'NBP':
+                    return { shortName: location, fullName: 'Novel Business Park - Adugodi' };
+                case 'NOB':
+                    return { shortName: location, fullName: 'Novel Office Brigade' };
+                case 'BTP1F':
+                    return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
+                case 'BTP3F':
+                    return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
+                default: return { shortName: location, fullName: location };
+            }
+        });
+        confirmedLocations?.unshift({ shortName: "ALL", fullName: "ALL" });
+
+        let allLocations = [
+            { shortName: "NTP", fullName: "Novel Tech Park - Kudlu Gate" },
+            { shortName: "NOM", fullName: "Novel Office Marathahalli" },
+            { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
+            { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
+            { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
+            { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
+            { shortName: "NOB", fullName: "Novel Office Brigade" },
+            { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+        ]
+
+        allLocations.forEach((element) => {
+            if (!confirmedLocations?.some(confirmedLocation => confirmedLocation.shortName === element.shortName)) {
+                confirmedLocations?.push(element);
+            }
+        })
     }
-    confirmedLocations = confirmedLocations?.map(location => {
-        switch (location) {
-            case 'NTP':
-                return { shortName: location, fullName: 'Novel Tech Park - Kudlu Gate' };
-            case 'NOM':
-                return { shortName: location, fullName: 'Novel Office Marathahalli' };
-            case 'NOC':
-                return { shortName: location, fullName: 'Novel Office Central - MG Road' };
-            case 'NOQ':
-                return { shortName: location, fullName: 'Novel Office Queens- Queens Road' };
-            case 'NOW':
-                return { shortName: location, fullName: 'Novel Office WorkHub- Whitefield' };
-            case 'NBP':
-                return { shortName: location, fullName: 'Novel Business Park - Adugodi' };
-            case 'NOB':
-                return { shortName: location, fullName: 'Novel Office Brigade' };
-            case 'BTP1F':
-                return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
-            case 'BTP3F':
-                return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
-            default: return { shortName: location, fullName: location };
-        }
-    });
-    confirmedLocations?.unshift({ shortName: "ALL", fullName: "ALL" });
-
-    let allLocations = [
-        { shortName: "NTP", fullName: "Novel Tech Park - Kudlu Gate" },
-        { shortName: "NOM", fullName: "Novel Office Marathahalli" },
-        { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
-        { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
-        { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
-        { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
-        { shortName: "NOB", fullName: "Novel Office Brigade" },
-        { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
-    ]
-
-    allLocations.forEach((element) => {
-        if (!confirmedLocations?.some(confirmedLocation => confirmedLocation.shortName === element.shortName)) {
-            confirmedLocations?.push(element);
-        }
-    })
 
     //-----------------------------------------------------------END---------------------------------------------------------//
 
