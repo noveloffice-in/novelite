@@ -133,7 +133,6 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             ...ticketData,
             issueType: issueTypeDropdown,
         };
-        console.log("Ticket = ", updatedTicketData);
         setShowLoading(true);
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
