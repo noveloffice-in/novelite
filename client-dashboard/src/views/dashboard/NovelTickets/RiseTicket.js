@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogContentText, DialogTitle } from '@mui/material'
+import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogContentText, DialogTitle, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import React, { useEffect, useState } from 'react'
@@ -26,6 +26,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
+    const [showLoading, setShowLoading] = useState(false);
 
     const [ticketData, setTicketData] = useState({
         subject: "",
@@ -132,18 +133,26 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             ...ticketData,
             issueType: issueTypeDropdown,
         };
+        console.log("Ticket = ", updatedTicketData);
+        setShowLoading(true);
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
-        } else if(updatedTicketData.description === ""){
+            setShowLoading(false);
+        } else if (updatedTicketData.description === "") {
             notifyWarn("Please fill the ticket description");
-        } else if(updatedTicketData.contactName === ""){
+            setShowLoading(false);
+        } else if (updatedTicketData.contactName === "") {
             notifyWarn("Please fill the contact Name");
-        } else if(updatedTicketData.contactNumber === ""){
+            setShowLoading(false);
+        } else if (updatedTicketData.contactNumber === "") {
             notifyWarn("Please fill the contact Number");
-        } else if(updatedTicketData.contactNumber.length > 10){
+            setShowLoading(false);
+        } else if (updatedTicketData.contactNumber.length > 10) {
             notifyWarn("Please enter only 10 numbers");
+            setShowLoading(false);
         } else if (updatedTicketData.location === 'ALL' || updatedTicketData.location === '') {
             notifyWarn("Please Select the Location");
+            setShowLoading(false);
         } else {
             const updatedTicketData = {
                 ...ticketData,
@@ -157,25 +166,27 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             //         setOpen1(false);
             //         mutate();
             //     }, 1000);
-            
+
             //,Custom api to create an Issue
             axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
-            .then((res)=>{
-                console.log("Response = ", res);
-                notifySuccess('Ticket created Successfully');
+                .then((res) => {
+                    console.log("Response = ", res);
+                    notifySuccess('Ticket created Successfully');
                     setTimeout(() => {
+                        setShowLoading(false);
                         setOpen1(false);
                         mutate();
                     }, 1000);
-            }).catch((err) => {
-                console.log("inside catch " + JSON.stringify(err.message));
-                notifyError(err.message);
-            })
+                }).catch((err) => {
+                    console.log("inside catch " + JSON.stringify(err.message));
+                    notifyError(err.message);
+                })
         }
     }
     const handleLocationChange = (e) => {
         let changedLocation = e.target.value;
         setFilterLocation(changedLocation);
+        setTicketData(prev => ({ ...prev, location: changedLocation }));
         dispatch(setLocation(changedLocation));
         console.log("Location = ", changedLocation);
         if (e.target.value !== 'Property Location') {
@@ -282,8 +293,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     </Box>
                 </Box>
 
-                <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1}>
-                    Submit
+                <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>
+                    {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
                 </Button>
             </Box>
 
