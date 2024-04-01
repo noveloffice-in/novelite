@@ -178,7 +178,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         setFilterLocation(changedLocation);
         dispatch(setLocation(changedLocation));
         console.log("Location = ", changedLocation);
-        if (event.target.value !== 'Property Location') {
+        if (e.target.value !== 'Property Location') {
             localStorage.setItem('location', changedLocation);
         }
     }
