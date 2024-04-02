@@ -125,6 +125,7 @@ const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout
 const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
+const VisitorPass = Loadable(lazy(() => import('../views/dashboard/VisitorPass/VisitorPass')));
 
 //Notifications
 const Notifications = Loadable(lazy(() => import('../views/notification/Notifications')));
@@ -151,6 +152,7 @@ const Router = [
       { path: '/category', exact: true, element: < Protected  Component={Category} /> },
       { path: '/notifications', exact: true, element: < Protected  Component={Notifications} /> },
       { path: '/bookings', exact: true, element: < Protected  Component={Bookings} /> },
+      { path: '/visitor_pass', exact: true, element: < Protected  Component={VisitorPass} /> },
       { path: '/bookingslot', exact: true, element: < Protected  Component={BookingSlot} /> },
       { path: '/payment_summary', exact: true, element: < Protected  Component={PaymentSummary} /> },
       { path: '/checkout', exact: true, element: < Protected  Component={Checkout}  /> },

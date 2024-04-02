@@ -104,8 +104,8 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Visitor parking pass',
     icon: IconParking ,
-    href: '/location',
-    chip: 'i',
+    href: '/visitor_pass',
+    // chip: 'i',
     chipColor: 'secondary',
   },
   {
