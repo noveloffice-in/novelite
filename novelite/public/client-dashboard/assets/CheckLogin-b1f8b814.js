@@ -1,0 +1,1 @@
+import{a,q as r,r as n,j as i}from"./index-2a4889a1.js";function m(o){const{Component:t}=o,e=a(),{currentUser:s,isValidating:u,isLoading:g,login:c,logout:d,error:f,updateCurrentUser:l,getUserCookie:p}=r();return n.useEffect(()=>{s!=null?e("/dashboard"):e("/login")},[]),i.jsx(t,{})}export{m as default};

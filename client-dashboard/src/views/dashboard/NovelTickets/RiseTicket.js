@@ -178,6 +178,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     }, 1000);
                 }).catch((err) => {
                     console.log("inside catch " + JSON.stringify(err.message));
+                    setShowLoading(false);
                     notifyError(err.message);
                 })
         }
