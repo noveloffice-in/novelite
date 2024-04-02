@@ -46,9 +46,6 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
     },
   }));
 
-  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
-  let noti = localStorage.getItem('noti') || 0;
-
   return (
     <List component="li" disablePadding key={item.id}>
       <ListItemStyled
@@ -88,7 +85,7 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
             color={item.chipColor}
             variant={item.variant ? item.variant : 'filled'}
             size="small"
-            label={item.title === "Notifications" ? data : item.chip}
+            label={item.chip}
           />
         )}
       </ListItemStyled>

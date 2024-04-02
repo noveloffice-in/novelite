@@ -49,7 +49,8 @@ import {
   IconAppWindow,
   IconLockAccess,
   IconBrandBooking,
-  IconFileDollar
+  IconFileDollar,
+  IconParking
 } from '@tabler/icons';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 
@@ -97,6 +98,14 @@ const Menuitems = [
     title: 'Invoices',
     icon: IconFileDollar ,
     href: '/invoice',
+    chipColor: 'secondary',
+  },
+  {
+    id: uniqueId(),
+    title: 'Visitor parking pass',
+    icon: IconParking ,
+    href: '/location',
+    chip: 'i',
     chipColor: 'secondary',
   },
   {
