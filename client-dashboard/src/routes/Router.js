@@ -125,7 +125,7 @@ const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout
 const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
-const VisitorPass = Loadable(lazy(() => import('../views/dashboard/VisitorPass/VisitorPass')));
+const VisitorPass = Loadable(lazy(() => import('../views/dashboard/VisitorParkingPass/VisitorPass')));
 
 //Notifications
 const Notifications = Loadable(lazy(() => import('../views/notification/Notifications')));
