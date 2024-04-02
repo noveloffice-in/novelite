@@ -1,0 +1,1 @@
+import{C as e,T as a}from"./index-70c16ae5.js";import{d as o,C as t}from"./Typography-d7f7ee89.js";const s=e(),r=o({themeId:a,defaultTheme:s,defaultClassName:"MuiBox-root",generateClassName:t.generate}),c=r;export{c as B};

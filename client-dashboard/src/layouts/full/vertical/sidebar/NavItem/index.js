@@ -50,23 +50,6 @@ const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
   const fullName = useSelector((state) => state.novelprofileReducer.fullName);
   let noti = localStorage.getItem('noti') || 0;
 
-  const { data, mutate } = useFrappeGetDocCount(
-    'Notifications CD',
-    [['read', '=', 'no'], ['customer_name', '=', fullName]],
-    false,
-  );
-
-  // setTimeout(() => {
-  //   mutate()
-  // }, 1000);
-
-  if (data > noti) {
-    // alert("new notification");
-    localStorage.setItem('noti', data);
-    noti = data;
-    console.log("data.length = ", data);
-  }
-
   return (
     <List component="li" disablePadding key={item.id}>
       <ListItemStyled

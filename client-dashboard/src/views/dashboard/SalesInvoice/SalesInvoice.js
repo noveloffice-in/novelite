@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PageContainer from '../../../components/container/PageContainer';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import Table from './Table';
+import SalesFilter from './SalesFilter';
 
 const BCrumb = [
   {
@@ -19,7 +20,7 @@ const BCrumb = [
 const SalesInvoice = () => {
 
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
-  const dispatch = useDispatch();
+  const [statusFilter, setStatusFilter] = React.useState("ALL");
 
   //-----------------------------------------------------------Fetch Invoice-----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Sales Invoice', {
@@ -37,9 +38,9 @@ const SalesInvoice = () => {
     <PageContainer title="Sales Invoice - Novel Office" description="this is Sales Invoice page">
       {/* breadcrumb */}
       <Breadcrumb title="Sales Invoice" items={BCrumb} />
-
+      {data && <SalesFilter data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter}/>}
       {/* Table */}
-      {data && <Table data={data} />}
+      {data && <Table data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter}/>}
 
     </PageContainer>
   );

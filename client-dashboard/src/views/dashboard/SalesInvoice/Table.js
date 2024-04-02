@@ -93,10 +93,9 @@ TablePaginationActions.propTypes = {
 };
 
 
-export default function Table1({ data }) {
+export default function Table1({ data, statusFilter, setStatusFilter }) {
 
     const [page, setPage] = useState(0);
-    const [statusFilter, setStatusFilter] = useState("All");
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [filterData, setFilterData] = useState(data);
 
@@ -141,7 +140,7 @@ export default function Table1({ data }) {
     };
 
     let statusArray = [
-        'All',
+        'ALL',
         'Pending',
         'Paid',
         'Credit Note'
