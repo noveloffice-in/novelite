@@ -1,6 +1,5 @@
 import { Box, Grid, Typography, styled } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { setVisibilityFilter } from '../../../store/apps/tickets/TicketSlice';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 const BoxStyled = styled(Box)(() => ({
@@ -13,13 +12,12 @@ const BoxStyled = styled(Box)(() => ({
     },
 }));
 
-const SalesFilter = ({ data, statusFilter, setStatusFilter  }) => {
-    const dispatch = useDispatch();
+const SalesFilter = ({ data, setStatusFilter }) => {
     const [pending, setPending] = useState([]);
     const [paid, setPaid] = useState([]);
     const [creditNote, setCreditNote] = useState([]);
 
-    const counter = useSelector((state) => state.ticketReducer.tickets);
+    //-----------------------------------------------------------Filtering the Invoices-----------------------------------------------//
 
     useEffect(() => {
         setPending(data?.filter((element) => {
@@ -39,9 +37,6 @@ const SalesFilter = ({ data, statusFilter, setStatusFilter  }) => {
         }))
     }, [])
 
-    const pendingC = counter.filter((t) => t.Status === 'Pending').length;
-    const openC = counter.filter((t) => t.Status === 'Open').length;
-    const closeC = counter.filter((t) => t.Status === 'Closed').length;
     return (
         <Box mb={2}>
             <Grid container spacing={3} textAlign="center">
@@ -49,7 +44,7 @@ const SalesFilter = ({ data, statusFilter, setStatusFilter  }) => {
                     <BoxStyled
                         onClick={() => setStatusFilter('ALL')}
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
-                        >
+                    >
                         <Typography variant="h3">{data.length}</Typography>
                         <Typography variant="h6">ALL</Typography>
                     </BoxStyled>
@@ -58,7 +53,7 @@ const SalesFilter = ({ data, statusFilter, setStatusFilter  }) => {
                     <BoxStyled
                         onClick={() => setStatusFilter('Pending')}
                         sx={{ backgroundColor: 'warning.light', color: 'warning.main' }}
-                        >
+                    >
                         <Typography variant="h3">{pending.length}</Typography>
                         <Typography variant="h6">Pending</Typography>
                     </BoxStyled>
@@ -67,7 +62,7 @@ const SalesFilter = ({ data, statusFilter, setStatusFilter  }) => {
                     <BoxStyled
                         onClick={() => setStatusFilter('Paid')}
                         sx={{ backgroundColor: 'success.light', color: 'success.main' }}
-                        >
+                    >
                         <Typography variant="h3">{paid.length}</Typography>
                         <Typography variant="h6">Paid</Typography>
                     </BoxStyled>

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import Table from './Table';
+import { useState } from 'react';
+import SalesFilter from './SalesFilter';
+import { useSelector } from 'react-redux';
 import { useFrappeGetDocList } from 'frappe-react-sdk';
-import { useDispatch, useSelector } from 'react-redux';
 import PageContainer from '../../../components/container/PageContainer';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
-import Table from './Table';
-import SalesFilter from './SalesFilter';
 
 const BCrumb = [
   {
@@ -16,11 +16,10 @@ const BCrumb = [
   },
 ];
 
-
 const SalesInvoice = () => {
 
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
-  const [statusFilter, setStatusFilter] = React.useState("ALL");
+  const [statusFilter, setStatusFilter] = useState("ALL");
 
   //-----------------------------------------------------------Fetch Invoice-----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Sales Invoice', {
@@ -38,9 +37,12 @@ const SalesInvoice = () => {
     <PageContainer title="Sales Invoice - Novel Office" description="this is Sales Invoice page">
       {/* breadcrumb */}
       <Breadcrumb title="Sales Invoice" items={BCrumb} />
-      {data && <SalesFilter data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter}/>}
+
+      {/* Invoice Filters */}
+      {data && <SalesFilter data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter} />}
+
       {/* Table */}
-      {data && <Table data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter}/>}
+      {data && <Table data={data} statusFilter={statusFilter} setStatusFilter={setStatusFilter} />}
 
     </PageContainer>
   );

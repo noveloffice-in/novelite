@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useFrappeGetDocCount } from 'frappe-react-sdk';
 
 const NavItem = ({ item, level, pathDirect, onClick, hideMenu }) => {
   const customizer = useSelector((state) => state.customizer);
