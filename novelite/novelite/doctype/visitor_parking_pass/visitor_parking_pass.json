@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:VPP{DD}{MM}{YY}-{###}",
+ "creation": "2024-04-03 14:53:34.785492",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_details_section",
+  "customer",
+  "customer_email",
+  "column_break_u6k4a",
+  "lead_id",
+  "billing_entity",
+  "visitor_details_section",
+  "visitor_name",
+  "vehicle_type",
+  "visit_location",
+  "column_break_isnkc",
+  "visitor_email",
+  "vehicle_no",
+  "visit_date",
+  "visit_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer_details_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_email",
+   "fieldtype": "Data",
+   "label": "Customer Email"
+  },
+  {
+   "fieldname": "column_break_u6k4a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lead_id",
+   "fieldtype": "Link",
+   "label": "Lead ID",
+   "options": "Leads"
+  },
+  {
+   "fieldname": "billing_entity",
+   "fieldtype": "Data",
+   "label": "Billing Entity"
+  },
+  {
+   "fieldname": "visitor_details_section",
+   "fieldtype": "Section Break",
+   "label": "Visitor Details"
+  },
+  {
+   "fieldname": "visitor_name",
+   "fieldtype": "Data",
+   "label": "Visitor Name"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Select",
+   "label": "Vehicle Type",
+   "options": "Car\nBike"
+  },
+  {
+   "fieldname": "visit_location",
+   "fieldtype": "Link",
+   "label": "Visit Location",
+   "options": "Property Location"
+  },
+  {
+   "fieldname": "column_break_isnkc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "visitor_email",
+   "fieldtype": "Data",
+   "label": "Visitor Email"
+  },
+  {
+   "fieldname": "vehicle_no",
+   "fieldtype": "Data",
+   "label": "Vehicle No"
+  },
+  {
+   "fieldname": "visit_date",
+   "fieldtype": "Date",
+   "label": "Visit Date"
+  },
+  {
+   "fieldname": "visit_time",
+   "fieldtype": "Data",
+   "label": "Visit Time"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-04-03 14:57:36.242610",
+ "modified_by": "Administrator",
+ "module": "Novelite",
+ "name": "Visitor Parking Pass",
+ "name_case": "UPPER CASE",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
