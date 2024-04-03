@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -16,51 +16,72 @@ import {
   TextField,
   Pagination,
   TableContainer,
+  Button,
 } from '@mui/material';
 import { fetchTickets, DeleteTicket, SearchTicket } from '../../../store/apps/tickets/TicketSlice';
 import { IconTrash } from '@tabler/icons';
 
+//Dialouge
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import PassForm from './PassForm';
+
 const PassTable = () => {
   const dispatch = useDispatch();
+
+  //Dialouge component
+  const [open1, setOpen1] = useState(false);
+
+  //Dialog
+  const handleClickOpen = () => {
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+
   useEffect(() => {
     dispatch(fetchTickets());
   }, [dispatch]);
 
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
-    if(tickets){
-        switch (filter) {
-          case 'total_tickets':
-            return tickets.filter(
-              (c) => !c.deleted && c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
-            );
-    
-          case 'Pending':
-            return tickets.filter(
-              (c) =>
-                !c.deleted &&
-                c.Status === 'Pending' &&
-                c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
-            );
-    
-          case 'Closed':
-            return tickets.filter(
-              (c) =>
-                !c.deleted &&
-                c.Status === 'Closed' &&
-                c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
-            );
-    
-          case 'Open':
-            return tickets.filter(
-              (c) =>
-                !c.deleted &&
-                c.Status === 'Open' &&
-                c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
-            );
-    
-          default:
-            throw new Error(`Unknown filter: ${filter}`);
-        }
+    if (tickets) {
+      switch (filter) {
+        case 'total_tickets':
+          return tickets.filter(
+            (c) => !c.deleted && c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+          );
+
+        case 'Pending':
+          return tickets.filter(
+            (c) =>
+              !c.deleted &&
+              c.Status === 'Pending' &&
+              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+          );
+
+        case 'Closed':
+          return tickets.filter(
+            (c) =>
+              !c.deleted &&
+              c.Status === 'Closed' &&
+              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+          );
+
+        case 'Open':
+          return tickets.filter(
+            (c) =>
+              !c.deleted &&
+              c.Status === 'Open' &&
+              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+          );
+
+        default:
+          throw new Error(`Unknown filter: ${filter}`);
+      }
     }
   };
 
@@ -73,13 +94,20 @@ const PassTable = () => {
   );
   return (
     <Box mt={4}>
-      <Box sx={{ maxWidth: '260px', ml: 'auto' }} mb={3}>
-        <TextField
-          size="small"
-          label="Search"
-          fullWidth
-          onChange={(e) => dispatch(SearchTicket(e.target.value))}
-        />
+      <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
+        <Box>
+          <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
+            Book parking pass
+          </Button>
+        </Box>
+        <Box sx={{ maxWidth: '260px', ml: 'auto' }} mb={3}>
+          <TextField
+            size="small"
+            label="Search"
+            fullWidth
+            onChange={(e) => dispatch(SearchTicket(e.target.value))}
+          />
+        </Box>
       </Box>
       <TableContainer>
         <Table>
@@ -172,6 +200,21 @@ const PassTable = () => {
       <Box my={3} display="flex" justifyContent={'center'}>
         <Pagination count={10} color="primary" />
       </Box>
+      {/* ---------------------------------------Dialog Start---------------------------------- */}
+      <Dialog
+        fullWidth
+        maxWidth='sm'
+        open={open1}
+        onClose={handleClose1}
+      >
+        <DialogTitle>Book a pass</DialogTitle>
+        <DialogContent>
+          <PassForm setOpen1={setOpen1} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose1}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

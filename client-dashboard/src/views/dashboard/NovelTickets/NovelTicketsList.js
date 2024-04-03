@@ -113,28 +113,28 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       switch (filter) {
         case 'total_tickets':
           return tickets.filter(
-            (c) => c.subject.toLocaleLowerCase().includes(ticketSearch),
+            (c) => c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'On Hold':
           return tickets.filter(
             (c) =>
               c.status === 'On Hold' &&
-              c.subject.toLocaleLowerCase().includes(ticketSearch),
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Closed':
           return tickets.filter(
             (c) =>
               c.status === 'Closed' &&
-              c.subject.toLocaleLowerCase().includes(ticketSearch),
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Open':
           return tickets.filter(
             (c) =>
               c.status === 'Open' &&
-              c.subject.toLocaleLowerCase().includes(ticketSearch),
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         default:
