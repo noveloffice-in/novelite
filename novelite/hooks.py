@@ -63,8 +63,8 @@ app_include_js = "/assets/novelite/js/novelite.js"
 # Installation
 # ------------
 
-# before_install = "novelite.install.before_install"
-# after_install = "novelite.install.after_install"
+before_install = "novelite.install.before_install"
+after_install = "novelite.install.after_install"
 
 # Uninstallation
 # ------------
