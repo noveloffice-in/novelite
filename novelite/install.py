@@ -41,12 +41,14 @@ def add_custom_fields_in_user():
 					{
 						"fieldname":"app_user_type",
 						"fieldtype":"Select",
-						"options":"Select an Option \nNovel Employee \nProperty Customer",
+						"options": "Select an Option\nNovel Employee\nProperty Customer",
 						"label": "App User Type",
 						"reqd": 1,
 						"insert_after": "",
 					},
 					{
+						"depends_on": "eval:doc.app_user_type == \"Property Customer\";",
+						"mandatory_depends_on": "eval:doc.app_user_type == \"Property Customer\";",
 						"fieldname":"customer",
 						"fieldtype":"Link",
 						"options":"Customer",
