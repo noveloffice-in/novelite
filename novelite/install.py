@@ -41,7 +41,7 @@ def add_custom_fields_in_user():
 					{
 						"fieldname":"app_user_type",
 						"fieldtype":"Select",
-						"options":"Option 1\nNovel Employee 2\nProperty Customer",
+						"options":"Select an Option \nNovel Employee \nProperty Customer",
 						"label": "App User Type",
 						"reqd": 1,
 						"insert_after": "",
