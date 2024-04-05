@@ -1,67 +1,67 @@
-import { Box } from '@mui/system'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import React from 'react';
-import { DialogTitle, Divider, TextField } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import React, { useState } from 'react';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider } from '@mui/material';
+import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 
-
-export default function PassForm() {
-    const [location, setLocation] = React.useState('');
-    const [billingLocation, setBillingLocation] = React.useState('');
-    const [userData, setUserData] = React.useState({
+export default function PassForm({ billingLocation }) {
+    const [location, setLocation] = useState('');
+    const [userData, setUserData] = useState({
         visitorName: '',
         vehicleNumber: '',
         visitorEmail: '',
-        bilLoc: ''
+        billingLead: billingLocation.length > 0 ? billingLocation[0].leadId : '',
+        billingLoc: billingLocation.length > 0 ? billingLocation[0].location : ''
     });
 
     const allLocations = [{ location: 'NTP' }, { location: 'NBP' }, { location: 'NOW' }, { location: 'NOB' }];
 
-    const handleChange = (event) => {
-        setLocation(event.target.value);
+    console.log("User Data = ", userData);
+    const handleBillingLocation = (element) => {
+        setUserData(prev => ({
+            ...prev,
+            billingLead: element.leadId,
+            billingLoc: element.location
+        }));
+
     };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     return (
         <Box>
-            <Box noValidate
-                component="form"
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    m: 'auto',
-                    width: '90%',
-                }}>
+            <Box noValidate component="form" sx={{ display: 'flex', flexDirection: 'column', m: 'auto', width: '90%' }}>
                 <Box>
                     <FormControl fullWidth variant="standard">
                         <InputLabel id="demo-simple-select-helper-label">Billing Location</InputLabel>
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
-                            value={billingLocation}
+                            // value={userData.billingLoc}
                             label="Billing Location"
-                            onChange={(e) => { setBillingLocation(e.target.value) }}
+                            onChange={(e) => handleBillingLocation(e.target.value)}
                         >
-                            <MenuItem value='NTP'>NTP</MenuItem>
-                            <MenuItem value='NOM'>NOM</MenuItem>
-                            <MenuItem value='NBP'>NBP</MenuItem>
+                            {billingLocation.map((element, index) => (
+                                <MenuItem key={index} value={element}>{element.location}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
-                    <TextField label="Your Email" variant="standard" required style={{ width: '100%', marginTop: '8px' }} name="visitorEmail" />
+                    <TextField label="Your Email" variant="standard" required style={{ width: '100%', marginTop: '8px' }} name="visitorEmail" value={userData.visitorEmail} onChange={handleInputChange} />
                 </Box>
                 <Divider />
                 <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Visitor Details</DialogTitle>
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
                     <Box >
-                        <TextField label="Visitor Name" variant="standard" value={setUserData.visitorName} onChange={() => { setUserData((prev) => { }) }} required style={{ width: '100%', marginTop: '16px' }} name="visitorName" />
-                        <TextField label="Vehicle Number" variant="standard" value={setUserData.vehicleNumber} onChange={() => { setUserData((prev) => { }) }} required style={{ width: '100%', marginTop: '16px' }} name="vehicleNumber" />
+                        <TextField label="Visitor Name" variant="standard" value={userData.visitorName} onChange={handleInputChange} required style={{ width: '100%', marginTop: '16px' }} name="visitorName" />
+                        <TextField label="Vehicle Number" variant="standard" value={userData.vehicleNumber} onChange={handleInputChange} required style={{ width: '100%', marginTop: '16px' }} name="vehicleNumber" />
                     </Box>
                     <Box >
-                        <TextField label="Visitor Email" variant="standard" value={setUserData.visitorEmail} onChange={() => { setUserData((prev) => { }) }} required style={{ width: '100%', marginTop: '16px' }} name="visitorEmail" />
+                        <TextField label="Visitor Email" variant="standard" value={userData.visitorEmail} onChange={handleInputChange} required style={{ width: '100%', marginTop: '16px' }} name="visitorEmail" />
                         <FormControl variant="standard" fullWidth sx={{ mt: 2 }} >
                             <InputLabel id="demo-simple-select-standard-label">Visit Location</InputLabel>
                             <Select
@@ -69,34 +69,28 @@ export default function PassForm() {
                                 id="demo-simple-select-standard"
                                 value={location}
                                 label="Visit Location"
-                                onChange={handleChange}
+                                onChange={(e) => setLocation(e.target.value)}
                             >
-                                {allLocations.map((element) => {
-                                    return (
-                                        <MenuItem key={element.location} value={element.location}> {element.location} </MenuItem>
-                                    )
-                                })}
+                                {allLocations.map((element) => (
+                                    <MenuItem key={element.location} value={element.location}>{element.location}</MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, justifyContent:'space-between', gap: 2, mt: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, justifyContent: 'space-between', gap: 2, mt: 2 }}>
                     <Box>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['TimePicker']}>
-                                <TimePicker label="Basic time picker" />
-                            </DemoContainer>
+                            <TimePicker label="Basic time picker" renderInput={(params) => <TextField {...params} />} />
                         </LocalizationProvider>
                     </Box>
                     <Box>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['DatePicker']}>
-                                <DatePicker label="Basic date picker" />
-                            </DemoContainer>
+                            <DatePicker label="Basic date picker" renderInput={(params) => <TextField {...params} />} />
                         </LocalizationProvider>
                     </Box>
                 </Box>
             </Box>
         </Box>
-    )
+    );
 }

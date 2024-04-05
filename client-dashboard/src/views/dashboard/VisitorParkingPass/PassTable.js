@@ -27,9 +27,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import PassForm from './PassForm';
+import { useFrappeGetDoc } from 'frappe-react-sdk';
 
 const PassTable = () => {
   const dispatch = useDispatch();
+  const companyName = useSelector((state) => state.novelprofileReducer.companyName);
+
+  //Getting leads and setting only lead Ids in store
+  const getLeadID = () => {
+    const { data: customerData } = useFrappeGetDoc(
+      'Customer', `${companyName}`
+    );
+    return customerData?.leads.map((lead) => { return { "location": lead.confirmed_location, "leadId": lead.leads } });
+  }
+
+  const billingLocation = getLeadID();
+  // console.log(getLeadID());
 
   //Dialouge component
   const [open1, setOpen1] = useState(false);
@@ -209,7 +222,7 @@ const PassTable = () => {
       >
         <DialogTitle>Book a pass</DialogTitle>
         <DialogContent>
-          <PassForm setOpen1={setOpen1} />
+          {billingLocation && <PassForm setOpen1={setOpen1} billingLocation={billingLocation}/>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>
