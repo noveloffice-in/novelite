@@ -353,3 +353,40 @@ def issue():
         # frappe.throw("Adding to doc")
     except Exception as e:
         frappe.throw(str(e))
+
+# --------------------------------
+
+@frappe.whitelist(allow_guest=True)
+def addDataToleadsAndVisitorParking():
+    data = frappe.request.json
+    
+    if data is None:
+        frappe.throw("No data provided")
+
+    lead_id = data.get('lead_name')
+    
+    if lead_id:
+        doc = frappe.get_doc("Leads", lead_id)
+        for i in doc.complementary_table:
+            i.vp_used = i.vp_used + 100
+        
+        doc.save()
+    else:
+        frappe.throw("Lead ID not provided")
+
+    vps = frappe.new_doc("Visitor Parking Pass")
+    vps.customer = data.get('customer', "")
+    vps.customer_email = data.get('customer_email', "")
+    vps.lead_id = data.get('lead_id', "")
+    vps.billing_entity = data.get('billing_entity', "")
+    vps.visitor_name = data.get('visitor_name', "")
+    vps.vehicle_type = data.get('vehicle_type', "")
+    vps.visit_location = data.get('visit_location', "")
+    vps.visitor_email = data.get('visitor_email', "")
+    vps.vehicle_no = data.get('vehicle_no', "")
+    visit_date = frappe.utils.getdate(data.get('visit_date')) if data.get('visit_date') else ""
+    vps.visit_date = visit_date
+    vps.visit_time = data.get('visit_time', "")
+    
+
+    vps.save()
