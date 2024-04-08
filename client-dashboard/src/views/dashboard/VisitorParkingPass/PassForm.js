@@ -1,28 +1,62 @@
 import React, { useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider } from '@mui/material';
-import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider, Button } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useSelector } from 'react-redux';
+//Toastify 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+//Date 
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DateField } from '@mui/x-date-pickers/DateField';
+//Time
+import { TimeField } from '@mui/x-date-pickers/TimeField';
 
 export default function PassForm({ billingLocation }) {
-    const [location, setLocation] = useState('');
+    const customerName = useSelector((state) => state.novelprofileReducer.fullName);
+    const customerEmailId = useSelector((state) => state.novelprofileReducer.userEmail);
     const [userData, setUserData] = useState({
+        customer: customerName,
+        customerEmail: customerEmailId,
         visitorName: '',
         vehicleNumber: '',
+        vehicleType: '',
         visitorEmail: '',
+        visitLocation: '',
         billingLead: billingLocation.length > 0 ? billingLocation[0].leadId : '',
-        billingLoc: billingLocation.length > 0 ? billingLocation[0].location : ''
+        billingLoc: billingLocation.length > 0 ? billingLocation[0] : '',
+        visitingDate: dayjs(),
+        visitingTime: dayjs()
     });
 
-    const allLocations = [{ location: 'NTP' }, { location: 'NBP' }, { location: 'NOW' }, { location: 'NOB' }];
+    const allLocations = [
+        { location: 'Novel Office WorkHub - Whitefield' },
+        { location: 'Novel Office Brigade' },
+        { location: 'Novel Tech Park - Kudlu Gate' },
+        { location: 'Novel Office Brigade - Whitefield' },
+        { location: 'Novel Office Central - MG Road' },
+        { location: 'Novel Business Park - Adugodi' },
+        { location: 'Novel Office Marathahalli' },
+        { location: 'Novel Office Queens - Queens Road' }
+    ];
 
-    console.log("User Data = ", userData);
+    const vehicleTypes = [
+        { type: "Car" },
+        { type: "Bike" }
+    ]
+
+    const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+    const notifyError = (msg) => toast.error(msg, { toastId: "error" });
+    const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
+
     const handleBillingLocation = (element) => {
         setUserData(prev => ({
             ...prev,
             billingLead: element.leadId,
             billingLoc: element.location
         }));
-
     };
 
     const handleInputChange = (e) => {
@@ -33,6 +67,54 @@ export default function PassForm({ billingLocation }) {
         }));
     };
 
+    const handleVisitLocationChange = (e) => {
+        const { value } = e.target;
+        setUserData(prev => ({
+            ...prev,
+            visitLocation: value
+        }));
+    };
+
+    const handleDateChange = (newValue) => {
+        const date = new Date(newValue);
+        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+        setUserData(prev => ({
+            ...prev,
+            visitingDate: formattedDate
+        }));
+    };
+
+    const handleTimeChange = (newValue) => {
+        const date = new Date(newValue);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedTime = `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+        setUserData(prev => ({
+            ...prev,
+            visitingTime: formattedTime
+        }));
+    };
+
+    const handleSubmit = () => {
+        const { customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime } = userData;
+
+        if (!(customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime)) {
+            notifyWarn("Please Fill all the details");
+        } else {
+            axios.post('/api/method/novelite.api.api.addDataToleadsAndVisitorParking', userData)
+                .then((res) => {
+                    console.log(res);
+                    notifySuccess("Booking succesfull");
+                })
+                .catch((err) => {
+                    notifyError(err.message);
+                    console.log(err);
+                })
+        }
+    }
+
     return (
         <Box>
             <Box noValidate component="form" sx={{ display: 'flex', flexDirection: 'column', m: 'auto', width: '90%' }}>
@@ -42,7 +124,7 @@ export default function PassForm({ billingLocation }) {
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
-                            // value={userData.billingLoc}
+                            value={userData.billingLoc}
                             label="Billing Location"
                             onChange={(e) => handleBillingLocation(e.target.value)}
                         >
@@ -51,7 +133,7 @@ export default function PassForm({ billingLocation }) {
                             ))}
                         </Select>
                     </FormControl>
-                    <TextField label="Your Email" variant="standard" required style={{ width: '100%', marginTop: '8px' }} name="visitorEmail" value={userData.visitorEmail} onChange={handleInputChange} />
+                    <TextField label="Your Email" variant="standard" required style={{ width: '100%', marginTop: '8px' }} name="customerEmail" value={userData.customerEmail} onChange={handleInputChange} />
                 </Box>
                 <Divider />
                 <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Visitor Details</DialogTitle>
@@ -63,13 +145,13 @@ export default function PassForm({ billingLocation }) {
                     <Box >
                         <TextField label="Visitor Email" variant="standard" value={userData.visitorEmail} onChange={handleInputChange} required style={{ width: '100%', marginTop: '16px' }} name="visitorEmail" />
                         <FormControl variant="standard" fullWidth sx={{ mt: 2 }} >
-                            <InputLabel id="demo-simple-select-standard-label">Visit Location</InputLabel>
+                            <InputLabel id="visit-location-label">Visit Location</InputLabel>
                             <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={location}
+                                labelId="visit-location-label"
+                                id="visit-location-select"
+                                value={userData.visitLocation}
                                 label="Visit Location"
-                                onChange={(e) => setLocation(e.target.value)}
+                                onChange={handleVisitLocationChange}
                             >
                                 {allLocations.map((element) => (
                                     <MenuItem key={element.location} value={element.location}>{element.location}</MenuItem>
@@ -78,19 +160,63 @@ export default function PassForm({ billingLocation }) {
                         </FormControl>
                     </Box>
                 </Box>
+                <FormControl variant="standard" fullWidth sx={{ mt: 2 }} >
+                    <InputLabel id="vehicle-type-label">Vehicle Type</InputLabel>
+                    <Select
+                        labelId="vehicle-type-label"
+                        id="vehicle-type-select"
+                        value={userData.vehicleType}
+                        label="Vehicle Type"
+                        name="vehicleType"
+                        onChange={handleInputChange}
+                    >
+                        {vehicleTypes.map((element) => (
+                            <MenuItem key={element.type} value={element.type}>{element.type}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, justifyContent: 'space-between', gap: 2, mt: 2 }}>
                     <Box>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker label="Basic time picker" renderInput={(params) => <TextField {...params} />} />
+                            <DemoContainer components={['TimeField', 'TimeField', 'TimeField']}>
+                                <TimeField
+                                    label="Format with meridiem"
+                                    defaultValue={userData.visitingDate}
+                                    format="hh:mm a"
+                                    onChange={(value) => { handleTimeChange(value.$d) }}
+                                />
+                            </DemoContainer>
                         </LocalizationProvider>
                     </Box>
                     <Box>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker label="Basic date picker" renderInput={(params) => <TextField {...params} />} />
+                            <DemoContainer components={['DateField', 'DateField']}>
+                                <DateField
+                                    label="Dash separator"
+                                    defaultValue={userData.visitingDate}
+                                    format="DD-MM-YYYY"
+                                    onChange={(newValue) => handleDateChange(newValue.$d)}
+                                />
+                            </DemoContainer>
                         </LocalizationProvider>
                     </Box>
                 </Box>
+                <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit} >
+                    Submit
+                </Button>
             </Box>
+            <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </Box>
     );
 }
