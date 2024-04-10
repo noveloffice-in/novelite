@@ -116,10 +116,10 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             (c) => c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
-        case 'On Hold':
+        case 'Pending':
           return tickets.filter(
             (c) =>
-              c.status === 'On Hold' &&
+              c.status === 'Pending' &&
               c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 

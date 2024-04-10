@@ -26,7 +26,7 @@ export default function PassForm({ billingLocation }) {
         visitorEmail: '',
         visitLocation: '',
         billingLead: billingLocation.length > 0 ? billingLocation[0].leadId : '',
-        billingLoc: billingLocation.length > 0 ? billingLocation[0] : '',
+        billingLoc: billingLocation.length > 0 ? billingLocation[0].location : '',
         visitingDate: dayjs(),
         visitingTime: dayjs()
     });
@@ -124,7 +124,7 @@ export default function PassForm({ billingLocation }) {
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
-                            value={userData.billingLoc}
+                            value={billingLocation.length > 0 ? billingLocation[0] : ''}
                             label="Billing Location"
                             onChange={(e) => handleBillingLocation(e.target.value)}
                         >
