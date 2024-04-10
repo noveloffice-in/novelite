@@ -27,7 +27,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import PassForm from './PassForm';
-import { useFrappeGetDoc } from 'frappe-react-sdk';
+import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 
 const PassTable = () => {
   const dispatch = useDispatch();
@@ -47,6 +47,7 @@ const PassTable = () => {
   //Dialouge component
   const [open1, setOpen1] = useState(false);
 
+  //------------------------------------------------------Dialog-----------------------------------------------//
   //Dialog
   const handleClickOpen = () => {
     setOpen1(true);
@@ -56,40 +57,45 @@ const PassTable = () => {
     setOpen1(false);
   };
 
-  useEffect(() => {
-    dispatch(fetchTickets());
-  }, [dispatch]);
+  //------------------------------------------------------Table Data-----------------------------------------------//
+  const { data, mutate, isLoading } = useFrappeGetDocList('Visitor Parking Pass', {
+    fields: ['name', 'visitor_name', 'vehicle_type', 'visit_location', 'visitor_email', 'vehicle_no', 'visit_date', 'visit_time'],
+    filters: [['customer', '=', companyName]],
+    orderBy: {
+      field: 'creation',
+      order: 'desc',
+    },
+  })
+
+  console.log('Table Data = ', data);
 
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
-    if (tickets) {
+    if (tickets != undefined) {
       switch (filter) {
         case 'total_tickets':
           return tickets.filter(
-            (c) => !c.deleted && c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+            (c) => c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Pending':
           return tickets.filter(
             (c) =>
-              !c.deleted &&
-              c.Status === 'Pending' &&
-              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+              c.status === 'Pending' &&
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Closed':
           return tickets.filter(
             (c) =>
-              !c.deleted &&
-              c.Status === 'Closed' &&
-              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+              c.status === 'Closed' &&
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Open':
           return tickets.filter(
             (c) =>
-              !c.deleted &&
-              c.Status === 'Open' &&
-              c.ticketTitle?.toLocaleLowerCase().includes(ticketSearch),
+              c.status === 'Open' &&
+              c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         default:
@@ -127,33 +133,35 @@ const PassTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="h6">Id</Typography>
+                <Typography variant="h6">Visitor Name</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Ticket</Typography>
+                <Typography variant="h6">Visit Date</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Assigned To</Typography>
+                <Typography variant="h6">Visit Time</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Status</Typography>
+                <Typography variant="h6">Visitor Vehicle No</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Date</Typography>
+                <Typography variant="h6">Visitor Location</Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6">Action</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {tickets.map((ticket) => (
-              <TableRow key={ticket.Id} hover>
-                <TableCell>{ticket.Id}</TableCell>
+          {data && <TableBody>
+            {data.map((element) => (
+              <TableRow key={element.name} hover>
+                <TableCell>
+                  <Typography variant="h6">{element.visitor_name}</Typography>
+                </TableCell>
                 <TableCell>
                   <Box>
                     <Typography variant="h6" fontWeight="500" noWrap>
-                      {ticket.ticketTitle}
+                      {element.visit_date}
                     </Typography>
                     <Typography
                       color="textSecondary"
@@ -162,25 +170,17 @@ const PassTable = () => {
                       variant="subtitle2"
                       fontWeight="400"
                     >
-                      {ticket.ticketDescription}
+                      {element.visit_time}
                     </Typography>
                   </Box>
                 </TableCell>
                 <TableCell>
                   <Stack direction="row" gap="10px" alignItems="center">
-                    <Avatar
-                      src={ticket.thumb}
-                      alt={ticket.thumb}
-                      width="35"
-                      sx={{
-                        borderRadius: '100%',
-                      }}
-                    />
-                    <Typography variant="h6">{ticket.AgentName}</Typography>
+                    <Typography variant="h6">{element.visit_time}</Typography>
                   </Stack>
                 </TableCell>
                 <TableCell>
-                  <Chip
+                  {/* <Chip
                     sx={{
                       backgroundColor:
                         ticket.Status === 'Open'
@@ -193,10 +193,11 @@ const PassTable = () => {
                     }}
                     size="small"
                     label={ticket.Status}
-                  />
+                  /> */}
+                  <Typography>{element.vehicle_no}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{ticket.Date}</Typography>
+                  <Typography>{element.visit_location}</Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Tooltip title="Delete Ticket">
@@ -207,7 +208,7 @@ const PassTable = () => {
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
+          </TableBody>}
         </Table>
       </TableContainer>
       <Box my={3} display="flex" justifyContent={'center'}>
@@ -222,7 +223,7 @@ const PassTable = () => {
       >
         <DialogTitle>Book a pass</DialogTitle>
         <DialogContent>
-          {billingLocation && <PassForm setOpen1={setOpen1} billingLocation={billingLocation}/>}
+          {billingLocation && <PassForm setOpen1={setOpen1} billingLocation={billingLocation} />}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>

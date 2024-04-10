@@ -100,7 +100,7 @@ export default function PassForm({ billingLocation }) {
     const handleSubmit = () => {
         const { customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime } = userData;
 
-        if (!(customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime)) {
+        if (!(customer || customerEmail || visitorName || vehicleNumber || vehicleType || visitorEmail || visitLocation || billingLead || billingLoc || visitingDate || visitingTime)) {
             notifyWarn("Please Fill all the details");
         } else {
             axios.post('/api/method/novelite.api.api.addDataToleadsAndVisitorParking', userData)
