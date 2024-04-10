@@ -28,6 +28,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import PassForm from './PassForm';
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
+import { Link } from 'react-router-dom';
 
 const PassTable = () => {
   const dispatch = useDispatch();
@@ -154,7 +155,7 @@ const PassTable = () => {
           </TableHead>
           {data && <TableBody>
             {data.map((element) => (
-              <TableRow key={element.name} hover>
+              <TableRow key={element.name} hover component={Link} to={`/visit_details/${element.name}`}>
                 <TableCell>
                   <Typography variant="h6">{element.visitor_name}</Typography>
                 </TableCell>
