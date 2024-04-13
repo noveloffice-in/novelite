@@ -11,6 +11,7 @@ from datetime import datetime
 import qrcode
 from io import BytesIO
 import base64
+import os
 # from cryptography.fernet import Fernet
 from Crypto.Cipher import AES
 
@@ -354,39 +355,69 @@ def issue():
     except Exception as e:
         frappe.throw(str(e))
 
-# --------------------------------
+# --------------------------------Creating Records in Visiting PP
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def addDataToleadsAndVisitorParking():
     data = frappe.request.json
-    
+
     if data is None:
         frappe.throw("No data provided")
 
-    lead_id = data.get('lead_name')
+    lead_id = data.get('billingLead')
     
     if lead_id:
         doc = frappe.get_doc("Leads", lead_id)
         for i in doc.complementary_table:
             i.vp_used = i.vp_used + 100
-        
+            i.save()
         doc.save()
     else:
         frappe.throw("Lead ID not provided")
 
+    # Create and insert the Visitor Parking Pass document first to get a valid 'name'
     vps = frappe.new_doc("Visitor Parking Pass")
     vps.customer = data.get('customer', "")
-    vps.customer_email = data.get('customer_email', "")
-    vps.lead_id = data.get('lead_id', "")
-    vps.billing_entity = data.get('billing_entity', "")
-    vps.visitor_name = data.get('visitor_name', "")
-    vps.vehicle_type = data.get('vehicle_type', "")
-    vps.visit_location = data.get('visit_location', "")
-    vps.visitor_email = data.get('visitor_email', "")
-    vps.vehicle_no = data.get('vehicle_no', "")
-    visit_date = frappe.utils.getdate(data.get('visit_date')) if data.get('visit_date') else ""
+    vps.customer_email = data.get('customerEmail', "")
+    vps.lead_id = data.get('billingLead', "")
+    vps.billing_entity = data.get('billingLoc', "")
+    vps.visitor_name = data.get('visitorName', "")
+    vps.vehicle_type = data.get('vehicleType', "")
+    vps.visit_location = data.get('visitLocation', "")
+    vps.visitor_email = data.get('visitorEmail', "")
+    vps.vehicle_no = data.get('vehicleNumber', "")
+    visit_date = frappe.utils.getdate(data.get('visitingDate')) if data.get('visitingDate') else ""
     vps.visit_date = visit_date
-    vps.visit_time = data.get('visit_time', "")
+    vps.visit_time = data.get('visitingTime', "")
     
+    vps.insert()  # This generates a 'name' for the vps document
 
-    vps.save()
+    # Now generate the QR code
+    qr_code_data = generate_qrcode(data)
+
+    # And save the QR code as a File document in Frappe, attaching it to the Visitor Parking Pass
+    qr_code_file = save_qr_code_file(qr_code_data, vps.name)  # Now vps has a valid name
+    
+    # Finally, update the Visitor Parking Pass document with the QR code file's URL
+    vps.db_set("custom_qr_code", qr_code_file.file_url)
+
+    return "Done!"
+
+def save_qr_code_file(qr_code_data, reference_name):
+    # Convert base64 string back to binary for file saving
+    qr_code_binary = base64.b64decode(qr_code_data)
+
+    # Create a new File doc and set its properties
+    file_doc = frappe.get_doc({
+        "doctype": "File",
+        "file_name": f"qr_code_{reference_name}.png",
+        "folder": "Home",
+        "is_private": 1,
+        "content": qr_code_binary,  # Here we use the binary data
+        "attached_to_doctype": "Visitor Parking Pass",
+        "attached_to_name": reference_name  # This should now be valid
+    })
+    file_doc.insert(ignore_permissions=True)
+    return file_doc
+
+

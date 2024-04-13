@@ -120,13 +120,14 @@ export default function PassForm({ billingLocation }) {
             <Box noValidate component="form" sx={{ display: 'flex', flexDirection: 'column', m: 'auto', width: '90%' }}>
                 <Box>
                     <FormControl fullWidth variant="standard">
-                        <InputLabel id="demo-simple-select-helper-label">Billing Location</InputLabel>
+                        <InputLabel required id="demo-simple-select-helper-label">Billing Location</InputLabel>
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
                             value={billingLocation.length > 0 ? billingLocation[0] : ''}
                             label="Billing Location"
                             onChange={(e) => handleBillingLocation(e.target.value)}
+                            disabled={billingLocation.length === 1}
                         >
                             {billingLocation.map((element, index) => (
                                 <MenuItem key={index} value={element}>{element.location}</MenuItem>
