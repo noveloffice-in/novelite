@@ -21,7 +21,7 @@ const BCrumb = [
     title: 'Visitor parking pass',
   },
   {
-    title: 'Pass Details',
+    title: 'Pass details',
   },
 ];
 
@@ -31,7 +31,7 @@ export default function PassDetails() {
   
   return (
     <PageContainer title="Visitor pass" description="this is Visitor pass page">
-      <Breadcrumb title="Visitor Pass Details" items={BCrumb} />
+      <Breadcrumb title="Visitor pass details" items={BCrumb} />
       <AppCard>
         <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
           {/* Left part */}
@@ -48,7 +48,7 @@ function Left({data}) {
   return (
     <ChildCard sx={{ width: '50%' }}>
       <Box p={2}>
-        <Typography variant="h4">Visitor Parking Details</Typography>
+        <Typography variant="h4">Visitor parking details</Typography>
         <Box>
           <Box p={3}>
             <Box display="flex" alignItems="center">

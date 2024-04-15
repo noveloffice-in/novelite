@@ -323,9 +323,9 @@ function ConfirmationDialogRaw(props) {
       open={open}
       {...other}
     >
-      <DialogTitle>Cancel Visitor parking pass?</DialogTitle>
+      <DialogTitle>Cancel visitor parking pass?</DialogTitle>
       <DialogContent dividers>
-        Do you want to cancel Visitor parking pass?
+        Do you want to cancel visitor parking pass?
       </DialogContent>
       <DialogActions>
         {!showLoading && <Button autoFocus onClick={handleCancel}>

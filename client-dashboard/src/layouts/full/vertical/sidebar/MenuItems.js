@@ -118,7 +118,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Gate Pass',
+    title: 'Gate pass',
     icon: IconChartDonut3 ,
     href: '/gatepass',
     chip: 'Upcoming',
