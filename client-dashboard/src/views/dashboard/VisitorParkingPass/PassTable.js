@@ -52,10 +52,10 @@ const PassTable = () => {
   const billingLocation = getLeadID();
   // console.log(getLeadID());
 
+  //------------------------------------------------------Dialog-----------------------------------------------//
   //Dialouge component
   const [open1, setOpen1] = useState(false);
 
-  //------------------------------------------------------Dialog-----------------------------------------------//
   //Dialog
   const handleClickOpen = () => {
     setOpen1(true);
@@ -95,6 +95,22 @@ const PassTable = () => {
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
   }
+
+  // Function to check if cancel button should be disabled
+  const isCancelDisabled = (visitDate, visitTime) => {
+    const currentDate = new Date();
+    const [year, month, day] = visitDate.split('-').map(Number);
+    const [time, period] = visitTime.split(' ');
+
+    let [hours, minutes] = time.split(':').map(Number);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    const visitDateTime = new Date(year, month - 1, day, hours, minutes);
+
+    console.log(visitDateTime);
+    console.log("Current", currentDate);
+
+    return visitDateTime < currentDate;
+  };
 
 
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
@@ -229,10 +245,10 @@ const PassTable = () => {
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Cancel Booking">
-                    <IconButton onClick={() => handleClickListItem(element.name)}>
+                    {/* <IconButton  > */}
                       {/* <IconTrash size="18" /> */}
-                      <Button color="error">Cancel</Button>
-                    </IconButton>
+                      <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>Cancel</Button>
+                    {/* </IconButton> */}
                   </Tooltip>
                 </TableCell>
               </TableRow>
@@ -323,9 +339,9 @@ function ConfirmationDialogRaw(props) {
       open={open}
       {...other}
     >
-      <DialogTitle>Cancel visitor parking pass?</DialogTitle>
+      <DialogTitle>Cancel Visitor parking pass?</DialogTitle>
       <DialogContent dividers>
-        Do you want to cancel visitor parking pass?
+        Do you want to cancel Visitor parking pass?
       </DialogContent>
       <DialogActions>
         {!showLoading && <Button autoFocus onClick={handleCancel}>
