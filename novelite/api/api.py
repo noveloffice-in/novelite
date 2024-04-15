@@ -355,7 +355,7 @@ def issue():
     except Exception as e:
         frappe.throw(str(e))
 
-# --------------------------------Creating Records in Visiting PP
+# --------------------------------Creating Records in Visiting PP----------------------------------------------------------
 
 @frappe.whitelist()
 def addDataToleadsAndVisitorParking():
@@ -420,4 +420,29 @@ def save_qr_code_file(qr_code_data, reference_name):
     file_doc.insert(ignore_permissions=True)
     return file_doc
 
+# --------------------------------Deleting Records in Visiting PP----------------------------------------------------------
+
+@frappe.whitelist()
+def removeDataFromLeadsAndVisitorParking(vps_id):
+    # First, find the Visitor Parking Pass document
+    vps_doc = frappe.get_doc("Visitor Parking Pass", vps_id)
+    
+    if not vps_doc:
+        frappe.throw(f"Visitor Parking Pass with ID {vps_id} not found")
+    
+    # Decrease vp_used by 100
+    lead_id = vps_doc.lead_id
+    if lead_id:
+        lead_doc = frappe.get_doc("Leads", lead_id)
+        for i in lead_doc.complementary_table:
+            i.vp_used = max(0, i.vp_used - 100)  # Ensure vp_used doesn't go below 0
+            i.save()
+        lead_doc.save()
+    else:
+        frappe.throw("Lead ID not provided in Visitor Parking Pass")
+    
+    # Delete the Visitor Parking Pass document
+    frappe.delete_doc("Visitor Parking Pass", vps_id, ignore_permissions=True)
+    
+    return "Done!"
 

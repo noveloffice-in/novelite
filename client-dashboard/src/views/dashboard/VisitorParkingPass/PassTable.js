@@ -17,9 +17,11 @@ import {
   Pagination,
   TableContainer,
   Button,
+  CircularProgress,
 } from '@mui/material';
-import { fetchTickets, DeleteTicket, SearchTicket } from '../../../store/apps/tickets/TicketSlice';
+import { DeleteTicket, SearchTicket } from '../../../store/apps/tickets/TicketSlice';
 import { IconTrash } from '@tabler/icons';
+import axios from 'axios';
 
 //Dialouge
 import Dialog from '@mui/material/Dialog';
@@ -29,6 +31,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import PassForm from './PassForm';
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import { Link } from 'react-router-dom';
+
+//Toastify 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PassTable = () => {
   const dispatch = useDispatch();
@@ -57,6 +63,20 @@ const PassTable = () => {
 
   const handleClose1 = () => {
     setOpen1(false);
+  };
+
+  //------------------------------------------------------Confirm Dialog-----------------------------------------------//
+  //Confirm Dialog 
+  const [open, setOpen] = useState(false);
+  const [visitorId, setVisitorId] = useState('');
+
+  const handleClickListItem = (id) => {
+    setVisitorId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   //------------------------------------------------------Table Data-----------------------------------------------//
@@ -155,18 +175,18 @@ const PassTable = () => {
               <TableCell>
                 <Typography variant="h6">Visitor Location</Typography>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align='center'>
                 <Typography variant="h6">Action</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           {data && <TableBody>
             {data.map((element) => (
-              <TableRow key={element.name} hover component={Link} to={`/visit_details/${element.name}`}>
-                <TableCell>
+              <TableRow key={element.name} hover>
+                <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   <Typography variant="h6">{element.visitor_name}</Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   <Box>
                     <Typography variant="h6" fontWeight="500" noWrap>
                       {element.visit_date}
@@ -182,12 +202,12 @@ const PassTable = () => {
                     </Typography>
                   </Box>
                 </TableCell>
-                <TableCell>
+                <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   <Stack direction="row" gap="10px" alignItems="center">
                     <Typography variant="h6">{element.visit_time}</Typography>
                   </Stack>
                 </TableCell>
-                <TableCell>
+                <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   {/* <Chip
                     sx={{
                       backgroundColor:
@@ -204,13 +224,14 @@ const PassTable = () => {
                   /> */}
                   <Typography>{element.vehicle_no}</Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   <Typography>{element.visit_location}</Typography>
                 </TableCell>
-                <TableCell align="right">
-                  <Tooltip title="Delete Ticket">
-                    <IconButton onClick={() => dispatch(DeleteTicket(ticket.Id))}>
-                      <IconTrash size="18" />
+                <TableCell>
+                  <Tooltip title="Cancel Booking">
+                    <IconButton onClick={() => handleClickListItem(element.name)}>
+                      {/* <IconTrash size="18" /> */}
+                      <Button color="error">Cancel</Button>
                     </IconButton>
                   </Tooltip>
                 </TableCell>
@@ -231,14 +252,105 @@ const PassTable = () => {
       >
         <DialogTitle>Book a pass</DialogTitle>
         <DialogContent>
-          {billingLocation && <PassForm setOpen1={setOpen1} billingLocation={billingLocation} />}
+          {billingLocation && <PassForm setOpen1={setOpen1} mutate={mutate} billingLocation={billingLocation} />}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose1}>Close</Button>
         </DialogActions>
       </Dialog>
+      <ConfirmationDialogRaw
+        id="ringtone-menu"
+        keepMounted
+        open={open}
+        mutate={mutate}
+        onClose={handleClose}
+        visitorId={visitorId}
+      />
     </Box>
   );
 };
 
 export default PassTable;
+
+//->  ------------------------------------------------Dialog component--------------------------------------------------
+import PropTypes from 'prop-types';
+
+function ConfirmationDialogRaw(props) {
+  const { onClose, visitorId, open, mutate, ...other } = props;
+  const radioGroupRef = React.useRef(null);
+  const [showLoading, setShowLoading] = React.useState(false);
+
+  const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+  const notifyError = (msg) => toast.error(msg, { toastId: "error" });
+
+  const handleEntering = () => {
+    if (radioGroupRef.current != null) {
+      radioGroupRef.current.focus();
+    }
+  };
+
+  const handleCancel = () => {
+    onClose();
+  };
+
+  const handleOk = () => {
+    setShowLoading(true);
+
+    if (visitorId) {
+      axios.post('/api/method/novelite.api.api.removeDataFromLeadsAndVisitorParking', { vps_id: visitorId })
+        .then((res) => {
+          console.log(res);
+          notifySuccess("Booking Cancelled succesfully");
+          setTimeout(() => {
+            onClose();
+            mutate();
+            setShowLoading(false);
+          }, 1000);
+        })
+        .catch((err) => {
+          notifyError(err.message);
+          setShowLoading(false);
+          console.log(err);
+        })
+    }
+  };
+
+  return (
+    <Dialog
+      sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
+      maxWidth="xs"
+      TransitionProps={{ onEntering: handleEntering }}
+      open={open}
+      {...other}
+    >
+      <DialogTitle>Cancel Visitor parking pass?</DialogTitle>
+      <DialogContent dividers>
+        Do you want to cancel Visitor parking pass?
+      </DialogContent>
+      <DialogActions>
+        {!showLoading && <Button autoFocus onClick={handleCancel}>
+          Cancel
+        </Button>}
+        <Button onClick={handleOk} disabled={showLoading}>{showLoading ? <CircularProgress color="inherit" size={24} /> : "Ok"}</Button>
+      </DialogActions>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </Dialog>
+  );
+}
+
+ConfirmationDialogRaw.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  visitorId: PropTypes.string.isRequired,
+};

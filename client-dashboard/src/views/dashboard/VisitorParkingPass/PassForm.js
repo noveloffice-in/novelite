@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider, Button } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider, Button, CircularProgress } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 //Date 
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -14,7 +14,7 @@ import { DateField } from '@mui/x-date-pickers/DateField';
 //Time
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 
-export default function PassForm({ billingLocation }) {
+export default function PassForm({ billingLocation, setOpen1, mutate }) {
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
     const customerEmailId = useSelector((state) => state.novelprofileReducer.userEmail);
     const [userData, setUserData] = useState({
@@ -30,6 +30,7 @@ export default function PassForm({ billingLocation }) {
         visitingDate: dayjs(),
         visitingTime: dayjs()
     });
+    const [showLoading, setShowLoading] = useState(false);
 
     const allLocations = [
         { location: 'Novel Office WorkHub - Whitefield' },
@@ -98,18 +99,26 @@ export default function PassForm({ billingLocation }) {
     };
 
     const handleSubmit = () => {
+        setShowLoading(true);
         const { customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime } = userData;
 
         if (!(customer || customerEmail || visitorName || vehicleNumber || vehicleType || visitorEmail || visitLocation || billingLead || billingLoc || visitingDate || visitingTime)) {
             notifyWarn("Please Fill all the details");
+            setShowLoading(false);
         } else {
             axios.post('/api/method/novelite.api.api.addDataToleadsAndVisitorParking', userData)
                 .then((res) => {
                     console.log(res);
                     notifySuccess("Booking succesfull");
+                    setTimeout(() => {
+                        setShowLoading(false);
+                        setOpen1(false);
+                        mutate();
+                    }, 1000);
                 })
                 .catch((err) => {
                     notifyError(err.message);
+                    setShowLoading(false);
                     console.log(err);
                 })
         }
@@ -202,8 +211,8 @@ export default function PassForm({ billingLocation }) {
                         </LocalizationProvider>
                     </Box>
                 </Box>
-                <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit} >
-                    Submit
+                <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit} disabled={showLoading}>
+                    {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
                 </Button>
             </Box>
             <ToastContainer
