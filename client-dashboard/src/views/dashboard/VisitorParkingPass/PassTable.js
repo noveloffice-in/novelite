@@ -32,6 +32,7 @@ import { Link } from 'react-router-dom';
 
 const PassTable = () => {
   const dispatch = useDispatch();
+  const [start, setStart] = useState(0);
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
 
   //Getting leads and setting only lead Ids in store
@@ -68,7 +69,13 @@ const PassTable = () => {
     },
   })
 
-  console.log('Table Data = ', data);
+  //-----------------------------------------------------------Pagination--------------------------------------------------//
+  const totalPages = Math.ceil(data / 10) || 1;
+  const pageChange = (e, currentPage) => {
+    currentPage = currentPage - 1;
+    setStart(currentPage * 10);
+  }
+
 
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
     if (tickets != undefined) {
@@ -213,7 +220,7 @@ const PassTable = () => {
         </Table>
       </TableContainer>
       <Box my={3} display="flex" justifyContent={'center'}>
-        <Pagination count={10} color="primary" />
+        <Pagination count={totalPages} color="primary" onChange={pageChange} />
       </Box>
       {/* ---------------------------------------Dialog Start---------------------------------- */}
       <Dialog

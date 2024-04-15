@@ -28,14 +28,14 @@ const BCrumb = [
 export default function PassDetails() {
   const { id } = useParams()
   const { data } = useFrappeGetDoc('Visitor Parking Pass', `${id}`);
-  console.log("Single Data = ", data);
+  
   return (
     <PageContainer title="Visitor pass" description="this is Visitor pass page">
       <Breadcrumb title="Visitor Pass Details" items={BCrumb} />
       <AppCard>
         <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
           {/* Left part */}
-          <Left />
+          {data && <Left data={data}/>}
           {/* Right part */}
           {data && <Right qrCode={data.custom_qr_code}/>}
         </Container>
@@ -44,7 +44,7 @@ export default function PassDetails() {
   )
 }
 
-function Left() {
+function Left({data}) {
   return (
     <ChildCard sx={{ width: '50%' }}>
       <Box p={2}>
@@ -56,63 +56,63 @@ function Left() {
 
               <Box sx={{ ml: 2 }}>
                 <Typography variant="h6" mb={0.5}>
-                  {'id'}
+                  {data.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" mb={0.5}>
-                  {"title"}
+                  {data.visit_location}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {"Hello"}
+                  {data.customer_email}
                 </Typography>
               </Box>
             </Box>
             <Grid container>
               <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Ticket Name
+                  Visitor Name
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {'title'}
+                  {data.visitor_name}
                 </Typography>
               </Grid>
               <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Status
+                  Visitor Email
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {'status'}
+                  {data.visitor_email}
                 </Typography>
               </Grid>
               <Grid item lg={12} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Id
+                  Visit Date
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {'id'}
+                  {data.visit_date}
                 </Typography>
               </Grid>
               <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Department
+                  Visit Time
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {'title'}
+                  {data.visit_time}
                 </Typography>
               </Grid>
               <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Company
+                  Vehicle Type
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {'title'}
+                  {data.vehicle_type}
                 </Typography>
               </Grid>
               <Grid item lg={12} xs={12} mt={4}>
                 <Typography variant="body2" mb={1} color="text.secondary">
-                  Notes
+                  Vehicle Number
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5}>
-                  {'title'}
+                  {data.vehicle_no}
                 </Typography>
               </Grid>
             </Grid>
