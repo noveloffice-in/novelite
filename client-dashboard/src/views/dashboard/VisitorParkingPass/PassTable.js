@@ -107,7 +107,7 @@ const PassTable = () => {
   };
 
   // Function to filter data based on search query
-  const filteredData = data.filter((element) =>
+  const filteredData = data?.filter((element) =>
     element.visitor_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
