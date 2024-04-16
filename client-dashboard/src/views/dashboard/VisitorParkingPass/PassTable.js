@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -8,10 +8,7 @@ import {
   TableCell,
   Typography,
   TableBody,
-  IconButton,
-  Chip,
   Stack,
-  Avatar,
   Tooltip,
   TextField,
   Pagination,
@@ -39,6 +36,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const PassTable = () => {
   const dispatch = useDispatch();
   const [start, setStart] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
 
   //Getting leads and setting only lead Ids in store
@@ -50,7 +48,6 @@ const PassTable = () => {
   }
 
   const billingLocation = getLeadID();
-  // console.log(getLeadID());
 
   //------------------------------------------------------Dialog-----------------------------------------------//
   //Dialouge component
@@ -106,69 +103,29 @@ const PassTable = () => {
     if (period === 'PM' && hours !== 12) hours += 12;
     const visitDateTime = new Date(year, month - 1, day, hours, minutes);
 
-    console.log(visitDateTime);
-    console.log("Current", currentDate);
-
     return visitDateTime < currentDate;
   };
 
-
-  const getVisibleTickets = (tickets, filter, ticketSearch) => {
-    if (tickets != undefined) {
-      switch (filter) {
-        case 'total_tickets':
-          return tickets.filter(
-            (c) => c.subject?.toLocaleLowerCase().includes(ticketSearch),
-          );
-
-        case 'Pending':
-          return tickets.filter(
-            (c) =>
-              c.status === 'Pending' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
-          );
-
-        case 'Closed':
-          return tickets.filter(
-            (c) =>
-              c.status === 'Closed' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
-          );
-
-        case 'Open':
-          return tickets.filter(
-            (c) =>
-              c.status === 'Open' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
-          );
-
-        default:
-          throw new Error(`Unknown filter: ${filter}`);
-      }
-    }
-  };
-
-  const tickets = useSelector((state) =>
-    getVisibleTickets(
-      state.ticketReducer.tickets,
-      state.ticketReducer.currentFilter,
-      state.ticketReducer.ticketSearch,
-    ),
+  // Function to filter data based on search query
+  const filteredData = data.filter((element) =>
+    element.visitor_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   return (
     <Box mt={4}>
       <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
         <Box>
-          <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
+          <Button variant="contained" onClick={handleClickOpen}>
             Book parking pass
           </Button>
         </Box>
-        <Box sx={{ maxWidth: '260px', ml: 'auto' }} mb={3}>
+        <Box sx={{ maxWidth: '100px', ml: 'auto' }}>
           <TextField
             size="small"
             label="Search"
             fullWidth
-            onChange={(e) => dispatch(SearchTicket(e.target.value))}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Box>
       </Box>
@@ -196,8 +153,8 @@ const PassTable = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          {data && <TableBody>
-            {data.map((element) => (
+          {filteredData && <TableBody>
+            {filteredData.map((element) => (
               <TableRow key={element.name} hover>
                 <TableCell component={Link} to={`/visit_details/${element.name}`} >
                   <Typography variant="h6">{element.visitor_name}</Typography>
@@ -224,20 +181,6 @@ const PassTable = () => {
                   </Stack>
                 </TableCell>
                 <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  {/* <Chip
-                    sx={{
-                      backgroundColor:
-                        ticket.Status === 'Open'
-                          ? (theme) => theme.palette.success.light
-                          : ticket.Status === 'Closed'
-                            ? (theme) => theme.palette.error.light
-                            : ticket.Status === 'Pending'
-                              ? (theme) => theme.palette.warning.light
-                              : ticket.Status === 'Moderate',
-                    }}
-                    size="small"
-                    label={ticket.Status}
-                  /> */}
                   <Typography>{element.vehicle_no}</Typography>
                 </TableCell>
                 <TableCell component={Link} to={`/visit_details/${element.name}`} >
@@ -245,10 +188,9 @@ const PassTable = () => {
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Cancel Booking">
-                    {/* <IconButton  > */}
-                      {/* <IconTrash size="18" /> */}
-                      <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>Cancel</Button>
-                    {/* </IconButton> */}
+                    <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>
+                      {isCancelDisabled(element.visit_date, element.visit_time) ? '-' : 'Cancel'}
+                    </Button>
                   </Tooltip>
                 </TableCell>
               </TableRow>
@@ -287,6 +229,7 @@ const PassTable = () => {
 };
 
 export default PassTable;
+
 
 //->  ------------------------------------------------Dialog component--------------------------------------------------
 import PropTypes from 'prop-types';

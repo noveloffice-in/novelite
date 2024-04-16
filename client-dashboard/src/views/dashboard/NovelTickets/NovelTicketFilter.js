@@ -79,7 +79,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={openIssues() !== 0 ? () => dispatch(setVisibilityFilter('Open')) : undefined}
-                    sx={{ backgroundColor: 'success.light', color: 'success.main' }}
+                    sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: openIssues() !== 0 ? 'pointer' : 'default'  }}
                 >
                     <Typography variant="h3">{openIssues()}</Typography>
                     <Typography variant="h6">New</Typography>
@@ -89,7 +89,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={ pendingIssues() !== 0 ? () => dispatch(setVisibilityFilter('On Hold')) : undefined }
-                    sx={{ backgroundColor: 'warning.light', color: 'warning.main' }}
+                    sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: pendingIssues() !== 0 ? 'pointer' : 'default'  }}
                 >
                     <Typography variant="h3">{pendingIssues()}</Typography>
                     <Typography variant="h6">On Hold</Typography>
@@ -99,7 +99,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={closedIssues() !== 0 ? () => dispatch(setVisibilityFilter('Closed')) : undefined}
-                    sx={{ backgroundColor: 'error.light', color: 'error.main' }}
+                    sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: closedIssues()  !== 0 ? 'pointer' : 'default'  }}
                 >
                     <Typography variant="h3">{closedIssues()}</Typography>
                     <Typography variant="h6">Closed</Typography>
@@ -109,7 +109,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={totalIssues() !== 0 ? () => dispatch(setVisibilityFilter('total_tickets')) : undefined}
-                    sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
+                    sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalIssues() !== 0 ? 'pointer' : 'default'  }}
                 >
                     <Typography variant="h3">{totalIssues()}</Typography>
                     <Typography variant="h6">Total</Typography>

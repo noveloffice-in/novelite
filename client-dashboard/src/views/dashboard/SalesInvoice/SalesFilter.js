@@ -1,5 +1,4 @@
 import { Box, Grid, Typography, styled } from '@mui/material';
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 const BoxStyled = styled(Box)(() => ({
@@ -40,37 +39,37 @@ const SalesFilter = ({ data, setStatusFilter }) => {
     return (
         <Box mb={2}>
             <Grid container spacing={3} textAlign="center">
-                <Grid item xs={12} sm={6} lg={3}>
+                <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={() => setStatusFilter('ALL')}
+                        onClick={data.length !== 0 ? () => setStatusFilter('ALL') : undefined}
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h3">{data.length}</Typography>
                         <Typography variant="h6">ALL</Typography>
                     </BoxStyled>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={3}>
+                <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={() => setStatusFilter('Pending')}
-                        sx={{ backgroundColor: 'warning.light', color: 'warning.main' }}
+                        onClick={pending.length !== 0 ? () => setStatusFilter('Pending') : undefined}
+                        sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: creditNote.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{pending.length}</Typography>
                         <Typography variant="h6">Pending</Typography>
                     </BoxStyled>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={3}>
+                <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={() => setStatusFilter('Paid')}
+                        onClick={paid.length !== 0 ? () => setStatusFilter('Paid') : undefined}
                         sx={{ backgroundColor: 'success.light', color: 'success.main' }}
                     >
                         <Typography variant="h3">{paid.length}</Typography>
                         <Typography variant="h6">Paid</Typography>
                     </BoxStyled>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={3}>
+                <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={() => setStatusFilter('Credit Note')}
-                        sx={{ backgroundColor: 'error.light', color: 'error.main' }}
+                        onClick={creditNote.length!== 0 ? () => setStatusFilter('Credit Note') : undefined}
+                        sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: creditNote.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{creditNote.length}</Typography>
                         <Typography variant="h6">Credit Note</Typography>
