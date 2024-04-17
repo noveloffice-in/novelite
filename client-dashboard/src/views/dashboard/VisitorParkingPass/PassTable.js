@@ -16,9 +16,9 @@ import {
   Button,
   CircularProgress,
 } from '@mui/material';
-import { DeleteTicket, SearchTicket } from '../../../store/apps/tickets/TicketSlice';
 import { IconTrash } from '@tabler/icons';
 import axios from 'axios';
+import BlockIcon from '@mui/icons-material/Block';
 
 //Dialouge
 import Dialog from '@mui/material/Dialog';
@@ -89,7 +89,6 @@ const PassTable = () => {
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const totalPages = Math.ceil(data?.length / 10) || 1;
-  console.log("Total pages = ", totalPages);
   const pageChange = (e, currentPage) => {
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
@@ -191,7 +190,7 @@ const PassTable = () => {
                 <TableCell>
                   <Tooltip title="Cancel Booking">
                     <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>
-                      {isCancelDisabled(element.visit_date, element.visit_time) ? '-' : 'Cancel'}
+                      {isCancelDisabled(element.visit_date, element.visit_time) ? <BlockIcon/> : 'Cancel'}
                     </Button>
                   </Tooltip>
                 </TableCell>

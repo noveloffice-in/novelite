@@ -101,28 +101,42 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
     const handleSubmit = () => {
         setShowLoading(true);
         const { customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime } = userData;
-
-        if (!(customer || customerEmail || visitorName || vehicleNumber || vehicleType || visitorEmail || visitLocation || billingLead || billingLoc || visitingDate || visitingTime)) {
-            notifyWarn("Please Fill all the details");
+    
+        if (!(customer && customerEmail && visitorName && vehicleNumber && vehicleType && visitorEmail && visitLocation && billingLead && billingLoc && visitingDate && visitingTime)) {
+            notifyWarn("Please fill in all the details");
             setShowLoading(false);
         } else {
-            axios.post('/api/method/novelite.api.api.addDataToleadsAndVisitorParking', userData)
-                .then((res) => {
-                    console.log(res);
-                    notifySuccess("Booking succesfull");
-                    setTimeout(() => {
+            const currentDate = new Date();
+            const currentDateTime = currentDate.getTime();
+    
+            const [day, month, year] = visitingDate.split('-');
+            const visitingDateTime = new Date(`${year}-${month}-${day}`);
+    
+            if (visitingDateTime.getTime() <= currentDateTime) {
+                notifyWarn("Visiting date must be greater than the current date");
+                setShowLoading(false);
+            } else {
+                axios.post('/api/method/novelite.api.api.addDataToleadsAndVisitorParking', userData)
+                    .then((res) => {
+                        console.log(res);
+                        notifySuccess("Booking successful");
+                        setTimeout(() => {
+                            setShowLoading(false);
+                            setOpen1(false);
+                            mutate();
+                        }, 1000);
+                    })
+                    .catch((err) => {
+                        notifyError(err.message);
                         setShowLoading(false);
-                        setOpen1(false);
-                        mutate();
-                    }, 1000);
-                })
-                .catch((err) => {
-                    notifyError(err.message);
-                    setShowLoading(false);
-                    console.log(err);
-                })
+                        console.log(err);
+                    });
+            }
         }
     }
+    
+
+
 
     return (
         <Box>
