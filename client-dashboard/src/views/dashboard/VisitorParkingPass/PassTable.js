@@ -80,6 +80,7 @@ const PassTable = () => {
   const { data, mutate, isLoading } = useFrappeGetDocList('Visitor Parking Pass', {
     fields: ['name', 'visitor_name', 'vehicle_type', 'visit_location', 'visitor_email', 'vehicle_no', 'visit_date', 'visit_time'],
     filters: [['customer', '=', companyName]],
+    limit_start: start,
     orderBy: {
       field: 'creation',
       order: 'desc',
@@ -92,21 +93,21 @@ const PassTable = () => {
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
   }
-
+  
   // Function to check if cancel button should be disabled
   const isCancelDisabled = (visitDate, visitTime) => {
     const currentDate = new Date();
     const [year, month, day] = visitDate.split('-').map(Number);
     const [time, period] = visitTime.split(' ');
-
+    
     let [hours, minutes] = time.split(':').map(Number);
     if (period === 'PM' && hours !== 12) hours += 12;
     const visitDateTime = new Date(year, month - 1, day, hours, minutes);
-
+    
     return visitDateTime < currentDate;
   };
-
-  // Function to filter data based on search query
+  
+  //-----------------------------------------------------------Search query--------------------------------------------------//
   const filteredData = data?.filter((element) =>
     element.visitor_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
