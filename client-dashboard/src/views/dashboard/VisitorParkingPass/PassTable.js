@@ -88,7 +88,8 @@ const PassTable = () => {
   })
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
-  const totalPages = Math.ceil(data / 10) || 1;
+  const totalPages = Math.ceil(data?.length / 10) || 1;
+  console.log("Total pages = ", totalPages);
   const pageChange = (e, currentPage) => {
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
