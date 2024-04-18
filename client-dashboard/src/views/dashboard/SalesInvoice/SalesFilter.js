@@ -42,7 +42,7 @@ const SalesFilter = ({ data, setStatusFilter }) => {
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
                         onClick={data.length !== 0 ? () => setStatusFilter('ALL') : undefined}
-                        sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
+                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: data.length !== 0 ? 'pointer' : 'default'  }}
                     >
                         <Typography variant="h3">{data.length}</Typography>
                         <Typography variant="h6">ALL</Typography>
@@ -51,7 +51,7 @@ const SalesFilter = ({ data, setStatusFilter }) => {
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
                         onClick={pending.length !== 0 ? () => setStatusFilter('Pending') : undefined}
-                        sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: creditNote.length !== 0 ? 'pointer' : 'default' }}
+                        sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: pending.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{pending.length}</Typography>
                         <Typography variant="h6">Pending</Typography>
@@ -60,7 +60,7 @@ const SalesFilter = ({ data, setStatusFilter }) => {
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
                         onClick={paid.length !== 0 ? () => setStatusFilter('Paid') : undefined}
-                        sx={{ backgroundColor: 'success.light', color: 'success.main' }}
+                        sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: paid.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{paid.length}</Typography>
                         <Typography variant="h6">Paid</Typography>
