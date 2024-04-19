@@ -270,7 +270,6 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     <TextField
                         id="outlined-multiline-static"
                         label="Ticket Description"
-                        required
                         multiline
                         rows={2}
                         style={{ width: '100%' }}

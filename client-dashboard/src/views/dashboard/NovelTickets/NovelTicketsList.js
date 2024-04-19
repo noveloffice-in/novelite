@@ -130,10 +130,10 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
-        case 'Open':
+        case 'In-Progress':
           return tickets.filter(
             (c) =>
-              c.status === 'Open' &&
+              c.status === 'In-Progress' &&
               c.subject?.toLocaleLowerCase().includes(ticketSearch),
           );
 
@@ -256,16 +256,16 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                     <Chip
                       sx={{
                         backgroundColor:
-                          ticket.status === 'Open'
+                          ticket.status === 'In-Progress'
                             ? (theme) => theme.palette.success.light
                             : ticket.status === 'Closed'
                               ? (theme) => theme.palette.error.light
-                              : ticket.status === 'On Hold'
+                              : ticket.status === 'Pending'
                                 ? (theme) => theme.palette.warning.light
                                 : ticket.status === 'Pending',
                       }}
                       size="small"
-                      label={ticket.status === 'Open' ? 'New' : `${ticket.status}`}
+                      label={ticket.status}
                     />
                   </TableCell>
                   {/* <TableCell>

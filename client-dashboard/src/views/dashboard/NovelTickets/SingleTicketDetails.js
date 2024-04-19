@@ -16,18 +16,18 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent, {
   timelineOppositeContentClasses,
 } from '@mui/lab/TimelineOppositeContent';
-import { useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
 export default function SingleTicketDetails() {
   const { id, title, status, description } = useParams();
 
-  console.log("All details = ",id ," ", title ," ", status ," ", description );
+  console.log("All details = ", id, " ", title, " ", status, " ", description);
 
   return (
     <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
       <Left id={id} title={title} status={status} description={description} />
-      <Right id={id} />
+      <Right id={id} status={status} />
     </Container>
 
   )
@@ -88,7 +88,7 @@ function Left({ id, title, status, description }) {
                   {title}
                 </Typography>
               </Grid>
-              <Grid item lg={6} xs={12} mt={4}>
+              {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Company
                 </Typography>
@@ -103,7 +103,7 @@ function Left({ id, title, status, description }) {
                 <Typography variant="subtitle1" mb={0.5}>
                   {title}
                 </Typography>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
         </Box>
@@ -112,28 +112,28 @@ function Left({ id, title, status, description }) {
   )
 }
 
-function Right({ id }) {
+function Right({ id, status }) {
 
-  //------------------------------------------------------Fetching comment List----------------------------------------------//
-  const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
-    fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
-    filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
-    // limit_start: start,
-    limit: 10000,
-    orderBy: {
-      field: 'creation',
-      order: 'desc', //asc
-    },
-  });
+  //,------------------------------------------------------Fetching comment List----------------------------------------------//
+  // const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
+  //   fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
+  //   filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
+  //   // limit_start: start,
+  //   limit: 10000,
+  //   orderBy: {
+  //     field: 'creation',
+  //     order: 'desc', //asc
+  //   },
+  // });
 
-  //--------------------------------------------------------Formating Date-----------------------------------------//
+  //,--------------------------------------------------------Formating Date-----------------------------------------//
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', '');
   }
 
-  //--------------------------------------------------------Converting HTML to string-----------------------------------------//
+  //,--------------------------------------------------------Converting HTML to string-----------------------------------------//
   const messages = (str) => {
     if ((str === null) || (str === ''))
       return '';
@@ -142,37 +142,58 @@ function Right({ id }) {
     return str.replace(/(<([^>]+)>)/ig, '');
   }
 
+  //.------------------------------------------------------Fetching Child Table List----------------------------------------------//
+  const { data, error, isValidating, mutate } = useFrappeGetDoc('Issue', id);
+
+  console.log("Data = ", data);
+  let message = "";
+
+  if (data) {
+    if (data.departments.length === 0) {
+      message = `Ticket status is ${status} and not assigned to any departments`;
+    } else if (data.departments.length === 1) {
+      message = `Issue has been assigned to ${data.departments[0].department} department and status is ${status}`;
+    } else if (data.departments.length > 1) {
+      message = `Issue has been re-assigned to ${data.departments[data.departments.length - 1].department} department and status is ${status}`;
+    }
+  }
+
+
   return (
-    <ChildCard sx={{ width: '50%' }}>
-      {data?.length !== 0 ? <Timeline
-        sx={{
-          [`& .${timelineOppositeContentClasses.root}`]: {
-            flex: 0.2,
-          },
-        }}
-      >
-        <Box p={2}>
-          <Typography variant="h4" sx={{ mt: "-1.3rem" }}  mb={2}>Updates</Typography>
-          <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
-            {data?.map((comment) => {
-              return (
-                <TimelineItem>
-                  <TimelineOppositeContent color="textSecondary">
-                    {formatDate(comment.creation)}
-                  </TimelineOppositeContent>
-                  <TimelineSeparator>
-                    <TimelineDot />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>{messages(comment.content)}</TimelineContent>
-                </TimelineItem>
-              )
-            })}
-          </Scrollbar>
-        </Box>
-      </Timeline> :
-        <Typography variant='h4'>No Updates</Typography>
-      }
+    <ChildCard padding={4} width='50%'>
+      <Typography variant="h4" sx={{ padding: "20%" }} mb={2}>{message}</Typography>
     </ChildCard>
+
+    // <ChildCard sx={{ width: '50%' }}>
+    //   {data?.length !== 0 ? <Timeline
+    //     sx={{
+    //       [`& .${timelineOppositeContentClasses.root}`]: {
+    //         flex: 0.2,
+    //       },
+    //     }}
+    //   >
+    //     <Box p={2}>
+    //       <Typography variant="h4" sx={{ mt: "-1.3rem" }}  mb={2}>Updates</Typography>
+    //       <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
+    //         {data?.map((comment) => {
+    //           return (
+    //             <TimelineItem>
+    //               <TimelineOppositeContent color="textSecondary">
+    //                 {formatDate(comment.creation)}
+    //               </TimelineOppositeContent>
+    //               <TimelineSeparator>
+    //                 <TimelineDot />
+    //                 <TimelineConnector />
+    //               </TimelineSeparator>
+    //               <TimelineContent>{messages(comment.content)}</TimelineContent>
+    //             </TimelineItem>
+    //           )
+    //         })}
+    //       </Scrollbar>
+    //     </Box>
+    //   </Timeline> :
+    //     <Typography variant='h4'>No Updates</Typography>
+    //   }
+    // </ChildCard>
   )
 }
