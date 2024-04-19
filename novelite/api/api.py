@@ -277,38 +277,38 @@ def issue():
     issue_info.contact_phone = data.get('contactNumber', "")
     issue_info.contact_email = data.get('email', "")
     issue_info.contact_email_alternative = data.get('alternateEmail', "")
-    issue = data.get('issue')
+    # issue = data.get('issue')
     
-    CR = [
-        "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
-        "Office Space Modification", "Other"]
+    # CR = [
+    #     "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
+    #     "Office Space Modification", "Other"]
     
-    FL = [
-        "Parking", "House Keeping", "Restroom | Common Area"
-    ]
-    # Define other departments as needed
-    departments = {
-        "CR": CR,
-        "FL": FL,
-        "IT": ["IT and Network"],
-        "FC": ["AC"],
-        "EL": ["Electrical"],
-        "FD": ["Meeting Room | Conference Room Booking"]
-    }
+    # FL = [
+    #     "Parking", "House Keeping", "Restroom | Common Area"
+    # ]
+    # # Define other departments as needed
+    # departments = {
+    #     "CR": CR,
+    #     "FL": FL,
+    #     "IT": ["IT and Network"],
+    #     "FC": ["AC"],
+    #     "EL": ["Electrical"],
+    #     "FD": ["Meeting Room | Conference Room Booking"]
+    # }
 
-    dept = None
-    for department, issues in departments.items():
-        if issue in issues:
-            dept = department
-            break
+    # dept = None
+    # for department, issues in departments.items():
+    #     if issue in issues:
+    #         dept = department
+    #         break
     
-    if dept:
-        issue_info.append("departments", {
-            "department": dept,
-            "status": "Pending"
-        })
-    else:
-        frappe.throw("Issue department not found")
+    # if dept:
+    #     issue_info.append("departments", {
+    #         "department": dept,
+    #         "status": "Pending"
+    #     })
+    # else:
+    #     frappe.throw("Issue department not found")
 
     try:
         issue_info.save()

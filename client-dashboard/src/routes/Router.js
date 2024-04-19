@@ -161,7 +161,7 @@ const Router = [
       { path: '/checkout', exact: true, element: < Protected Component={Checkout} /> },
       { path: '/tickets', exact: true, element: < Protected Component={NovelTickets} /> },
       // { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
-      { path: '/ticket_details/:id/:title/:status/:description', exact: true, element: <  Protected Component={TicketDetails} /> },
+      { path: '/ticket_details/:id', exact: true, element: <  Protected Component={TicketDetails} /> },
       // { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
       { path: '/invoice', exact: true, element: < Protected Component={SalesInvoice} /> },
 

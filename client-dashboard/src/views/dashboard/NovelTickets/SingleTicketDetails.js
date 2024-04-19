@@ -20,20 +20,23 @@ import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
 export default function SingleTicketDetails() {
-  const { id, title, status, description } = useParams();
+  const { id } = useParams();
 
-  console.log("All details = ", id, " ", title, " ", status, " ", description);
+  //.------------------------------------------------------Fetching TicketData----------------------------------------------//
+  const { data, error, isValidating, mutate } = useFrappeGetDoc('Issue', id);
+
+  console.log("Data = ", data);
 
   return (
     <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-      <Left id={id} title={title} status={status} description={description} />
-      <Right id={id} status={status} />
+      {data && <Left id={data.name} title={data.subject} status={data.status} />}
+      {data && <Right status={data.status} departments={data.departments} />}
     </Container>
 
   )
 }
 
-function Left({ id, title, status, description }) {
+function Left({ id, title, status }) {
   return (
     <ChildCard sx={{ width: '50%' }}>
       <Box p={2}>
@@ -48,9 +51,6 @@ function Left({ id, title, status, description }) {
                   {id}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" mb={0.5}>
-                  {title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ display: description !== 'null' ? "block" : "none" }}>
                   {title}
                 </Typography>
               </Box>
@@ -112,7 +112,7 @@ function Left({ id, title, status, description }) {
   )
 }
 
-function Right({ id, status }) {
+function Right({ status, departments }) {
 
   //,------------------------------------------------------Fetching comment List----------------------------------------------//
   // const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
@@ -142,20 +142,14 @@ function Right({ id, status }) {
     return str.replace(/(<([^>]+)>)/ig, '');
   }
 
-  //.------------------------------------------------------Fetching Child Table List----------------------------------------------//
-  const { data, error, isValidating, mutate } = useFrappeGetDoc('Issue', id);
-
-  console.log("Data = ", data);
   let message = "";
 
-  if (data) {
-    if (data.departments.length === 0) {
-      message = `Ticket status is ${status} and not assigned to any departments`;
-    } else if (data.departments.length === 1) {
-      message = `Issue has been assigned to ${data.departments[0].department} department and status is ${status}`;
-    } else if (data.departments.length > 1) {
-      message = `Issue has been re-assigned to ${data.departments[data.departments.length - 1].department} department and status is ${status}`;
-    }
+  if (departments.length === 0) {
+    message = `Ticket status is ${status} and not assigned to any departments`;
+  } else if (departments.length === 1) {
+    message = `Issue has been assigned to ${departments[0].department} department and status is ${status}`;
+  } else if (departments.length > 1) {
+    message = `Issue has been re-assigned to ${departments[departments.length - 1].department} department and status is ${status}`;
   }
 
 

@@ -227,7 +227,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           <TableBody>
             {tickets && tickets.map((ticket) => (
               <Tooltip disableFocusListener disableTouchListener placement="top-end" TransitionComponent={Zoom} title="Click to view updates">
-                <TableRow key={ticket.subject} hover component={Link} to={`/ticket_details/${ticket.name}/${ticket.subject}/${ticket.status}/${ticket.description}`}>
+                <TableRow key={ticket.subject} hover component={Link} to={`/ticket_details/${ticket.name}`}>
                   <TableCell>
                     <Box>
                       <Typography variant="h6" fontWeight="500" wrap>
