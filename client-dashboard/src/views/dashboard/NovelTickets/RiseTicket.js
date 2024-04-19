@@ -137,9 +137,6 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
             setShowLoading(false);
-        } else if (updatedTicketData.description === "") {
-            notifyWarn("Please fill the ticket description");
-            setShowLoading(false);
         } else if (updatedTicketData.contactName === "") {
             notifyWarn("Please fill the contact Name");
             setShowLoading(false);

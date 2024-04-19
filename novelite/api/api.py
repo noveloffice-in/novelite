@@ -305,7 +305,7 @@ def issue():
     if dept:
         issue_info.append("departments", {
             "department": dept,
-            "status": "Open"
+            "status": "Pending"
         })
     else:
         frappe.throw("Issue department not found")
