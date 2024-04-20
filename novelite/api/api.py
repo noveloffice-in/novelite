@@ -258,63 +258,63 @@ def addDataToDoc():
     return "Data added successfully"
 
 
-@frappe.whitelist()
-def issue():
-    data = frappe.request.json
+# @frappe.whitelist()
+# def issue():
+#     data = frappe.request.json
     
-    if data is None:
-        frappe.throw("No data provided")  # Handle case where no data is provided
+#     if data is None:
+#         frappe.throw("No data provided")  # Handle case where no data is provided
 
-    # Now you can continue with your existing logic to process the data
-    issue_info = frappe.new_doc("Issue")
-    issue_info.subject = data.get('subject', "")
-    issue_info.customer = data.get('customer', "")
-    issue_info.issue_type = data.get('issue', "")
-    issue_info.issue_subtype = data.get('issueType', "")
-    issue_info.location = data.get('location', "")
-    issue_info.description = data.get('description', "")
-    issue_info.contact_name = data.get('contactName', "")
-    issue_info.contact_phone = data.get('contactNumber', "")
-    issue_info.contact_email = data.get('email', "")
-    issue_info.contact_email_alternative = data.get('alternateEmail', "")
-    # issue = data.get('issue')
+#     # Now you can continue with your existing logic to process the data
+#     issue_info = frappe.new_doc("Issue")
+#     issue_info.subject = data.get('subject', "")
+#     issue_info.customer = data.get('customer', "")
+#     issue_info.issue_type = data.get('issue', "")
+#     issue_info.issue_subtype = data.get('issueType', "")
+#     issue_info.location = data.get('location', "")
+#     issue_info.description = data.get('description', "")
+#     issue_info.contact_name = data.get('contactName', "")
+#     issue_info.contact_phone = data.get('contactNumber', "")
+#     issue_info.contact_email = data.get('email', "")
+#     issue_info.contact_email_alternative = data.get('alternateEmail', "")
+#     # issue = data.get('issue')
     
-    # CR = [
-    #     "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
-    #     "Office Space Modification", "Other"]
+#     # CR = [
+#     #     "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
+#     #     "Office Space Modification", "Other"]
     
-    # FL = [
-    #     "Parking", "House Keeping", "Restroom | Common Area"
-    # ]
-    # # Define other departments as needed
-    # departments = {
-    #     "CR": CR,
-    #     "FL": FL,
-    #     "IT": ["IT and Network"],
-    #     "FC": ["AC"],
-    #     "EL": ["Electrical"],
-    #     "FD": ["Meeting Room | Conference Room Booking"]
-    # }
+#     # FL = [
+#     #     "Parking", "House Keeping", "Restroom | Common Area"
+#     # ]
+#     # # Define other departments as needed
+#     # departments = {
+#     #     "CR": CR,
+#     #     "FL": FL,
+#     #     "IT": ["IT and Network"],
+#     #     "FC": ["AC"],
+#     #     "EL": ["Electrical"],
+#     #     "FD": ["Meeting Room | Conference Room Booking"]
+#     # }
 
-    # dept = None
-    # for department, issues in departments.items():
-    #     if issue in issues:
-    #         dept = department
-    #         break
+#     # dept = None
+#     # for department, issues in departments.items():
+#     #     if issue in issues:
+#     #         dept = department
+#     #         break
     
-    # if dept:
-    #     issue_info.append("departments", {
-    #         "department": dept,
-    #         "status": "Pending"
-    #     })
-    # else:
-    #     frappe.throw("Issue department not found")
+#     # if dept:
+#     #     issue_info.append("departments", {
+#     #         "department": dept,
+#     #         "status": "Pending"
+#     #     })
+#     # else:
+#     #     frappe.throw("Issue department not found")
 
-    try:
-        issue_info.save()
-        # frappe.throw("Adding to doc")
-    except Exception as e:
-        frappe.throw(str(e))
+#     try:
+#         issue_info.save()
+#         # frappe.throw("Adding to doc")
+#     except Exception as e:
+#         frappe.throw(str(e))
 
 # --------------------------------Creating Records in Visiting PP----------------------------------------------------------
 

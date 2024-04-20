@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 import axios from 'axios';
+import { subject } from '@casl/ability';
 
 
 const style = {
@@ -155,29 +156,49 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 issueType: issueTypeDropdown,
             };
 
+            const ticketDetails = {
+                subject: updatedTicketData.subject,
+                description: updatedTicketData.description,
+                location: updatedTicketData.location,
+                issue_type: updatedTicketData.issue,
+                issue_subtype: updatedTicketData.issueType,
+                contact_name: updatedTicketData.contactName,
+                contact_phone: updatedTicketData.contactNumber,
+                contact_email: updatedTicketData.email,
+                contact_email_alternative: updatedTicketData.alternateEmail,
+                customer: customerName,
+                creation_via: "Ticket",
+            }
+
             //,Frappe Hook to create Issue 
-            // const create = createDoc('Issue', ticketData).then(() => {
-            //     notifySuccess('Ticket created Successfully');
-            //     setTimeout(() => {
-            //         setOpen1(false);
-            //         mutate();
-            //     }, 1000);
+            const create = createDoc('Issue', ticketDetails).then(() => {
+                notifySuccess('Ticket created Successfully');
+                setTimeout(() => {
+                    setShowLoading(false);
+                    setOpen1(false);
+                    mutate();
+                }, 1000);
+            }).catch((err) => {
+                console.log("inside catch " + JSON.stringify(err.message));
+                setShowLoading(false);
+                notifyError(err.message);
+            })
 
             //,Custom api to create an Issue
-            axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
-                .then((res) => {
-                    console.log("Response = ", res);
-                    notifySuccess('Ticket created Successfully');
-                    setTimeout(() => {
-                        setShowLoading(false);
-                        setOpen1(false);
-                        mutate();
-                    }, 1000);
-                }).catch((err) => {
-                    console.log("inside catch " + JSON.stringify(err.message));
-                    setShowLoading(false);
-                    notifyError(err.message);
-                })
+            // axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
+            //     .then((res) => {
+            //         console.log("Response = ", res);
+            //         notifySuccess('Ticket created Successfully');
+            //         setTimeout(() => {
+            //             setShowLoading(false);
+            //             setOpen1(false);
+            //             mutate();
+            //         }, 1000);
+            //     }).catch((err) => {
+            //         console.log("inside catch " + JSON.stringify(err.message));
+            //         setShowLoading(false);
+            //         notifyError(err.message);
+            //     })
         }
     }
     const handleLocationChange = (e) => {
