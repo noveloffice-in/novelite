@@ -161,7 +161,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 description: updatedTicketData.description,
                 location: updatedTicketData.location,
                 issue_type: updatedTicketData.issue,
-                issue_subtype: updatedTicketData.issueType,
+                custom_issue_subtype: updatedTicketData.issueType,
                 contact_name: updatedTicketData.contactName,
                 contact_phone: updatedTicketData.contactNumber,
                 contact_email: updatedTicketData.email,
