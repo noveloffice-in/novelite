@@ -29,20 +29,43 @@ export default function SingleTicketDetails() {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-      {data && <Left id={data.name} title={data.subject} status={data.status} />}
-      {data && <Right status={data.status} departments={data.departments} />}
+      {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} />}
+      {/* {data && <Right status={data.status} departments={data.departments} />} */}
     </Container>
 
   )
 }
 
-function Left({ id, title, status }) {
+function Left({ id, title, status, creation }) {
+
+  const formatDateTime = (inputDatetime, returnType) => {
+    const date = new Date(inputDatetime);
+
+    const pad = (num) => {
+      return num < 10 ? '0' + num : num;
+    }
+
+    const formattedDate = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear().toString()}`;
+
+    const hours = date.getHours();
+    const minutes = pad(date.getMinutes());
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    const formattedTime = `${pad(hours % 12)}:${minutes} ${ampm}`;
+
+    if (returnType === 'Date') {
+      return formattedDate
+    } else {
+      return formattedTime
+    }
+  }
+
   return (
-    <ChildCard sx={{ width: '50%' }}>
-      <Box p={2}>
-        <Typography variant="h4">Ticket Details</Typography>
+    // <ChildCard sx={{ width: '50%' }}>
+    <Box p={1}>
+      <Box>
+        <Typography variant="h4" pb={1}>Ticket Details</Typography>
         <Box>
-          <Box p={3}>
+          <Box >
             <Box display="flex" alignItems="center">
               <ConfirmationNumberTwoToneIcon sx={{ width: '70px', height: '70px' }} />
 
@@ -88,15 +111,16 @@ function Left({ id, title, status }) {
                   {title}
                 </Typography>
               </Grid>
-              {/* <Grid item lg={6} xs={12} mt={4}>
+              <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Company
+                  Creation date and time
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {title}
+                  {formatDateTime(creation, 'Date')} <br />
+                  {formatDateTime(creation, 'Time')}
                 </Typography>
               </Grid>
-              <Grid item lg={12} xs={12} mt={4}>
+              {/* <Grid item lg={12} xs={12} mt={4}>
                 <Typography variant="body2" mb={1} color="text.secondary">
                   Notes
                 </Typography>
@@ -108,7 +132,7 @@ function Left({ id, title, status }) {
           </Box>
         </Box>
       </Box>
-    </ChildCard>
+    </Box>
   )
 }
 
