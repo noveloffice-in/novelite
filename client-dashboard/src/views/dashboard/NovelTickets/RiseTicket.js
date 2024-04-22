@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
-import { Box } from '@mui/system'
+import { Box, Stack, height } from '@mui/system'
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import React, { useEffect, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
@@ -8,9 +8,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
+import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
-import { subject } from '@casl/ability';
 
+//Attachment
+import { styled } from '@mui/material/styles';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
+import { tooltipClasses } from '@mui/material/Tooltip';
 
 const style = {
     position: 'absolute',
@@ -23,11 +28,34 @@ const style = {
     p: 4,
 };
 
+//Attachment Style
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
+
+//Custom tooltip
+const CustomWidthTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))({
+    [`& .${tooltipClasses.tooltip}`]: {
+        maxWidth: 300,
+    },
+});
+
 export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate }) {
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
     const [showLoading, setShowLoading] = useState(false);
+    const [attachment, setAttachment] = useState(null);
 
     const [ticketData, setTicketData] = useState({
         subject: "",
@@ -170,19 +198,22 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 creation_via: "Ticket",
             }
 
+            console.log("Attachment is = ", attachment);
+            setShowLoading(false);
+
             //,Frappe Hook to create Issue 
-            const create = createDoc('Issue', ticketDetails).then(() => {
-                notifySuccess('Ticket created Successfully');
-                setTimeout(() => {
-                    setShowLoading(false);
-                    setOpen1(false);
-                    mutate();
-                }, 1000);
-            }).catch((err) => {
-                console.log("inside catch " + JSON.stringify(err.message));
-                setShowLoading(false);
-                notifyError(err.message);
-            })
+            // const create = createDoc('Issue', ticketDetails).then(() => {
+            //     notifySuccess('Ticket created Successfully');
+            //     setTimeout(() => {
+            //         setShowLoading(false);
+            //         setOpen1(false);
+            //         mutate();
+            //     }, 1000);
+            // }).catch((err) => {
+            //     console.log("inside catch " + JSON.stringify(err.message));
+            //     setShowLoading(false);
+            //     notifyError(err.message);
+            // })
 
             //,Custom api to create an Issue
             // axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
@@ -251,8 +282,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 </Tooltip>
 
                 <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel>Issue</InputLabel>
-                    <Select value={issueDropdown} label="Issue" onChange={handleIssueDropdownChange}>
+                    <InputLabel>Issue type</InputLabel>
+                    <Select value={issueDropdown} label="Issue type" onChange={handleIssueDropdownChange}>
                         {issueName.map(issue => (
                             <MenuItem key={issue} value={issue}>{issue}</MenuItem>
                         ))}
@@ -260,10 +291,10 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 </FormControl>
                 {issueDropdown !== "Other" && (
                     <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel>Issue Type</InputLabel>
+                        <InputLabel>Issue sub type</InputLabel>
                         <Select
                             value={issueTypeDropdown}
-                            label="Issue Type"
+                            label="Issue sub type"
                             onChange={handleIssueTypeDropdownChange}
                         >
                             {issueTypeOptions.map(issueType => (
@@ -283,6 +314,28 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         onChange={handleInputChange}
                     />
                 ) : null}
+
+                <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
+                    <TextField
+                        label="Vent number"
+                        variant="standard"
+                        sx={{ width: '100%', mt: 2, ml: 1 }}
+                        name="info"
+                        // value={}
+                        onChange={handleInputChange}
+                    />
+                    <CustomWidthTooltip placement="left" TransitionComponent={Zoom}
+                        fullWidth
+                        title={
+                            <>
+                                <img src='https://imgs.search.brave.com/KSA43U74oZ2OcvBCjbHx_ScTzN-cXeioCn8en5bqbvw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9uYXR1cmFsLXNj/ZW5lcnktd2l0aC1w/YXRod2F5LWFuZC1t/b3VudGFpbi12aWV3/LWZyZWUtcGhvdG8u/anBlZz93PTYwMCZx/dWFsaXR5PTgw'
+                                    width='100%'
+                                />
+                            </>
+                        }>
+                        <HelpIcon sx={{ mb: '-2rem' }} />
+                    </CustomWidthTooltip>
+                </Stack>
 
                 <Box sx={{ mt: 2 }} >
                     <TextField
@@ -308,6 +361,20 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
                         <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
                     </Box>
+                </Box>
+
+                <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="outlined"
+                        tabIndex={-1}
+                        startIcon={<AttachFileIcon />}
+                    >
+                        Attach file
+                        <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+                    </Button>
+                    {/* {attachment && <Typography variant='p'>{attachment}</Typography>} */}
                 </Box>
 
                 <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>

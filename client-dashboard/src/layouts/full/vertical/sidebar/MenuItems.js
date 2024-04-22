@@ -100,14 +100,14 @@ const Menuitems = [
     href: '/invoice',
     chipColor: 'secondary',
   },
-  // {
-  //   id: uniqueId(),
-  //   title: 'Visitor parking pass',
-  //   icon: IconParking ,
-  //   href: '/visitor_pass',
-  //   // chip: 'i',
-  //   chipColor: 'secondary',
-  // },
+  {
+    id: uniqueId(),
+    title: 'Visitor parking pass',
+    icon: IconParking ,
+    href: '/visitor_pass',
+    // chip: 'i',
+    chipColor: 'secondary',
+  },
   {
     id: uniqueId(),
     title: 'Bookings',
