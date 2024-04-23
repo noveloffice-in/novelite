@@ -64,6 +64,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const [attachment, setAttachment] = useState(null);
     const [openToolTip, setOpenToolTip] = React.useState(false);
 
+    const [contactErr, setContactErr] = useState(false);
+    const [contactNumErr, setContactNumErr] = useState(false);
+
     const [ticketData, setTicketData] = useState({
         subject: "",
         description: "",
@@ -75,6 +78,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         alternateEmail: "",
         customer: customerName,
         file: "",
+        fileName: "",
+        ventNumber: "",
         creation_via: "Ticket",
     });
 
@@ -183,15 +188,19 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             ...ticketData,
             issueType: issueTypeDropdown,
         };
+        setContactErr(false);
         setShowLoading(true);
+        setContactNumErr(false);
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
             setShowLoading(false);
         } else if (updatedTicketData.contactName === "") {
             notifyWarn("Please fill the contact Name");
+            setContactErr(true);
             setShowLoading(false);
         } else if (updatedTicketData.contactNumber === "") {
             notifyWarn("Please fill the contact Number");
+            setContactNumErr(true);
             setShowLoading(false);
         } else if (updatedTicketData.contactNumber.length > 10) {
             notifyWarn("Please enter only 10 numbers");
@@ -203,6 +212,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             notifyWarn("File size cannot be more than 5MB and must be in PDF, PNG, JPG, or MP4 format");
             setShowLoading(false);
         } else {
+            setShowLoading(true);
             const updatedTicketData = {
                 ...ticketData,
                 issueType: issueTypeDropdown
@@ -218,52 +228,59 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 contact_phone: updatedTicketData.contactNumber,
                 contact_email_alternative: updatedTicketData.alternateEmail,
                 customer: customerName,
+                vent_number: updatedTicketData.ventNumber,
                 creation_via: "Ticket",
             }
 
-            const reader = new FileReader();
-            reader.readAsDataURL(attachment);
-            reader.onloadend = function () {
-                const base64data = reader.result;
+            if (attachment) {
+                const reader = new FileReader();
+                reader.readAsDataURL(attachment);
+                reader.onloadend = function () {
+                    const base64data = reader.result;
 
-                // Include base64 data in ticketDetails
-                ticketDetails.file = base64data;
-                console.log(ticketDetails);
-                setShowLoading(false);
+                    // Include base64 data in ticketDetails
+                    ticketDetails.file = base64data;
+                    ticketDetails.fileName = attachment.name.split('.')[0];
 
-                //,Frappe Hook to create Issue 
-                // const create = createDoc('Issue', ticketDetails).then(() => {
-                //     notifySuccess('Ticket created Successfully');
-                //     setTimeout(() => {
-                //         setShowLoading(false);
-                //         setOpen1(false);
-                //         mutate();
-                //     }, 1000);
-                // }).catch((err) => {
-                //     console.log("inside catch " + JSON.stringify(err.message));
-                //     setShowLoading(false);
-                //     notifyError(err.message);
-                // })
+                    //,   Axios call
+                    createIssue(ticketDetails);
 
-
-                //,Custom api to create an Issue
-                axios.post('/api/method/novelite.api.api.issue', ticketDetails)
-                    .then((res) => {
-                        console.log("Response = ", res);
-                        notifySuccess('Ticket created Successfully');
-                        setTimeout(() => {
-                            setShowLoading(false);
-                            setOpen1(false);
-                            mutate();
-                        }, 1000);
-                    }).catch((err) => {
-                        console.log("inside catch " + JSON.stringify(err.message));
-                        setShowLoading(false);
-                        notifyError(err.message);
-                    })
+                    //,Frappe Hook to create Issue 
+                    // const create = createDoc('Issue', ticketDetails).then(() => {
+                    //     notifySuccess('Ticket created Successfully');
+                    //     setTimeout(() => {
+                    //         setShowLoading(false);
+                    //         setOpen1(false);
+                    //         mutate();
+                    //     }, 1000);
+                    // }).catch((err) => {
+                    //     console.log("inside catch " + JSON.stringify(err.message));
+                    //     setShowLoading(false);
+                    //     notifyError(err.message);
+                    // })
+                }
+            } else {
+                createIssue(ticketDetails);
             }
-
         }
+    }
+
+    const createIssue = (ticket) => {
+        //,Custom api to create an Issue
+        axios.post('/api/method/novelite.api.api.issue', ticket)
+            .then((res) => {
+                console.log("Response = ", res);
+                notifySuccess('Ticket created Successfully');
+                setTimeout(() => {
+                    setShowLoading(false);
+                    setOpen1(false);
+                    mutate();
+                }, 1000);
+            }).catch((err) => {
+                console.log("inside catch " + JSON.stringify(err.message));
+                setShowLoading(false);
+                notifyError(err.message);
+            })
     }
 
     //----------------------------------------------------------Location dropdown-----------------------------------------------//
@@ -291,6 +308,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     width: '90%',
                 }}>
 
+                {/* -------------------------------------Location Dropdown-------------------------------------------  */}
                 <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
                     {confirmedLocations?.length >= 2 ?
                         (<Box>
@@ -316,6 +334,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     }
                 </Tooltip>
 
+                {/* -------------------------------------Issue type, Issue subtype dropdown-------------------------------------------  */}
                 <FormControl fullWidth sx={{ mt: 2 }}>
                     <InputLabel>Issue type</InputLabel>
                     <Select value={issueDropdown} label="Issue type" onChange={handleIssueDropdownChange}>
@@ -339,6 +358,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     </FormControl>
                 )}
 
+                {/* -------------------------------------Ticket subject-------------------------------------------  */}
                 {issueTypeDropdown === "Other" ? (
                     <TextField
                         label="Ticket Title"
@@ -350,12 +370,13 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     />
                 ) : null}
 
+                {/* -------------------------------------Vent number-------------------------------------------  */}
                 {issueDropdown === 'AC' ? <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
                     <TextField
                         label="Vent number"
+                        name='ventNumber'
                         variant="standard"
                         sx={{ width: '100%', mt: 2, ml: 1 }}
-                        name="info"
                         // value={}
                         onChange={handleInputChange}
                     />
@@ -380,6 +401,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     </HtmlTooltip>
                 </Stack> : null}
 
+                {/* -------------------------------------Ticket Description-------------------------------------------  */}
                 <Box sx={{ mt: 2 }} >
                     <TextField
                         id="outlined-multiline-static"
@@ -393,19 +415,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     />
                 </Box>
 
-                <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Contact Details</DialogTitle>
-
-                <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
-                    <Box>
-                        <TextField label="Contact Name" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactName" onChange={handleInputChange} />
-                        <TextField label="Contact Number" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />
-                    </Box>
-                    <Box>
-                        <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
-                        <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
-                    </Box>
-                </Box>
-
+                {/* -------------------------------------Attach file-------------------------------------------  */}
                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
                     <Button
                         component="label"
@@ -418,6 +428,29 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
                     </Button>
                     {attachment && <Typography variant='p'>{attachment.name}</Typography>}
+                </Box>
+
+                {/* -------------------------------------Contact Details-------------------------------------------  */}
+                <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Contact Details</DialogTitle>
+
+                <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
+                    <Box>
+                        {contactErr ?
+                            (<TextField error label="Contact Name" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactName" onChange={handleInputChange} />)
+                            :
+                            (<TextField label="Contact Name" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactName" onChange={handleInputChange} />)
+                        }
+                        {
+                            contactNumErr ?
+                                (<TextField error label="Contact Number" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />)
+                                :
+                                (<TextField label="Contact Number" variant="standard" required style={{ width: '100%', marginTop: '16px' }} name="contactNumber" onChange={handleInputChange} />)
+                        }
+                    </Box>
+                    <Box>
+                        <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
+                        <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
+                    </Box>
                 </Box>
 
                 <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>

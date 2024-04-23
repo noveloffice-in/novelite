@@ -16,6 +16,7 @@ import {
   Button,
   Badge,
   FormControl,
+  IconButton,
 } from '@mui/material';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -30,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 //For Modal
 import { useFrappeGetDocList } from 'frappe-react-sdk';
+import CloseIcon from '@mui/icons-material/Close';
 
 //For Client Location
 import InputLabel from '@mui/material/InputLabel';
@@ -41,6 +43,7 @@ import Zoom from '@mui/material/Zoom';
 import { Link } from 'react-router-dom';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 import RiseTicket from './RiseTicket';
+import { Stack } from '@mui/system';
 
 
 const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilterLocation, filterLocation }) => {
@@ -302,12 +305,21 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         open={open1}
         onClose={handleClose1}
       >
-        <DialogTitle>Raise a Ticket</DialogTitle>
+        <DialogTitle>
+          <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+            <Typography variant='h5'>Raise a Ticket</Typography>
+            <IconButton  onClick={handleClose1} aria-label="close">
+              <CloseIcon/>
+            </IconButton>
+          </Stack>
+        </DialogTitle>
         <DialogContent>
           <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose1}>Close</Button>
+          {/* <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%'>
+          <Button variant="contained" onClick={handleClose1}>Submit</Button>
+          </Box> */}
         </DialogActions>
       </Dialog>
       {/* ---------------------------------------Dialog Ends------------------------------------ */}

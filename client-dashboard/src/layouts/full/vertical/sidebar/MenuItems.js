@@ -109,6 +109,10 @@ const Menuitems = [
     chipColor: 'secondary',
   },
   {
+    navlabel: true,
+    subheader: 'Upcoming',
+  },
+  {
     id: uniqueId(),
     title: 'Bookings',
     icon: IconBrandBooking ,
@@ -124,10 +128,14 @@ const Menuitems = [
     chip: 'Upcoming',
     chipColor: 'secondary',
   },
-  // {
-  //   navlabel: true,
-  //   subheader: 'Others',
-  // },
+  {
+    id: uniqueId(),
+    title: 'Expansion/Downsize',
+    icon: IconChartDonut3 ,
+    href: '/gatepass',
+    // chip: 'Upcoming',
+    chipColor: 'secondary',
+  },
   // {
   //   id: uniqueId(),
   //   title: 'Notifications',

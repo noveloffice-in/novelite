@@ -259,46 +259,57 @@ def addDataToDoc():
     return "Data added successfully"
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def issue():
     # Get data from frappe.form_dict
     data = frappe.form_dict
 
-    # Extract file data from base64 encoded string
-    if 'file' in data:
-        file_data = data['file']
-        file_data = file_data.split(',')[1]  # Remove the data URI prefix
-        # file_type = file_data.split(',')[0] 
-        file_binary = base64.b64decode(file_data)
-
-    # Create a new Issue document and populate it with the received data
-    issue_info = frappe.new_doc("Issue")
-    issue_info.subject = data.get('subject', "")
-    issue_info.customer = data.get('customer', "")
-    issue_info.issue_type = data.get('issue_type', "")
-    issue_info.custom_issue_subtype = data.get('custom_issue_subtype', "")
-    issue_info.location = data.get('location', "")
-    issue_info.description = data.get('description', "")
-    issue_info.contact_name = data.get('contact_name', "")
-    issue_info.contact_phone = data.get('contact_phone', "")
-    issue_info.contact_email = data.get('contact_email', "")
-    issue_info.contact_email_alternative = data.get('contact_email_alternative', "")
-
-    issue_info.insert(ignore_permissions=True)
-
     try:
-        file_doc = frappe.get_doc({
-            "doctype": "File",
-            "file_name": f"attahment_{issue_info.name}.png",
-            "folder": "Home",
-            "is_private": 0,
-            "content": file_binary,  # Here we use the binary data
-            "attached_to_doctype": "Issue",
-            "attached_to_name": issue_info.name  # This should now be valid
-        })
-        file_doc.insert(ignore_permissions=True)
+        # Extract file data from base64 encoded string
+        if 'file' in data:
+            file_data = data['file']
+            file_data = file_data.split(',')[1]  # Remove the data URI prefix
+            # file_type = file_data.split(',')[0] 
+            file_binary = base64.b64decode(file_data)
 
-        issue_info.db_set("attachment", file_doc.file_url)
+        # Create a new Issue document and populate it with the received data
+        issue_info = frappe.new_doc("Issue")
+        issue_info.subject = data.get('subject', "")
+        issue_info.customer = data.get('customer', "")
+        issue_info.issue_type = data.get('issue_type', "")
+        issue_info.vent_number = data.get('vent_number', "")
+        issue_info.custom_issue_subtype = data.get('custom_issue_subtype', "")
+        issue_info.location = data.get('location', "")
+        issue_info.description = data.get('description', "")
+        issue_info.contact_name = data.get('contact_name', "")
+        issue_info.contact_phone = data.get('contact_phone', "")
+        issue_info.contact_email = data.get('contact_email', "")
+        issue_info.contact_email_alternative = data.get('contact_email_alternative', "")
+
+        issue_info.insert(ignore_permissions=True)
+
+        if 'file' in data and 'fileName' in data:
+            file_format = data['file'].split(';')[0].split('/')[1]
+            file_name = f"{data['fileName']}.{file_format}"
+
+            if file_format in ['png', 'jpg', 'jpeg', 'pdf']:
+                content_type = "image/" + file_format
+            elif file_format == 'mp4':
+                content_type = "video/mp4"
+
+            file_doc = frappe.get_doc({
+                "doctype": "File",
+                "file_name": file_name,
+                "folder": "Home",
+                "is_private": 0,
+                "content": file_binary,  # Here we use the binary data
+                "content_type": content_type,
+                "attached_to_doctype": "Issue",
+                "attached_to_name": issue_info.name  # This should now be valid
+            })
+            file_doc.insert(ignore_permissions=True)
+
+            issue_info.db_set("attachment", file_doc.file_url)
 
         return _("Issue created successfully")
     except Exception as e:
