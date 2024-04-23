@@ -15,6 +15,7 @@ import os
 # from cryptography.fernet import Fernet
 from Crypto.Cipher import AES
 
+
 @frappe.whitelist(allow_guest=True)
 def sign_up():
     try:
@@ -258,63 +259,51 @@ def addDataToDoc():
     return "Data added successfully"
 
 
-# @frappe.whitelist()
-# def issue():
-#     data = frappe.request.json
-    
-#     if data is None:
-#         frappe.throw("No data provided")  # Handle case where no data is provided
+@frappe.whitelist(allow_guest=True)
+def issue():
+    # Get data from frappe.form_dict
+    data = frappe.form_dict
 
-#     # Now you can continue with your existing logic to process the data
-#     issue_info = frappe.new_doc("Issue")
-#     issue_info.subject = data.get('subject', "")
-#     issue_info.customer = data.get('customer', "")
-#     issue_info.issue_type = data.get('issue', "")
-#     issue_info.issue_subtype = data.get('issueType', "")
-#     issue_info.location = data.get('location', "")
-#     issue_info.description = data.get('description', "")
-#     issue_info.contact_name = data.get('contactName', "")
-#     issue_info.contact_phone = data.get('contactNumber', "")
-#     issue_info.contact_email = data.get('email', "")
-#     issue_info.contact_email_alternative = data.get('alternateEmail', "")
-#     # issue = data.get('issue')
-    
-#     # CR = [
-#     #     "Security and Access", "Gate Pass", "Documents and Accounts", "Accounts and Billing",
-#     #     "Office Space Modification", "Other"]
-    
-#     # FL = [
-#     #     "Parking", "House Keeping", "Restroom | Common Area"
-#     # ]
-#     # # Define other departments as needed
-#     # departments = {
-#     #     "CR": CR,
-#     #     "FL": FL,
-#     #     "IT": ["IT and Network"],
-#     #     "FC": ["AC"],
-#     #     "EL": ["Electrical"],
-#     #     "FD": ["Meeting Room | Conference Room Booking"]
-#     # }
+    # Extract file data from base64 encoded string
+    if 'file' in data:
+        file_data = data['file']
+        file_data = file_data.split(',')[1]  # Remove the data URI prefix
+        # file_type = file_data.split(',')[0] 
+        file_binary = base64.b64decode(file_data)
 
-#     # dept = None
-#     # for department, issues in departments.items():
-#     #     if issue in issues:
-#     #         dept = department
-#     #         break
-    
-#     # if dept:
-#     #     issue_info.append("departments", {
-#     #         "department": dept,
-#     #         "status": "Pending"
-#     #     })
-#     # else:
-#     #     frappe.throw("Issue department not found")
+    # Create a new Issue document and populate it with the received data
+    issue_info = frappe.new_doc("Issue")
+    issue_info.subject = data.get('subject', "")
+    issue_info.customer = data.get('customer', "")
+    issue_info.issue_type = data.get('issue_type', "")
+    issue_info.custom_issue_subtype = data.get('custom_issue_subtype', "")
+    issue_info.location = data.get('location', "")
+    issue_info.description = data.get('description', "")
+    issue_info.contact_name = data.get('contact_name', "")
+    issue_info.contact_phone = data.get('contact_phone', "")
+    issue_info.contact_email = data.get('contact_email', "")
+    issue_info.contact_email_alternative = data.get('contact_email_alternative', "")
 
-#     try:
-#         issue_info.save()
-#         # frappe.throw("Adding to doc")
-#     except Exception as e:
-#         frappe.throw(str(e))
+    issue_info.insert(ignore_permissions=True)
+
+    try:
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": f"attahment_{issue_info.name}.png",
+            "folder": "Home",
+            "is_private": 0,
+            "content": file_binary,  # Here we use the binary data
+            "attached_to_doctype": "Issue",
+            "attached_to_name": issue_info.name  # This should now be valid
+        })
+        file_doc.insert(ignore_permissions=True)
+
+        issue_info.db_set("attachment", file_doc.file_url)
+
+        return _("Issue created successfully")
+    except Exception as e:
+        return str(e)
+    
 
 # --------------------------------Creating Records in Visiting PP----------------------------------------------------------
 

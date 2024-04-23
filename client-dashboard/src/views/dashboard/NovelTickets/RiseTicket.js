@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
-import { Box, Stack, height } from '@mui/system'
+import { Box, Stack, borderRadius, height, padding } from '@mui/system'
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import React, { useEffect, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { tooltipClasses } from '@mui/material/Tooltip';
+import { stubFalse } from 'lodash';
 
 const style = {
     position: 'absolute',
@@ -42,13 +43,18 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 //Custom tooltip
-const CustomWidthTooltip = styled(({ className, ...props }) => (
+const HtmlTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
-))({
+))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
+        // backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
         maxWidth: 300,
+        // fontSize: theme.typography.pxToRem(12),
+        // border: '1px solid #dadde9',
+        padding: '10px',
     },
-});
+}));
 
 export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate }) {
 
@@ -56,6 +62,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
     const [showLoading, setShowLoading] = useState(false);
     const [attachment, setAttachment] = useState(null);
+    const [openToolTip, setOpenToolTip] = React.useState(false);
 
     const [ticketData, setTicketData] = useState({
         subject: "",
@@ -65,9 +72,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         issueType: "Internet not working | Slow Internet",
         contactName: "",
         contactNumber: "",
-        email: "",
         alternateEmail: "",
         customer: customerName,
+        file: "",
         creation_via: "Ticket",
     });
 
@@ -157,6 +164,20 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         }));
     };
 
+    const checkFileFormat = (file) => {
+        if (!file) {
+            return false;
+        } else if (file.size > 5242880) {
+            return true;
+        }
+        const extension = file.name.split('.').pop().toLowerCase();
+        const allowedFormats = ['pdf', 'png', 'jpg', 'mp4'];
+        if (!allowedFormats.includes(extension)) {
+            return true;
+        }
+        return false;
+    }
+
     const riseTicket = () => {
         const updatedTicketData = {
             ...ticketData,
@@ -178,10 +199,13 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         } else if (updatedTicketData.location === 'ALL' || updatedTicketData.location === '') {
             notifyWarn("Please Select the Location");
             setShowLoading(false);
+        } else if (checkFileFormat(attachment)) {
+            notifyWarn("File size cannot be more than 5MB and must be in PDF, PNG, JPG, or MP4 format");
+            setShowLoading(false);
         } else {
             const updatedTicketData = {
                 ...ticketData,
-                issueType: issueTypeDropdown,
+                issueType: issueTypeDropdown
             };
 
             const ticketDetails = {
@@ -192,46 +216,57 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 custom_issue_subtype: updatedTicketData.issueType,
                 contact_name: updatedTicketData.contactName,
                 contact_phone: updatedTicketData.contactNumber,
-                contact_email: updatedTicketData.email,
                 contact_email_alternative: updatedTicketData.alternateEmail,
                 customer: customerName,
                 creation_via: "Ticket",
             }
 
-            console.log("Attachment is = ", attachment);
-            setShowLoading(false);
+            const reader = new FileReader();
+            reader.readAsDataURL(attachment);
+            reader.onloadend = function () {
+                const base64data = reader.result;
 
-            //,Frappe Hook to create Issue 
-            // const create = createDoc('Issue', ticketDetails).then(() => {
-            //     notifySuccess('Ticket created Successfully');
-            //     setTimeout(() => {
-            //         setShowLoading(false);
-            //         setOpen1(false);
-            //         mutate();
-            //     }, 1000);
-            // }).catch((err) => {
-            //     console.log("inside catch " + JSON.stringify(err.message));
-            //     setShowLoading(false);
-            //     notifyError(err.message);
-            // })
+                // Include base64 data in ticketDetails
+                ticketDetails.file = base64data;
+                console.log(ticketDetails);
+                setShowLoading(false);
 
-            //,Custom api to create an Issue
-            // axios.post('/api/method/novelite.api.api.issue', updatedTicketData)
-            //     .then((res) => {
-            //         console.log("Response = ", res);
-            //         notifySuccess('Ticket created Successfully');
-            //         setTimeout(() => {
-            //             setShowLoading(false);
-            //             setOpen1(false);
-            //             mutate();
-            //         }, 1000);
-            //     }).catch((err) => {
-            //         console.log("inside catch " + JSON.stringify(err.message));
-            //         setShowLoading(false);
-            //         notifyError(err.message);
-            //     })
+                //,Frappe Hook to create Issue 
+                // const create = createDoc('Issue', ticketDetails).then(() => {
+                //     notifySuccess('Ticket created Successfully');
+                //     setTimeout(() => {
+                //         setShowLoading(false);
+                //         setOpen1(false);
+                //         mutate();
+                //     }, 1000);
+                // }).catch((err) => {
+                //     console.log("inside catch " + JSON.stringify(err.message));
+                //     setShowLoading(false);
+                //     notifyError(err.message);
+                // })
+
+
+                //,Custom api to create an Issue
+                axios.post('/api/method/novelite.api.api.issue', ticketDetails)
+                    .then((res) => {
+                        console.log("Response = ", res);
+                        notifySuccess('Ticket created Successfully');
+                        setTimeout(() => {
+                            setShowLoading(false);
+                            setOpen1(false);
+                            mutate();
+                        }, 1000);
+                    }).catch((err) => {
+                        console.log("inside catch " + JSON.stringify(err.message));
+                        setShowLoading(false);
+                        notifyError(err.message);
+                    })
+            }
+
         }
     }
+
+    //----------------------------------------------------------Location dropdown-----------------------------------------------//
     const handleLocationChange = (e) => {
         let changedLocation = e.target.value;
         setFilterLocation(changedLocation);
@@ -315,7 +350,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     />
                 ) : null}
 
-                <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
+                {issueDropdown === 'AC' ? <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
                     <TextField
                         label="Vent number"
                         variant="standard"
@@ -324,18 +359,26 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         // value={}
                         onChange={handleInputChange}
                     />
-                    <CustomWidthTooltip placement="left" TransitionComponent={Zoom}
-                        fullWidth
+                    <HtmlTooltip placement="left" TransitionComponent={Zoom} sx={{ transform: 'translate(-14px, 51px)' }}
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        onClose={() => { setOpenToolTip(stubFalse) }}
+                        open={openToolTip}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
                         title={
                             <>
                                 <img src='https://imgs.search.brave.com/KSA43U74oZ2OcvBCjbHx_ScTzN-cXeioCn8en5bqbvw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9uYXR1cmFsLXNj/ZW5lcnktd2l0aC1w/YXRod2F5LWFuZC1t/b3VudGFpbi12aWV3/LWZyZWUtcGhvdG8u/anBlZz93PTYwMCZx/dWFsaXR5PTgw'
-                                    width='100%'
+                                    width='100%' alt="img"
                                 />
+                                <Typography variant='p'>AC vent Number</Typography>
                             </>
                         }>
-                        <HelpIcon sx={{ mb: '-2rem' }} />
-                    </CustomWidthTooltip>
-                </Stack>
+                        <HelpIcon onClick={() => { setOpenToolTip(!openToolTip) }} sx={{ mb: '-2rem' }} />
+                    </HtmlTooltip>
+                </Stack> : null}
 
                 <Box sx={{ mt: 2 }} >
                     <TextField
@@ -374,7 +417,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         Attach file
                         <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
                     </Button>
-                    {/* {attachment && <Typography variant='p'>{attachment}</Typography>} */}
+                    {attachment && <Typography variant='p'>{attachment.name}</Typography>}
                 </Box>
 
                 <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>

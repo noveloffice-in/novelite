@@ -109,7 +109,7 @@ const PassTable = () => {
   
   //-----------------------------------------------------------Search query--------------------------------------------------//
   const filteredData = data?.filter((element) =>
-    element.visitor_name.toLowerCase().includes(searchQuery.toLowerCase())
+    element.visitor_name?.toLowerCase().includes(searchQuery?.toLowerCase())
   );
 
   return (
