@@ -15,6 +15,9 @@ import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
+//Ac vent image
+import acVent from '../../../assets/images/acVent/AC Vent Number Identification.jpg'
+
 import { tooltipClasses } from '@mui/material/Tooltip';
 import { stubFalse } from 'lodash';
 
@@ -295,7 +298,6 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         }
     }
 
-
     return (
         <>
             <Box
@@ -391,7 +393,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         disableTouchListener
                         title={
                             <>
-                                <img src='https://imgs.search.brave.com/KSA43U74oZ2OcvBCjbHx_ScTzN-cXeioCn8en5bqbvw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9uYXR1cmFsLXNj/ZW5lcnktd2l0aC1w/YXRod2F5LWFuZC1t/b3VudGFpbi12aWV3/LWZyZWUtcGhvdG8u/anBlZz93PTYwMCZx/dWFsaXR5PTgw'
+                                <img src={acVent}
                                     width='100%' alt="img"
                                 />
                                 <Typography variant='p'>AC vent Number</Typography>

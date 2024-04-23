@@ -152,6 +152,7 @@ const Router = [
       // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
       { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
       { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
       { path: '/category', exact: true, element: < Protected Component={Category} /> },
       { path: '/notifications', exact: true, element: < Protected Component={Notifications} /> },
       { path: '/bookings', exact: true, element: < Protected Component={Bookings} /> },

@@ -132,7 +132,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Expansion/Downsize',
     icon: IconChartDonut3 ,
-    href: '/gatepass',
+    href: '/Expansion_Downsize',
     // chip: 'Upcoming',
     chipColor: 'secondary',
   },

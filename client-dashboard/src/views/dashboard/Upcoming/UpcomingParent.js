@@ -10,11 +10,17 @@ export default function UpcomingParent({ Component }) {
         heading: "Gate pass feature upcoming",
         content: "The gate pass feature will soon be seamlessly integrated into our web app, offering enhanced convenience for all users. Stay tuned for this exciting addition to manage your access with ease!"
     }
+    let expansion_downsize = {
+        heading: "Expansion/Downsize feature upcoming",
+        content: "The Expansion/Downsize feature will soon be seamlessly integrated into our web app, offering enhanced convenience for all users. Stay tuned for this exciting addition to manage your access with ease!"
+    }
 
     if (window.location.href.split("/")[4] === 'location') {
         return (<Component tittle={"Bookings"} bookings={bookings} />)
     } else if (window.location.href.split("/")[4] === 'gatepass') {
         return (<Component tittle={"Gate pass"} bookings={gatepass} />)
+    } else if (window.location.href.split("/")[4] === 'Expansion_Downsize'){
+        return (<Component tittle={"Expansion-Downsize"} bookings={expansion_downsize} />)
     }
     return (<Component tittle={"Tittle"} />)
 }
