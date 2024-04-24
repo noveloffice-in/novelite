@@ -18,6 +18,7 @@ import {
   FormControl,
   IconButton,
   CircularProgress,
+  Rating,
 } from '@mui/material';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -31,7 +32,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 //For Modal
-import { useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import CloseIcon from '@mui/icons-material/Close';
 
 //For Client Location
@@ -46,16 +47,31 @@ import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 import RiseTicket from './RiseTicket';
 import { Stack } from '@mui/system';
 
+//Ratiog
+import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
+
+//Toastify 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilterLocation, filterLocation }) => {
   const dispatch = useDispatch();
 
   //Dialouge component
   const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [toolTip, setToolTip] = useState(false);
   const [start, setStart] = useState(0);
   const [submitTicket, setSubmitTicket] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
+  //rating
+  const [rating, setRating] = useState(5);
+  const [ticketId, setTicketId] = useState(0);
+
+  //-----------------------------------------------------------Toast functions--------------------------------------------------//
+  const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+  const notifyError = (msg) => toast.error(msg, { toastId: "error" });
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -95,7 +111,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   //------------------------------------------------------Dialog, Tooltip-----------------------------------------------//
 
-  //Dialog
+  //Dialog for rise ticket
   const handleClickOpen = () => {
     setOpen1(true);
     setSubmitTicket(false);
@@ -103,6 +119,16 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   const handleClose1 = () => {
     setOpen1(false);
+  };
+
+  //For Rating
+  const handleClickOpen2 = (id) => {
+    setOpen2(true);
+    setTicketId(id);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
   };
 
   //ToolTip
@@ -119,7 +145,24 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     setSubmitTicket(!submitTicket);
   }
 
+  //------------------------------------------------------Filtering-----------------------------------------------//
+  const { updateDoc, loading, isCompleted } = useFrappeUpdateDoc();
+  const sendRating = () => {
+    updateDoc('Issue', ticketId, { rating: rating })
+      .then((res) => {
+        notifySuccess("Rated Successfully");
+        console.log(res);
+        setTimeout(() => {
+          handleClose2();
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyError(err);
+      })
+  }
 
+  //------------------------------------------------------Filtering-----------------------------------------------//
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
     if (tickets != undefined) {
       switch (filter) {
@@ -232,21 +275,20 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                 <Typography variant="h6">Date</Typography>
               </TableCell> */}
               <TableCell>
-                <Typography variant="h6">Updates</Typography>
+                <Typography variant="h6">Rating</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tickets && tickets.map((ticket) => (
-              <Tooltip disableFocusListener disableTouchListener placement="top-end" TransitionComponent={Zoom} title="Click to view updates">
-                <TableRow key={ticket.subject} hover component={Link} to={`/ticket_details/${ticket.name}`}>
-                  <TableCell>
-                    <Box>
-                      <Typography variant="h6" fontWeight="500" wrap>
-                        {ticket.name}
-                      </Typography>
+              <TableRow key={ticket.subject} hover>
+                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                  <Box>
+                    <Typography variant="h6" fontWeight="500" wrap>
+                      {ticket.name}
+                    </Typography>
 
-                      {/* <Typography
+                    {/* <Typography
                       color="textSecondary"
                       noWrap
                       sx={{ maxWidth: '250px' }}
@@ -255,49 +297,45 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                     >
                       {ticket.ticketDescription}
                     </Typography> */}
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box>
-                      <Typography variant="h6" fontWeight="500" wrap >
-                        {ticket.subject}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      sx={{
-                        backgroundColor:
-                          ticket.status === 'In-Progress'
-                            ? (theme) => theme.palette.success.light
-                            : ticket.status === 'Closed'
-                              ? (theme) => theme.palette.error.light
-                              : ticket.status === 'Pending'
-                                ? (theme) => theme.palette.warning.light
-                                : ticket.status === 'Pending',
-                      }}
-                      size="small"
-                      label={ticket.status}
-                    />
-                  </TableCell>
-                  {/* <TableCell>
+                  </Box>
+                </TableCell>
+                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                  <Box>
+                    <Typography variant="h6" fontWeight="500" wrap >
+                      {ticket.subject}
+                    </Typography>
+                  </Box>
+                </TableCell>
+                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                  <Chip
+                    sx={{
+                      backgroundColor:
+                        ticket.status === 'In-Progress'
+                          ? (theme) => theme.palette.success.light
+                          : ticket.status === 'Closed'
+                            ? (theme) => theme.palette.error.light
+                            : ticket.status === 'Pending'
+                              ? (theme) => theme.palette.warning.light
+                              : ticket.status === 'Pending',
+                    }}
+                    size="small"
+                    label={ticket.status}
+                  />
+                </TableCell>
+                {/* <TableCell>
                   <Typography>{ticket.creation.split(" ")[0]}</Typography>
                 </TableCell> */}
-                  {ticket.status === 'Closed' ?
-                    (<TableCell >
-                      <Badge color="secondary" badgeContent={0}>
-                        <CommentsDisabledOutlinedIcon />
-                      </Badge>
-                    </TableCell>)
-                    :
-                    (<TableCell >
-                      <Badge color="secondary" badgeContent={0}>
-                        <CommentOutlinedIcon />
-                      </Badge>
-                    </TableCell>)
-                  }
-                </TableRow>
-              </Tooltip>
+                <TableCell >
+                  <Badge color="secondary" badgeContent={0}>
+                    <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name) }} >
+                      <Stack flexDirection='row' alignItems='center' gap={0.5}>
+                        Rate  <StarBorderPurple500Icon />
+                      </Stack>
+                    </Button>
+                    {/* <CommentsDisabledOutlinedIcon /> */}
+                  </Badge>
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
@@ -334,6 +372,56 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         </DialogActions>
       </Dialog>
       {/* ---------------------------------------Dialog Ends------------------------------------ */}
+
+      {/* ---------------------------------------Rating Dialog Start---------------------------------- */}
+      <Dialog
+        fullWidth
+        maxWidth='sm'
+        open={open2}
+        onClose={handleClose2}
+      >
+        <DialogTitle>
+          <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+            <Typography variant='h5'>Please Rate Us</Typography>
+            <IconButton onClick={handleClose2} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+        </DialogTitle>
+        <DialogContent>
+          {/* ---------------------------------------Toast Container Starts------------------------------------ */}
+          <ToastContainer
+            position="top-center"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          {/* ---------------------------------------Toast Container Ends------------------------------------ */}
+          <Typography component="legend">Rate us</Typography>
+          <Rating
+            name="simple-controlled"
+            value={rating}
+            onChange={(event, newValue) => {
+              setRating(newValue);
+            }}
+          />
+          {/* <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} /> */}
+        </DialogContent>
+        <DialogActions>
+          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
+            <Button variant="outlined" onClick={sendRating}>
+              Submit
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
     </Box>
   );
 };

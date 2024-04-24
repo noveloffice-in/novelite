@@ -117,6 +117,14 @@ const Menuitems = [
     chipColor: 'secondary',
   },
   {
+    id: uniqueId(),
+    title: 'Expansion/Downsize',
+    icon: IconChartDonut3 ,
+    href: '/Expansion_Downsize',
+    // chip: 'Upcoming',
+    chipColor: 'secondary',
+  },
+  {
     navlabel: true,
     subheader: 'Upcoming',
   },
@@ -125,15 +133,7 @@ const Menuitems = [
     title: 'Gate pass',
     icon: IconChartDonut3 ,
     href: '/gatepass',
-    // chip: 'Upcoming',
-    chipColor: 'secondary',
-  },
-  {
-    id: uniqueId(),
-    title: 'Expansion/Downsize',
-    icon: IconChartDonut3 ,
-    href: '/Expansion_Downsize',
-    // chip: 'Upcoming',
+    chip: 'Upcoming',
     chipColor: 'secondary',
   },
   // {
