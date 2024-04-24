@@ -17,6 +17,7 @@ import {
   Badge,
   FormControl,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -53,6 +54,8 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [open1, setOpen1] = useState(false);
   const [toolTip, setToolTip] = useState(false);
   const [start, setStart] = useState(0);
+  const [submitTicket, setSubmitTicket] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
 
   //-----------------------------------------------------------Pagination--------------------------------------------------//
   const pageChange = (e, currentPage) => {
@@ -95,6 +98,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   //Dialog
   const handleClickOpen = () => {
     setOpen1(true);
+    setSubmitTicket(false);
   };
 
   const handleClose1 = () => {
@@ -109,6 +113,11 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const handleTooltipOpen = () => {
     setToolTip(true);
   };
+
+  //Submit btn trigger inside modal
+  const handleSubmit = () => {
+    setSubmitTicket(!submitTicket);
+  }
 
 
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
@@ -308,18 +317,20 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         <DialogTitle>
           <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
             <Typography variant='h5'>Raise a Ticket</Typography>
-            <IconButton  onClick={handleClose1} aria-label="close">
-              <CloseIcon/>
+            <IconButton onClick={handleClose1} aria-label="close">
+              <CloseIcon />
             </IconButton>
           </Stack>
         </DialogTitle>
         <DialogContent>
-          <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} />
+          <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} />
         </DialogContent>
         <DialogActions>
-          {/* <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%'>
-          <Button variant="contained" onClick={handleClose1}>Submit</Button>
-          </Box> */}
+          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%'>
+            <Button variant="contained" onClick={handleSubmit} disabled={confirmedLocations?.length === 1 || showLoading}>
+              {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
       {/* ---------------------------------------Dialog Ends------------------------------------ */}

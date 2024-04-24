@@ -1,7 +1,7 @@
 import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
 import { Box, Stack, borderRadius, height, padding } from '@mui/system'
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -59,11 +59,10 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate }) {
+export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading }) {
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
-    const [showLoading, setShowLoading] = useState(false);
     const [attachment, setAttachment] = useState(null);
     const [openToolTip, setOpenToolTip] = React.useState(false);
 
@@ -120,6 +119,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const [issueTypeDropdown, setIssueTypeDropdown] = useState(issueOptions[issueDropdown] ? issueOptions[issueDropdown][0] : "");
     const [issueTypeOptions, setIssueTypeOptions] = useState(issueOptions[issueDropdown] || []);
 
+    //For outer submit btn trigger
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
         if (issueDropdown !== "Other" && issueTypeDropdown !== "Other") {
             setTicketData(prevState => ({
@@ -129,6 +131,15 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         }
     }, [issueDropdown, issueTypeDropdown]);
 
+    //For outer submit btn trigger
+    useEffect(() => {
+
+        if (!isFirstRender.current) {
+            riseTicket();
+        } else {
+            isFirstRender.current = false;
+        }
+    }, [submitTicket])
     //----------------------------------------------------------Issue and Issue Type Dropdown change-----------------------------------------------//
     const handleIssueDropdownChange = (e) => {
         const selectedIssue = e.target.value;
@@ -455,9 +466,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     </Box>
                 </Box>
 
-                <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>
+                {/* <Button variant="contained" sx={{ mt: 2 }} onClick={riseTicket} disabled={confirmedLocations?.length === 1 || showLoading}>
                     {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
-                </Button>
+                </Button> */}
             </Box>
 
             <ToastContainer

@@ -54,13 +54,14 @@ export default function BookSlot() {
     const [date, setDate] = useState(dayjs());
     const [fromTime, setFromTime] = useState(dayjs());
     const [toTime, setToTime] = useState(dayjs());
-
+    const [disbleBtn, setDisableBtn] = useState(true);
 
     //Date change
     const handleDateChange = (newValue) => {
         const date = new Date(newValue);
         const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
         setDate(formattedDate);
+        setDisableBtn(false);
     };
 
     //Time Change
@@ -147,7 +148,7 @@ export default function BookSlot() {
                             />
                         </Box>
 
-                        <Button type='submit' variant="contained">
+                        <Button type='submit' variant="contained" disabled={disbleBtn}>
                             {loading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
                         </Button>
                     </form>
