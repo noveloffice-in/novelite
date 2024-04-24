@@ -1,0 +1,91 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-04-24 10:34:50.260134",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "location",
+  "room_type",
+  "room",
+  "booking_date",
+  "booking_time",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Location",
+   "options": "Room Locations",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room type",
+   "options": "Room Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Rooms",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_date",
+   "fieldtype": "Date",
+   "label": "Booking Date"
+  },
+  {
+   "fieldname": "booking_time",
+   "fieldtype": "Data",
+   "label": "Booking Time"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-04-24 10:37:01.817725",
+ "modified_by": "Administrator",
+ "module": "Room Bookings",
+ "name": "Room slots booking",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

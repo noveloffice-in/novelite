@@ -116,17 +116,23 @@ const Protected = Loadable(lazy(() => import('./Protected')));
 const GetData = Loadable(lazy(() => import('./Getdata')));
 const CheckLogin = Loadable(lazy(() => import('./CheckLogin')));
 const Noveldashboard = Loadable(lazy(() => import('../views/dashboard/Noveldashboard')));
+
+//Invoice
+const SalesInvoice = Loadable(lazy(() => import('../views/dashboard/SalesInvoice/SalesInvoice')));
+
 //Bookings
 const Bookings = Loadable(lazy(() => import('../views/dashboard/Booking/Bookings')));
+const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const Category = Loadable(lazy(() => import('../views/dashboard/Booking/Category')));
-const SalesInvoice = Loadable(lazy(() => import('../views/dashboard/SalesInvoice/SalesInvoice')));
 const BookingSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookingSlot')));
 const PaymentSummary = Loadable(lazy(() => import('../views/dashboard/Booking/PaymentSummary')));
 const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout')));
-const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
+
 //Tickets
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
+const NovelTicketChat = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketChat/NovelTicketChat')));
+
 //VisitorParking
 const VisitorPass = Loadable(lazy(() => import('../views/dashboard/VisitorParkingPass/VisitorPass')));
 const PassDetails = Loadable(lazy(() => import('../views/dashboard/VisitorParkingPass/PassDetails')));
@@ -134,7 +140,7 @@ const PassDetails = Loadable(lazy(() => import('../views/dashboard/VisitorParkin
 //Notifications
 const Notifications = Loadable(lazy(() => import('../views/notification/Notifications')));
 
-// const NovelTicketChat = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketChat/NovelTicketChat')));
+//Upcoming
 const Upcoming = Loadable(lazy(() => import('../views/dashboard/Upcoming/Upcoming')));
 const UpcomingParent = Loadable(lazy(() => import('../views/dashboard/Upcoming/UpcomingParent')));
 
@@ -145,27 +151,39 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', element: <Navigate to="/Login" /> },
-      // { path: '/dashboards/modern', exact: true, element: < Protected  Component={ModernDash} /> },
-
+      
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData Component={Noveldashboard} /> },
-      // { path: '/location', exact: true, element: < Protected  Component={Location} /> },
-      { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-      { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-      { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      
+      //Booking
+      { path: '/location', exact: true, element: < Protected  Component={Location} /> },
       { path: '/category', exact: true, element: < Protected Component={Category} /> },
-      { path: '/notifications', exact: true, element: < Protected Component={Notifications} /> },
       { path: '/bookings', exact: true, element: < Protected Component={Bookings} /> },
-      { path: '/visitor_pass', exact: true, element: < Protected Component={VisitorPass} /> },
       { path: '/bookingslot', exact: true, element: < Protected Component={BookingSlot} /> },
       { path: '/payment_summary', exact: true, element: < Protected Component={PaymentSummary} /> },
       { path: '/checkout', exact: true, element: < Protected Component={Checkout} /> },
+      
+      //Upcomming
+      // { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      
+      // Tickets 
       { path: '/tickets', exact: true, element: < Protected Component={NovelTickets} /> },
       // { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
       { path: '/ticket_details/:id', exact: true, element: <  Protected Component={TicketDetails} /> },
+      
+      // Visitor Parking pass 
+      { path: '/visitor_pass', exact: true, element: < Protected Component={VisitorPass} /> },
       // { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
+      
+      // Invoice 
       { path: '/invoice', exact: true, element: < Protected Component={SalesInvoice} /> },
-
+      
+      //Not needed
+      // { path: '/notifications', exact: true, element: < Protected Component={Notifications} /> },
+      // { path: '/dashboards/modern', exact: true, element: < Protected  Component={ModernDash} /> },
+      
       // { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
       // { path: '/apps/chats', element: <Chats /> },
       // { path: '/apps/notes', element: <Notes /> },
