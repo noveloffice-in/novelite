@@ -59,7 +59,7 @@ export default function Bookings() {
                         return (
                             <Grid item xs={12} sm={4} lg={3} key={index}>
                                 <Card variant="outlined" sx={{ maxWidth: 345, display : card.status === "Active" ? "block" : "none"  }}>
-                                    <CardActionArea component={Link} to="/bookingslot" onClick={() => { dispatch(setRoomName(card.name)) }}>
+                                    <CardActionArea component={Link} to="/bookslot" onClick={() => { dispatch(setRoomName(card.name)) }}>
                                         <CardMedia
                                             component="img"
                                             height="140"

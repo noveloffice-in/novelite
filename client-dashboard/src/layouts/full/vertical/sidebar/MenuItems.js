@@ -102,6 +102,14 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Bookings',
+    icon: IconBrandBooking ,
+    href: '/location',
+    // chip: 'Upcoming',
+    chipColor: 'secondary',
+  },
+  {
+    id: uniqueId(),
     title: 'Visitor parking pass',
     icon: IconParking ,
     href: '/visitor_pass',
@@ -114,18 +122,10 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Bookings',
-    icon: IconBrandBooking ,
-    href: '/location',
-    chip: 'Upcoming',
-    chipColor: 'secondary',
-  },
-  {
-    id: uniqueId(),
     title: 'Gate pass',
     icon: IconChartDonut3 ,
     href: '/gatepass',
-    chip: 'Upcoming',
+    // chip: 'Upcoming',
     chipColor: 'secondary',
   },
   {

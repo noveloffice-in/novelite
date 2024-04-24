@@ -125,6 +125,7 @@ const Bookings = Loadable(lazy(() => import('../views/dashboard/Booking/Bookings
 const Location = Loadable(lazy(() => import('../views/dashboard/Booking/Location')));
 const Category = Loadable(lazy(() => import('../views/dashboard/Booking/Category')));
 const BookingSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookingSlot')));
+const BookSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookSlot')));
 const PaymentSummary = Loadable(lazy(() => import('../views/dashboard/Booking/PaymentSummary')));
 const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout')));
 
@@ -159,7 +160,8 @@ const Router = [
       { path: '/location', exact: true, element: < Protected  Component={Location} /> },
       { path: '/category', exact: true, element: < Protected Component={Category} /> },
       { path: '/bookings', exact: true, element: < Protected Component={Bookings} /> },
-      { path: '/bookingslot', exact: true, element: < Protected Component={BookingSlot} /> },
+      // { path: '/bookingslot', exact: true, element: < Protected Component={BookingSlot} /> },
+      { path: '/bookslot', exact: true, element: < Protected Component={BookSlot} /> },
       { path: '/payment_summary', exact: true, element: < Protected Component={PaymentSummary} /> },
       { path: '/checkout', exact: true, element: < Protected Component={Checkout} /> },
       
@@ -175,7 +177,7 @@ const Router = [
       
       // Visitor Parking pass 
       { path: '/visitor_pass', exact: true, element: < Protected Component={VisitorPass} /> },
-      // { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
+      { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
       
       // Invoice 
       { path: '/invoice', exact: true, element: < Protected Component={SalesInvoice} /> },
