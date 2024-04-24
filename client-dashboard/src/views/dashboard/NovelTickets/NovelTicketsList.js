@@ -326,7 +326,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} />
         </DialogContent>
         <DialogActions>
-          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%'>
+          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
             <Button variant="contained" onClick={handleSubmit} disabled={confirmedLocations?.length === 1 || showLoading}>
               {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
             </Button>

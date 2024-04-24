@@ -63,8 +63,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
+    const customerEmailId = useSelector((state) => state.novelprofileReducer.userEmail);
     const [attachment, setAttachment] = useState(null);
-    const [openToolTip, setOpenToolTip] = React.useState(false);
+    const [openToolTip, setOpenToolTip] = useState(false);
 
     const [contactErr, setContactErr] = useState(false);
     const [contactNumErr, setContactNumErr] = useState(false);
@@ -79,6 +80,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         contactNumber: "",
         alternateEmail: "",
         customer: customerName,
+        email:customerEmailId,
         file: "",
         fileName: "",
         ventNumber: "",
@@ -461,7 +463,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         }
                     </Box>
                     <Box>
-                        <TextField label="Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" onChange={handleInputChange} />
+                        <TextField label="Email" required variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" value={ticketData.email} onChange={handleInputChange} />
                         <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
                     </Box>
                 </Box>

@@ -129,6 +129,9 @@ const BookSlot = Loadable(lazy(() => import('../views/dashboard/Booking/BookSlot
 const PaymentSummary = Loadable(lazy(() => import('../views/dashboard/Booking/PaymentSummary')));
 const Checkout = Loadable(lazy(() => import('../views/dashboard/Booking/Checkout')));
 
+//Expansion and Downsize
+const Exp_down = Loadable(lazy(() => import('../views/dashboard/Expansion_Downsize/Exp_down')));
+
 //Tickets
 const NovelTickets = Loadable(lazy(() => import('../views/dashboard/NovelTickets/NovelTickets')));
 const TicketDetails = Loadable(lazy(() => import('../views/dashboard/NovelTickets/TicketDetails')));
@@ -168,7 +171,10 @@ const Router = [
       //Upcomming
       // { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
       { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-      { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      // { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      
+      //Expansion and Downsize
+      { path: '/Expansion_Downsize', exact: true, element: < Protected Component={Exp_down} /> },
       
       // Tickets 
       { path: '/tickets', exact: true, element: < Protected Component={NovelTickets} /> },
