@@ -11,8 +11,10 @@
   "location",
   "room_type",
   "room",
+  "column_break_rhkbq",
   "booking_date",
-  "booking_time",
+  "from_time",
+  "to_time",
   "description"
  ],
  "fields": [
@@ -50,23 +52,32 @@
   },
   {
    "fieldname": "booking_date",
-   "fieldtype": "Date",
-   "label": "Booking Date"
-  },
-  {
-   "fieldname": "booking_time",
    "fieldtype": "Data",
-   "label": "Booking Time"
+   "label": "Booking Date"
   },
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "fieldname": "column_break_rhkbq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Data",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Data",
+   "label": "To Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-24 10:37:01.817725",
+ "modified": "2024-04-25 10:48:48.596206",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room slots booking",
