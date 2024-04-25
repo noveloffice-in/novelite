@@ -85,7 +85,7 @@ export default function () {
                             </Select>
                         </FormControl>
 
-                        {subAction === 'Other' ? <FormControl fullWidth sx={{ mt: 2 }}>
+                        <FormControl fullWidth sx={{ mt: 2 }}>
                             <Box>
                                 <TextField
                                     id="outlined-multiline-static"
@@ -96,7 +96,7 @@ export default function () {
                                     name="description"
                                 />
                             </Box>
-                        </FormControl> : null}
+                        </FormControl>
                         {/* <TextField id="outlined-basic" label="Seats" variant="outlined" sx={{ mt: 2 }} />
                         <TextField id="outlined-basic" label="cabins" variant="outlined" sx={{ mt: 2 }} /> */}
                     </Box>
