@@ -63,6 +63,7 @@ export default function () {
                     setLoading(false);
                 }).catch((err) => {
                     notifyError(err);
+                    setLoading(false);
                     console.log(err);
                 })
         }
