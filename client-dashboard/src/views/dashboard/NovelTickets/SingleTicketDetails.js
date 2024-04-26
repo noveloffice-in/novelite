@@ -24,7 +24,7 @@ export default function SingleTicketDetails() {
   const { id } = useParams();
 
   //.------------------------------------------------------Fetching TicketData----------------------------------------------//
-  const { data, error, isValidating, mutate } = useFrappeGetDoc('Issue', id);
+  const { data} = useFrappeGetDoc('Issue', id);
 
   console.log("Data = ", data);
 
@@ -33,7 +33,7 @@ export default function SingleTicketDetails() {
       <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
         {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} rating={data.rating} ratingDescription={data.review_description} />}
         {data && <Right id={data.name} />}
-      </Container>
+      </Container> 
       {data && <ChildCard>
         <NovelTicketChat id={data.name} title={data.subject} />
       </ChildCard>}
