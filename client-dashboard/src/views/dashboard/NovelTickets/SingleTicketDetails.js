@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Rating, Typography } from '@mui/material';
 import { Box, Container } from '@mui/system';
 import React from 'react'
 import { useParams } from 'react-router'
@@ -29,14 +29,14 @@ export default function SingleTicketDetails() {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-      {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} />}
+      {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} rating={data.rating} ratingDescription={data.review_description} />}
       {/* {data && <Right status={data.status} departments={data.departments} />} */}
     </Container>
 
   )
 }
 
-function Left({ id, title, status, creation }) {
+function Left({ id, title, status, creation, rating, ratingDescription }) {
 
   const formatDateTime = (inputDatetime, returnType) => {
     const date = new Date(inputDatetime);
@@ -95,14 +95,7 @@ function Left({ id, title, status, creation }) {
                   {status}
                 </Typography>
               </Grid>
-              <Grid item lg={12} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Id
-                </Typography>
-                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {id}
-                </Typography>
-              </Grid>
+
               <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Department
@@ -120,14 +113,25 @@ function Left({ id, title, status, creation }) {
                   {formatDateTime(creation, 'Time')}
                 </Typography>
               </Grid>
-              {/* <Grid item lg={12} xs={12} mt={4}>
-                <Typography variant="body2" mb={1} color="text.secondary">
-                  Notes
-                </Typography>
-                <Typography variant="subtitle1" mb={0.5}>
-                  {title}
-                </Typography>
-              </Grid> */}
+              {rating > 0 ? <>
+                <Grid item lg={6} xs={12} mt={4}>
+                  <Typography variant="body2" mb={1} color="text.secondary">
+                    Rating
+                  </Typography>
+                  <Rating
+                    name="read-only"
+                    value={rating}
+                    readOnly
+                  />
+                </Grid>
+                <Grid item lg={6} xs={12} mt={4}>
+                  <Typography variant="body2" color="text.secondary">
+                    Creation date and time
+                  </Typography>
+                  <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+                    {ratingDescription ?  ratingDescription : 'No review description'}
+                  </Typography>
+                </Grid></> : null}
             </Grid>
           </Box>
         </Box>

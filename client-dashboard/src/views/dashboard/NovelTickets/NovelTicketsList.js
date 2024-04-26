@@ -66,8 +66,10 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [submitTicket, setSubmitTicket] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   //rating
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(0);
   const [ticketId, setTicketId] = useState(0);
+  const [ticketRatingSubject, setTicketRatingSubject] = useState('');
+  const [ratingDescription, setRatingDescription] = useState('');
 
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -93,7 +95,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   //-----------------------------------------------------------Fetch Tickets-----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
-    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'location'],
+    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'location', 'rating'],
     filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
     limit_start: start,
     limit: 10,
@@ -122,9 +124,11 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   };
 
   //For Rating
-  const handleClickOpen2 = (id) => {
+  const handleClickOpen2 = (id, subject) => {
     setOpen2(true);
     setTicketId(id);
+    setRating(0);
+    setTicketRatingSubject(subject);
   };
 
   const handleClose2 = () => {
@@ -148,12 +152,13 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   //------------------------------------------------------Filtering-----------------------------------------------//
   const { updateDoc, loading, isCompleted } = useFrappeUpdateDoc();
   const sendRating = () => {
-    updateDoc('Issue', ticketId, { rating: rating })
+    updateDoc('Issue', ticketId, { rating: rating , review_description : ratingDescription })
       .then((res) => {
         notifySuccess("Rated Successfully");
         console.log(res);
         setTimeout(() => {
           handleClose2();
+          mutate();
         }, 2000);
       })
       .catch((err) => {
@@ -338,14 +343,18 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                     <Typography>{ticket.creation.split(" ")[0]}</Typography>
                   </TableCell> */}
                   <TableCell >
-                    <Badge color="secondary" badgeContent={0}>
-                      <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name) }} >
-                        <Stack flexDirection='row' alignItems='center' gap={0.5}>
-                          Rate  <StarBorderPurple500Icon />
-                        </Stack>
-                      </Button>
-                      {/* <CommentsDisabledOutlinedIcon /> */}
-                    </Badge>
+                    {/* <Badge color="secondary" badgeContent={0}> */}
+                    {ticket.rating > 0 ? <Rating
+                      name="read-only"
+                      value={ticket.rating}
+                      readOnly
+                    /> : <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name, ticket.subject) }} >
+                      <Stack flexDirection='row' alignItems='center' gap={0.5}>
+                        Rate  <StarBorderPurple500Icon />
+                      </Stack>
+                    </Button>}
+                    {/* <CommentsDisabledOutlinedIcon /> */}
+                    {/* </Badge> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -415,19 +424,34 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               theme="light"
             />
             {/* ---------------------------------------Toast Container Ends------------------------------------ */}
-            <Typography component="legend">Rate us</Typography>
-            <Rating
-              name="simple-controlled"
-              value={rating}
-              onChange={(event, newValue) => {
-                setRating(newValue);
-              }}
-            />
-            {/* <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} /> */}
+            <Stack >
+              <Typography variant='p'>{ticketId}</Typography>
+              <Typography variant='p'>{ticketRatingSubject}</Typography>
+              <Typography component="legend">Rate us</Typography>
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                onChange={(event, newValue) => {
+                  setRating(newValue);
+                }}
+              />
+              <Box sx={{ mt: 2 }} >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Review Description"
+                  multiline
+                  rows={2}
+                  style={{ width: '100%' }}
+                  name="description"
+                  value={ratingDescription}
+                  onChange={(e)=>{setRatingDescription(e.target.value)}}
+                />
+              </Box>
+            </Stack>
           </DialogContent>
           <DialogActions>
             <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
-              <Button variant="outlined" onClick={sendRating}>
+              <Button variant="outlined" onClick={sendRating} disabled={rating === 0} >
                 Submit
               </Button>
             </Box>
