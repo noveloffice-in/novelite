@@ -210,220 +210,234 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   //-----------------------------------------------------------END---------------------------------------------------------//
 
-  return (
-    <Box mt={4}>
-      {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
-      <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
-        {/* <Box>
-        </Box> */}
-        <Box sx={{ mb: 2 }} >
-          {confirmedLocations?.length >= 2 ?
-            (<FormControl sx={{ m: 1, minWidth: 170 }}>
-              <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
-              <Select
-                labelId="demo-simple-select-autowidth-label"
-                id="demo-simple-select-autowidth"
-                value={filterLocation}
-                label="Property Location"
-                onChange={handleChange}
-              >
-                {confirmedLocations?.map((location, index) => {
-                  return (
-                    <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>) :
-            (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
-          }
-        </Box>
-      </Box>
+  if (data) {
+    return (
+      <Box mt={4}>
+        {/* --------------------------------If no Data---------------------------------  */}
+        {
+          data.length === 0 && <Stack alignItems='center' justifyContent='center' p={4}>
+            <Typography variant='h4' pb={2}>There are no tickets</Typography>
+            <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
+              New &nbsp;
+              <AddIcon />
+            </Button>
+          </Stack>
+        }
 
-      {/* --------------------------------New Ticket Button and Search---------------------------------  */}
-      <Box display="flex" justifyContent={'space-between'} alignItems={'center'} >
-        <Box>
-          <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
-            New &nbsp;
-            <AddIcon />
-          </Button>
-        </Box>
-        <Box sx={{ ml: 'auto', width: { xs: "8rem", md: "12rem", ls: "12rem" } }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
-          <TextField
-            size="small"
-            label="Search"
-            // fullWidth
-            onChange={(e) => dispatch(SearchTicket(e.target.value))}
-          />
-        </Box>
-      </Box>
+        {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
+        {data.length !== 0 && <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
+          {/* <Box>
+          </Box> */}
+          <Box sx={{ mb: 2 }} >
+            {confirmedLocations?.length >= 2 ?
+              (<FormControl sx={{ m: 1, minWidth: 170 }}>
+                <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-label"
+                  id="demo-simple-select-autowidth"
+                  value={filterLocation}
+                  label="Property Location"
+                  onChange={handleChange}
+                >
+                  {confirmedLocations?.map((location, index) => {
+                    return (
+                      <MenuItem key={location.shortName + index} value={location.shortName}>{location.fullName}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>) :
+              (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
+            }
+          </Box>
+        </Box>}
 
-      {/* ---------------------------------------Table Start---------------------------------  */}
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h6">Ticket ID</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Ticket Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Status</Typography>
-              </TableCell>
-              {/* <TableCell>
-                <Typography variant="h6">Date</Typography>
-              </TableCell> */}
-              <TableCell>
-                <Typography variant="h6">Rating</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tickets && tickets.map((ticket) => (
-              <TableRow key={ticket.subject} hover>
-                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                  <Box>
-                    <Typography variant="h6" fontWeight="500" wrap>
-                      {ticket.name}
-                    </Typography>
+        {/* --------------------------------New Ticket Button and Search---------------------------------  */}
+        {data.length !== 0 && <Box display="flex" justifyContent={'space-between'} alignItems={'center'} >
+          <Box>
+            <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
+              New &nbsp;
+              <AddIcon />
+            </Button>
+          </Box>
+          <Box sx={{ ml: 'auto', width: { xs: "8rem", md: "12rem", ls: "12rem" } }} display="flex" justifyContent={'space-between'} alignItems={'center'}>
+            <TextField
+              size="small"
+              label="Search"
+              // fullWidth
+              onChange={(e) => dispatch(SearchTicket(e.target.value))}
+            />
+          </Box>
+        </Box>}
 
-                    {/* <Typography
-                      color="textSecondary"
-                      noWrap
-                      sx={{ maxWidth: '250px' }}
-                      variant="subtitle2"
-                      fontWeight="400"
-                    >
-                      {ticket.ticketDescription}
-                    </Typography> */}
-                  </Box>
+        {/* ---------------------------------------Table Start---------------------------------  */}
+        {data.length !== 0 && <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography variant="h6">Ticket ID</Typography>
                 </TableCell>
-                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                  <Box>
-                    <Typography variant="h6" fontWeight="500" wrap >
-                      {ticket.subject}
-                    </Typography>
-                  </Box>
+                <TableCell>
+                  <Typography variant="h6">Ticket Name</Typography>
                 </TableCell>
-                <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                  <Chip
-                    sx={{
-                      backgroundColor:
-                        ticket.status === 'In-Progress'
-                          ? (theme) => theme.palette.success.light
-                          : ticket.status === 'Closed'
-                            ? (theme) => theme.palette.error.light
-                            : ticket.status === 'Pending'
-                              ? (theme) => theme.palette.warning.light
-                              : ticket.status === 'Pending',
-                    }}
-                    size="small"
-                    label={ticket.status}
-                  />
+                <TableCell>
+                  <Typography variant="h6">Status</Typography>
                 </TableCell>
                 {/* <TableCell>
-                  <Typography>{ticket.creation.split(" ")[0]}</Typography>
+                  <Typography variant="h6">Date</Typography>
                 </TableCell> */}
-                <TableCell >
-                  <Badge color="secondary" badgeContent={0}>
-                    <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name) }} >
-                      <Stack flexDirection='row' alignItems='center' gap={0.5}>
-                        Rate  <StarBorderPurple500Icon />
-                      </Stack>
-                    </Button>
-                    {/* <CommentsDisabledOutlinedIcon /> */}
-                  </Badge>
+                <TableCell>
+                  <Typography variant="h6">Rating</Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {/* ---------------------------------------Table Ends---------------------------------  */}
-      <Box my={3} display="flex" justifyContent={'center'}>
-        <Pagination count={totalPages} color="primary" onChange={pageChange} />
+            </TableHead>
+            <TableBody>
+              {tickets && tickets.map((ticket) => (
+                <TableRow key={ticket.subject} hover>
+                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                    <Box>
+                      <Typography variant="h6" fontWeight="500" wrap>
+                        {ticket.name}
+                      </Typography>
+
+                      {/* <Typography
+                        color="textSecondary"
+                        noWrap
+                        sx={{ maxWidth: '250px' }}
+                        variant="subtitle2"
+                        fontWeight="400"
+                      >
+                        {ticket.ticketDescription}
+                      </Typography> */}
+                    </Box>
+                  </TableCell>
+                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                    <Box>
+                      <Typography variant="h6" fontWeight="500" wrap >
+                        {ticket.subject}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                    <Chip
+                      sx={{
+                        backgroundColor:
+                          ticket.status === 'In-Progress'
+                            ? (theme) => theme.palette.success.light
+                            : ticket.status === 'Closed'
+                              ? (theme) => theme.palette.error.light
+                              : ticket.status === 'Pending'
+                                ? (theme) => theme.palette.warning.light
+                                : ticket.status === 'Pending',
+                      }}
+                      size="small"
+                      label={ticket.status}
+                    />
+                  </TableCell>
+                  {/* <TableCell>
+                    <Typography>{ticket.creation.split(" ")[0]}</Typography>
+                  </TableCell> */}
+                  <TableCell >
+                    <Badge color="secondary" badgeContent={0}>
+                      <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name) }} >
+                        <Stack flexDirection='row' alignItems='center' gap={0.5}>
+                          Rate  <StarBorderPurple500Icon />
+                        </Stack>
+                      </Button>
+                      {/* <CommentsDisabledOutlinedIcon /> */}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>}
+        {/* ---------------------------------------Table Ends---------------------------------  */}
+        {data.length !== 0 && <Box my={3} display="flex" justifyContent={'center'}>
+          <Pagination count={totalPages} color="primary" onChange={pageChange} />
+        </Box>}
+
+        {/* ---------------------------------------Dialog Start---------------------------------- */}
+        <Dialog
+          fullWidth
+          maxWidth='sm'
+          open={open1}
+          onClose={handleClose1}
+        >
+          <DialogTitle>
+            <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+              <Typography variant='h5'>Raise a Ticket</Typography>
+              <IconButton onClick={handleClose1} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+          </DialogTitle>
+          <DialogContent>
+            <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} />
+          </DialogContent>
+          <DialogActions>
+            <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
+              <Button variant="contained" onClick={handleSubmit} disabled={confirmedLocations?.length === 1 || showLoading}>
+                {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
+              </Button>
+            </Box>
+          </DialogActions>
+        </Dialog>
+        {/* ---------------------------------------Dialog Ends------------------------------------ */}
+
+        {/* ---------------------------------------Rating Dialog Start---------------------------------- */}
+        <Dialog
+          fullWidth
+          maxWidth='sm'
+          open={open2}
+          onClose={handleClose2}
+        >
+          <DialogTitle>
+            <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+              <Typography variant='h5'>Please Rate Us</Typography>
+              <IconButton onClick={handleClose2} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+          </DialogTitle>
+          <DialogContent>
+            {/* ---------------------------------------Toast Container Starts------------------------------------ */}
+            <ToastContainer
+              position="top-center"
+              autoClose={1000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+            {/* ---------------------------------------Toast Container Ends------------------------------------ */}
+            <Typography component="legend">Rate us</Typography>
+            <Rating
+              name="simple-controlled"
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+            />
+            {/* <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} /> */}
+          </DialogContent>
+          <DialogActions>
+            <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
+              <Button variant="outlined" onClick={sendRating}>
+                Submit
+              </Button>
+            </Box>
+          </DialogActions>
+        </Dialog>
+        {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
       </Box>
+    );
+  }
 
-      {/* ---------------------------------------Dialog Start---------------------------------- */}
-      <Dialog
-        fullWidth
-        maxWidth='sm'
-        open={open1}
-        onClose={handleClose1}
-      >
-        <DialogTitle>
-          <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
-            <Typography variant='h5'>Raise a Ticket</Typography>
-            <IconButton onClick={handleClose1} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-        </DialogTitle>
-        <DialogContent>
-          <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} />
-        </DialogContent>
-        <DialogActions>
-          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
-            <Button variant="contained" onClick={handleSubmit} disabled={confirmedLocations?.length === 1 || showLoading}>
-              {showLoading ? <CircularProgress color="inherit" size={26} /> : "Submit"}
-            </Button>
-          </Box>
-        </DialogActions>
-      </Dialog>
-      {/* ---------------------------------------Dialog Ends------------------------------------ */}
-
-      {/* ---------------------------------------Rating Dialog Start---------------------------------- */}
-      <Dialog
-        fullWidth
-        maxWidth='sm'
-        open={open2}
-        onClose={handleClose2}
-      >
-        <DialogTitle>
-          <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
-            <Typography variant='h5'>Please Rate Us</Typography>
-            <IconButton onClick={handleClose2} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-        </DialogTitle>
-        <DialogContent>
-          {/* ---------------------------------------Toast Container Starts------------------------------------ */}
-          <ToastContainer
-            position="top-center"
-            autoClose={1000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-          {/* ---------------------------------------Toast Container Ends------------------------------------ */}
-          <Typography component="legend">Rate us</Typography>
-          <Rating
-            name="simple-controlled"
-            value={rating}
-            onChange={(event, newValue) => {
-              setRating(newValue);
-            }}
-          />
-          {/* <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} /> */}
-        </DialogContent>
-        <DialogActions>
-          <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
-            <Button variant="outlined" onClick={sendRating}>
-              Submit
-            </Button>
-          </Box>
-        </DialogActions>
-      </Dialog>
-      {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
-    </Box>
-  );
 };
 
 export default NovelTicketsList;

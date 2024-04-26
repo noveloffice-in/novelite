@@ -38,6 +38,18 @@ export default function Location() {
         limit: 100,
     });
     //-----------------------------------------------------------END---------------------------------------------------------//
+    if (data) {
+        if (data.length === 0) {
+            return (
+                <PageContainer title="Location - Novel Office">
+                    <Stack alignItems='center' justifyContent='center' p={4}>
+                        <Breadcrumb title="Location" items={BCrumb} />
+                        <Typography variant='h4' >There are no records to show</Typography>
+                    </Stack>
+                </PageContainer>
+            )
+        }
+    }
 
     return (
         <PageContainer title="Location - Novel Office">

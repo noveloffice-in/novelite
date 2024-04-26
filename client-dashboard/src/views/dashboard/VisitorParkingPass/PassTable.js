@@ -93,140 +93,156 @@ const PassTable = () => {
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
   }
-  
+
   // Function to check if cancel button should be disabled
   const isCancelDisabled = (visitDate, visitTime) => {
     const currentDate = new Date();
     const [year, month, day] = visitDate.split('-').map(Number);
     const [time, period] = visitTime.split(' ');
-    
+
     let [hours, minutes] = time.split(':').map(Number);
     if (period === 'PM' && hours !== 12) hours += 12;
     const visitDateTime = new Date(year, month - 1, day, hours, minutes);
-    
+
     return visitDateTime < currentDate;
   };
-  
+
   //-----------------------------------------------------------Search query--------------------------------------------------//
   const filteredData = data?.filter((element) =>
     element.visitor_name?.toLowerCase().includes(searchQuery?.toLowerCase())
   );
 
-  return (
-    <Box mt={4}>
-      <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
-        <Box>
-          <Button variant="contained" onClick={handleClickOpen}>
-            Book parking pass
-          </Button>
-        </Box>
-        <Box sx={{ maxWidth: '100px', ml: 'auto' }}>
-          <TextField
-            size="small"
-            label="Search"
-            fullWidth
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </Box>
-      </Box>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="h6">Visitor Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Visit Date</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Visit Time</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Visitor Vehicle No</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="h6">Visitor Location</Typography>
-              </TableCell>
-              <TableCell align='center'>
-                <Typography variant="h6">Action</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          {filteredData && <TableBody>
-            {filteredData.map((element) => (
-              <TableRow key={element.name} hover>
-                <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  <Typography variant="h6">{element.visitor_name}</Typography>
-                </TableCell>
-                <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  <Box>
-                    <Typography variant="h6" fontWeight="500" noWrap>
-                      {element.visit_date}
-                    </Typography>
-                    <Typography
-                      color="textSecondary"
-                      noWrap
-                      sx={{ maxWidth: '250px' }}
-                      variant="subtitle2"
-                      fontWeight="400"
-                    >
-                      {element.visit_time}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  <Stack direction="row" gap="10px" alignItems="center">
-                    <Typography variant="h6">{element.visit_time}</Typography>
-                  </Stack>
-                </TableCell>
-                <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  <Typography>{element.vehicle_no}</Typography>
-                </TableCell>
-                <TableCell component={Link} to={`/visit_details/${element.name}`} >
-                  <Typography>{element.visit_location}</Typography>
+  if (data) {
+    return (
+      <Box mt={4}>
+        {/* ---------------------------------------No Data---------------------------------- */}
+        {
+          data.length === 0 && (<Stack alignItems='center' justifyContent='center' p={4}>
+            <Typography variant='h4' pb={2}>There are no Records to show</Typography>
+            <Box>
+              <Button variant="contained" onClick={handleClickOpen}>
+                Book parking pass
+              </Button>
+            </Box>
+          </Stack>)
+        }
+
+        {/* ---------------------------------------if Data starts---------------------------------- */}
+        {data.length !== 0 && <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
+          <Box>
+            <Button variant="contained" onClick={handleClickOpen}>
+              Book parking pass
+            </Button>
+          </Box>
+          <Box sx={{ maxWidth: '100px', ml: 'auto' }}>
+            <TextField
+              size="small"
+              label="Search"
+              fullWidth
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </Box>
+        </Box>}
+        {data.length !== 0 && (<TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography variant="h6">Visitor Name</Typography>
                 </TableCell>
                 <TableCell>
-                  <Tooltip title="Cancel Booking">
-                    <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>
-                      {isCancelDisabled(element.visit_date, element.visit_time) ? <BlockIcon/> : 'Cancel'}
-                    </Button>
-                  </Tooltip>
+                  <Typography variant="h6">Visit Date</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Visit Time</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Visitor Vehicle No</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6">Visitor Location</Typography>
+                </TableCell>
+                <TableCell align='center'>
+                  <Typography variant="h6">Action</Typography>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>}
-        </Table>
-      </TableContainer>
-      <Box my={3} display="flex" justifyContent={'center'}>
-        <Pagination count={totalPages} color="primary" onChange={pageChange} />
+            </TableHead>
+            {filteredData && <TableBody>
+              {filteredData.map((element) => (
+                <TableRow key={element.name} hover>
+                  <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                    <Typography variant="h6">{element.visitor_name}</Typography>
+                  </TableCell>
+                  <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                    <Box>
+                      <Typography variant="h6" fontWeight="500" noWrap>
+                        {element.visit_date}
+                      </Typography>
+                      <Typography
+                        color="textSecondary"
+                        noWrap
+                        sx={{ maxWidth: '250px' }}
+                        variant="subtitle2"
+                        fontWeight="400"
+                      >
+                        {element.visit_time}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                    <Stack direction="row" gap="10px" alignItems="center">
+                      <Typography variant="h6">{element.visit_time}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                    <Typography>{element.vehicle_no}</Typography>
+                  </TableCell>
+                  <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                    <Typography>{element.visit_location}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip title="Cancel Booking">
+                      <Button color="error" onClick={() => handleClickListItem(element.name)} disabled={isCancelDisabled(element.visit_date, element.visit_time)}>
+                        {isCancelDisabled(element.visit_date, element.visit_time) ? <BlockIcon /> : 'Cancel'}
+                      </Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>}
+          </Table>
+        </TableContainer>)}
+        {data.length !== 0 && <Box my={3} display="flex" justifyContent={'center'}>
+          <Pagination count={totalPages} color="primary" onChange={pageChange} />
+        </Box>}
+
+        {/* ---------------------------------------Dialog Start---------------------------------- */}
+        <Dialog
+          fullWidth
+          maxWidth='sm'
+          open={open1}
+          onClose={handleClose1}
+        >
+          <DialogTitle>Book a pass</DialogTitle>
+          <DialogContent>
+            {billingLocation && <PassForm setOpen1={setOpen1} mutate={mutate} billingLocation={billingLocation} />}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose1}>Close</Button>
+          </DialogActions>
+        </Dialog>
+        <ConfirmationDialogRaw
+          id="ringtone-menu"
+          keepMounted
+          open={open}
+          mutate={mutate}
+          onClose={handleClose}
+          visitorId={visitorId}
+        />
       </Box>
-      {/* ---------------------------------------Dialog Start---------------------------------- */}
-      <Dialog
-        fullWidth
-        maxWidth='sm'
-        open={open1}
-        onClose={handleClose1}
-      >
-        <DialogTitle>Book a pass</DialogTitle>
-        <DialogContent>
-          {billingLocation && <PassForm setOpen1={setOpen1} mutate={mutate} billingLocation={billingLocation} />}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose1}>Close</Button>
-        </DialogActions>
-      </Dialog>
-      <ConfirmationDialogRaw
-        id="ringtone-menu"
-        keepMounted
-        open={open}
-        mutate={mutate}
-        onClose={handleClose}
-        visitorId={visitorId}
-      />
-    </Box>
-  );
+    );
+  }
 };
 
 export default PassTable;
