@@ -18,7 +18,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { formatDistanceToNowStrict } from 'date-fns';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { Link } from 'react-router-dom';
-import '../NovelTickets/chat.css';
 import { useSelector } from 'react-redux';
 import novelLogo from '../../../assets/images/logo/novel logo.webp'
 

@@ -67,8 +67,6 @@ export default function () {
                     console.log(err);
                 })
         }
-
-        console.log("loading = ", loading);
     }
 
     return (

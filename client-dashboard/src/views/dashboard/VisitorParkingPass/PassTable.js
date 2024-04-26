@@ -15,6 +15,7 @@ import {
   TableContainer,
   Button,
   CircularProgress,
+  IconButton,
 } from '@mui/material';
 import { IconTrash } from '@tabler/icons';
 import axios from 'axios';
@@ -28,6 +29,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import PassForm from './PassForm';
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import { Link } from 'react-router-dom';
+import CloseIcon from '@mui/icons-material/Close';
 
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -224,12 +226,19 @@ const PassTable = () => {
           open={open1}
           onClose={handleClose1}
         >
-          <DialogTitle>Book a pass</DialogTitle>
+          <DialogTitle>
+            <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+              <Typography variant='h5'>Book a pass</Typography>
+              <IconButton onClick={handleClose1} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+          </DialogTitle>
           <DialogContent>
             {billingLocation && <PassForm setOpen1={setOpen1} mutate={mutate} billingLocation={billingLocation} />}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose1}>Close</Button>
+            {/* <Button onClick={handleClose1}>Close</Button> */}
           </DialogActions>
         </Dialog>
         <ConfirmationDialogRaw
