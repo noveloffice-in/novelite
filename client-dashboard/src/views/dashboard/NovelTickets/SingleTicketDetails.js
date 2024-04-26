@@ -1,5 +1,5 @@
 import { Grid, Rating, Typography } from '@mui/material';
-import { Box, Container } from '@mui/system';
+import { Box, Container, Stack } from '@mui/system';
 import React from 'react'
 import { useParams } from 'react-router'
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
@@ -18,6 +18,7 @@ import TimelineOppositeContent, {
 } from '@mui/lab/TimelineOppositeContent';
 import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
+import NovelTicketChat from './TicketChat/NovelTicketChat';
 
 export default function SingleTicketDetails() {
   const { id } = useParams();
@@ -28,11 +29,15 @@ export default function SingleTicketDetails() {
   console.log("Data = ", data);
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-      {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} rating={data.rating} ratingDescription={data.review_description} />}
-      {/* {data && <Right status={data.status} departments={data.departments} />} */}
+    <Container sx={{ width: '100%', p: 2 }}>
+      <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
+        {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} rating={data.rating} ratingDescription={data.review_description} />}
+        {data && <Right id={data.name} />}
+      </Container>
+      {data && <ChildCard>
+        <NovelTicketChat id={data.name} title={data.subject} />
+      </ChildCard>}
     </Container>
-
   )
 }
 
@@ -61,7 +66,7 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
 
   return (
     // <ChildCard sx={{ width: '50%' }}>
-    <Box p={1}>
+    <ChildCard p={1}>
       <Box>
         <Typography variant="h4" pb={1}>Ticket Details</Typography>
         <Box>
@@ -129,30 +134,30 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
                     Creation date and time
                   </Typography>
                   <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                    {ratingDescription ?  ratingDescription : 'No review description'}
+                    {ratingDescription ? ratingDescription : 'No review description'}
                   </Typography>
                 </Grid></> : null}
             </Grid>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </ChildCard>
   )
 }
 
-function Right({ status, departments }) {
+function Right({ id }) {
 
   //,------------------------------------------------------Fetching comment List----------------------------------------------//
-  // const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
-  //   fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
-  //   filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
-  //   // limit_start: start,
-  //   limit: 10000,
-  //   orderBy: {
-  //     field: 'creation',
-  //     order: 'desc', //asc
-  //   },
-  // });
+  const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
+    fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
+    filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
+    // limit_start: start,
+    limit: 10000,
+    orderBy: {
+      field: 'creation',
+      order: 'desc', //asc
+    },
+  });
 
   //,--------------------------------------------------------Formating Date-----------------------------------------//
   const formatDate = (dateString) => {
@@ -170,52 +175,37 @@ function Right({ status, departments }) {
     return str.replace(/(<([^>]+)>)/ig, '');
   }
 
-  let message = "";
-
-  if (departments.length === 0) {
-    message = `Ticket status is ${status} and not assigned to any departments`;
-  } else if (departments.length === 1) {
-    message = `Issue has been assigned to ${departments[0].department} department and status is ${status}`;
-  } else if (departments.length > 1) {
-    message = `Issue has been re-assigned to ${departments[departments.length - 1].department} department and status is ${status}`;
-  }
-
-
   return (
-    <ChildCard padding={4} width='50%'>
-      <Typography variant="h4" sx={{ padding: "20%" }} mb={2}>{message}</Typography>
+    <ChildCard sx={{ width: '50%' }}>
+      {data?.length !== 0 ? <Timeline
+        sx={{
+          [`& .${timelineOppositeContentClasses.root}`]: {
+            flex: 0.2,
+          },
+        }}
+      >
+        <Box p={2}>
+          <Typography variant="h4" sx={{ mt: "-1.3rem" }} mb={2}>Updates</Typography>
+          <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
+            {data?.map((comment) => {
+              return (
+                <TimelineItem>
+                  <TimelineOppositeContent color="textSecondary">
+                    {formatDate(comment.creation)}
+                  </TimelineOppositeContent>
+                  <TimelineSeparator>
+                    <TimelineDot />
+                    <TimelineConnector />
+                  </TimelineSeparator>
+                  <TimelineContent>{messages(comment.content)}</TimelineContent>
+                </TimelineItem>
+              )
+            })}
+          </Scrollbar>
+        </Box>
+      </Timeline> :
+        <Typography variant='h4'>No Updates</Typography>
+      }
     </ChildCard>
-
-    // <ChildCard sx={{ width: '50%' }}>
-    //   {data?.length !== 0 ? <Timeline
-    //     sx={{
-    //       [`& .${timelineOppositeContentClasses.root}`]: {
-    //         flex: 0.2,
-    //       },
-    //     }}
-    //   >
-    //     <Box p={2}>
-    //       <Typography variant="h4" sx={{ mt: "-1.3rem" }}  mb={2}>Updates</Typography>
-    //       <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
-    //         {data?.map((comment) => {
-    //           return (
-    //             <TimelineItem>
-    //               <TimelineOppositeContent color="textSecondary">
-    //                 {formatDate(comment.creation)}
-    //               </TimelineOppositeContent>
-    //               <TimelineSeparator>
-    //                 <TimelineDot />
-    //                 <TimelineConnector />
-    //               </TimelineSeparator>
-    //               <TimelineContent>{messages(comment.content)}</TimelineContent>
-    //             </TimelineItem>
-    //           )
-    //         })}
-    //       </Scrollbar>
-    //     </Box>
-    //   </Timeline> :
-    //     <Typography variant='h4'>No Updates</Typography>
-    //   }
-    // </ChildCard>
   )
 }
