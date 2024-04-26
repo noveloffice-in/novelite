@@ -60,7 +60,7 @@ export default function TicketChatContent({ data, title }) {
                                     </ListItemAvatar>
                                 </Box> */}
                                 <ListItemText
-                                    primary={<Typography variant="h5">{title}</Typography>}
+                                    primary={<Typography variant="h4">Chats</Typography>}
                                 />
                             </ListItem>
                         </Box>

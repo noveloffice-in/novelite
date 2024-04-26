@@ -119,20 +119,20 @@ export default function BookSlot() {
 
                     <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['DatePicker']}>
+                            <DemoContainer components={['DatePicker']} >
                                 <DatePicker label="Plesase select date" value={date} onChange={(newValue) => { handleDateChange(newValue.$d) }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['TimePicker']}>
+                            <DemoContainer components={['TimePicker']} >
                                 <TimePicker label="From" value={fromTime} onChange={(newValue) => { handleTimeChange(newValue, 'from') }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['TimePicker']}>
+                            <DemoContainer components={['TimePicker']} >
                                 <TimePicker label="To" value={toTime} onChange={(newValue) => { handleTimeChange(newValue, 'to') }} />
                             </DemoContainer>
                         </LocalizationProvider>

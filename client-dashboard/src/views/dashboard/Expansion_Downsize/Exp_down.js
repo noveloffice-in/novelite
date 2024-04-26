@@ -70,8 +70,8 @@ export default function () {
     }
 
     return (
-        <PageContainer title="Book Slots - Novel Office">
-            <Breadcrumb title="Booking Slots" items={BCrumb} />
+        <PageContainer title="Expansion/Downsize - Novel Office">
+            <Breadcrumb title="Expansion/Downsize" items={BCrumb} />
             <>
                 <Box sx={{
                     display: 'flex',

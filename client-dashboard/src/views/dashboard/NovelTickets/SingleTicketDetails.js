@@ -204,7 +204,9 @@ function Right({ id }) {
           </Scrollbar>
         </Box>
       </Timeline> :
-        <Typography variant='h4'>No Updates</Typography>
+        <Stack alignItems='center' justifyContent='center' width='100%' height='100%'>
+          <Typography variant='h4'>No Updates</Typography>
+        </Stack>
       }
     </ChildCard>
   )

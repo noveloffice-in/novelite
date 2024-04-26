@@ -40,7 +40,7 @@ export default function NovelTicketChat({id, title}) {
   })
 
   return (
-    <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
+    // <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
       <Box>
         {/* ------------------------------------------- */}
         {/* Left part */}
@@ -57,6 +57,6 @@ export default function NovelTicketChat({id, title}) {
           <TicketChatSender id={id} mutate={mutate} />
         </Box>
       </Box>
-    </PageContainer>
+    // </PageContainer>
   )
 }

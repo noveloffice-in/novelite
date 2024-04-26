@@ -20,7 +20,7 @@ const BCrumb = [
 
 export default function TicketDetails() {
     return (
-        <PageContainer title="Chat ui" description="this is Chat page">
+        <PageContainer title="Ticket Details - Novel Office" description="this is Details page">
             <Breadcrumb title="Ticket Details" items={BCrumb} />
             <AppCard>
                 {/* Left part */}

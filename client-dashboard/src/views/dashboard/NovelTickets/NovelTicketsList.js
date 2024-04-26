@@ -149,10 +149,10 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     setSubmitTicket(!submitTicket);
   }
 
-  //------------------------------------------------------Filtering-----------------------------------------------//
+  //------------------------------------------------------Rating-----------------------------------------------//
   const { updateDoc, loading, isCompleted } = useFrappeUpdateDoc();
   const sendRating = () => {
-    updateDoc('Issue', ticketId, { rating: rating , review_description : ratingDescription })
+    updateDoc('Issue', ticketId, { rating: rating, review_description: ratingDescription })
       .then((res) => {
         notifySuccess("Rated Successfully");
         console.log(res);
@@ -218,19 +218,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   if (data) {
     return (
       <Box mt={4}>
-        {/* --------------------------------If no Data---------------------------------  */}
-        {
-          data.length === 0 && <Stack alignItems='center' justifyContent='center' p={4}>
-            <Typography variant='h4' pb={2}>There are no tickets</Typography>
-            <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
-              New &nbsp;
-              <AddIcon />
-            </Button>
-          </Stack>
-        }
 
         {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
-        {data.length !== 0 && <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
+        <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
           {/* <Box>
           </Box> */}
           <Box sx={{ mb: 2 }} >
@@ -254,7 +244,18 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               (<Typography variant='h4'>This customer is not linked to any Location</Typography>)
             }
           </Box>
-        </Box>}
+        </Box>
+
+        {/* --------------------------------If no Data---------------------------------  */}
+        {
+          data.length === 0 && <Stack alignItems='center' justifyContent='center' p={4}>
+            <Typography variant='h4' pb={2}>There are no tickets</Typography>
+            <Button variant="contained" onClick={handleClickOpen} sx={{ ml: 1 }}>
+              New &nbsp;
+              <AddIcon />
+            </Button>
+          </Stack>
+        }
 
         {/* --------------------------------New Ticket Button and Search---------------------------------  */}
         {data.length !== 0 && <Box display="flex" justifyContent={'space-between'} alignItems={'center'} >
@@ -444,7 +445,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                   style={{ width: '100%' }}
                   name="description"
                   value={ratingDescription}
-                  onChange={(e)=>{setRatingDescription(e.target.value)}}
+                  onChange={(e) => { setRatingDescription(e.target.value) }}
                 />
               </Box>
             </Stack>
