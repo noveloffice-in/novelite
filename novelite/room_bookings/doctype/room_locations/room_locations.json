@@ -10,7 +10,8 @@
  "field_order": [
   "location_name",
   "room_type_details",
-  "image"
+  "image",
+  "front_desk_email"
  ],
  "fields": [
   {
@@ -33,11 +34,17 @@
    "label": "Room Type Details",
    "options": "Room Type Details",
    "reqd": 1
+  },
+  {
+   "fieldname": "front_desk_email",
+   "fieldtype": "Data",
+   "label": "Front Desk Email",
+   "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-31 09:43:05.525018",
+ "modified": "2024-04-27 19:29:28.109581",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Locations",

@@ -108,7 +108,7 @@ export default function BookSlot() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisableBtn(true);
-        
+
         let form = new FormData(e.target);
         let formObj = Object.fromEntries(form.entries());
 
@@ -116,7 +116,7 @@ export default function BookSlot() {
             customer: companyName,
             location: location,
             room_type: roomType,
-            customer_email: userEmail,
+            email_cc: userEmail,
             room: roomName,
             booking_date: date,
             from_time: fromTime,
@@ -127,14 +127,14 @@ export default function BookSlot() {
         console.log('boookingData = ', boookingData);
         if (date !== '' && fromTime !== '' && toTime !== '') {
             createDoc('Room slots booking', boookingData)
-            .then(() => {
-                notifySuccess("Slot has been Booked");
-                setTimeout(() => {
-                    navigate('/location');
-                }, 1500);
-            }).catch((err) => {
-                console.log("inside catch " + JSON.stringify(err.message));
-                console.err(err.message);
+                .then(() => {
+                    notifySuccess("Slot has been Booked");
+                    setTimeout(() => {
+                        navigate('/location');
+                    }, 1500);
+                }).catch((err) => {
+                    console.log("inside catch " + JSON.stringify(err.message));
+                    console.err(err.message);
                     notifyError(err);
                 })
         } else {

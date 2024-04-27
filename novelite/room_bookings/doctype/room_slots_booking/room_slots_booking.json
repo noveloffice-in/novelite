@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "autoname": "format:RB{DD}{MM}{YY}{#####}",
  "creation": "2024-04-24 10:34:50.260134",
  "default_view": "List",
  "doctype": "DocType",
@@ -11,6 +11,8 @@
   "location",
   "room_type",
   "room",
+  "email_to",
+  "email_cc",
   "column_break_rhkbq",
   "booking_date",
   "from_time",
@@ -73,14 +75,32 @@
    "fieldname": "to_time",
    "fieldtype": "Data",
    "label": "To Time"
+  },
+  {
+   "description": "Front Desk Email",
+   "fetch_from": "location.front_desk_email",
+   "fetch_if_empty": 1,
+   "fieldname": "email_to",
+   "fieldtype": "Data",
+   "label": "Email To",
+   "options": "Email"
+  },
+  {
+   "description": "Customer Email",
+   "fieldname": "email_cc",
+   "fieldtype": "Data",
+   "label": "Email CC",
+   "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-25 10:48:48.596206",
+ "modified": "2024-04-27 21:48:48.873169",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room slots booking",
+ "name_case": "UPPER CASE",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

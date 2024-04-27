@@ -363,9 +363,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           </Table>
         </TableContainer>}
         {/* ---------------------------------------Table Ends---------------------------------  */}
-        {data.length !== 0 && <Box my={3} display="flex" justifyContent={'center'}>
+        <Box my={3} display="flex" justifyContent={'center'}>
           <Pagination count={totalPages} color="primary" onChange={pageChange} />
-        </Box>}
+        </Box>
 
         {/* ---------------------------------------Dialog Start---------------------------------- */}
         <Dialog

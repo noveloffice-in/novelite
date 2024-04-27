@@ -13,6 +13,7 @@ import { useFrappeCreateDoc } from 'frappe-react-sdk';
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
 
 const BCrumb = [
@@ -31,13 +32,15 @@ export default function () {
     const [action, setAction] = React.useState('Expansion');
     const [subAction, setSubAction] = React.useState('Seats');
     const [loading, setLoading] = React.useState(false);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
 
     let value = ['Expansion', 'Downsize'];
-    let subActions = ['Seats', 'Aminites', 'Both', 'Other']
+    let subActions = ['Seats', 'Amenities', 'Both', 'Others']
 
     //-----------------------------------------------------------Toast functions--------------------------------------------------//
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
+    const notifyWarn = (msg) => toast.warn(msg, { toastId: "error" });
 
     const handleChange = (event) => {
         setAction(event.target.value);
@@ -53,10 +56,12 @@ export default function () {
         setLoading(true);
         let form = new FormData(e.target);
         let formObj = Object.fromEntries(form.entries());
+        formObj.customer = companyName;
 
-        let { action, sub_action, description } = formObj;
+        let { action, sub_action } = formObj;
+        console.log("Object = ", formObj);
 
-        if (action !== "" && sub_action !== "" && description !== "") {
+        if (action !== "" && sub_action !== "") {
             createDoc('Expansion and Dowsize', formObj)
                 .then((res) => {
                     notifySuccess("Application submitted successfully");
@@ -66,6 +71,9 @@ export default function () {
                     setLoading(false);
                     console.log(err);
                 })
+        } else {
+            notifyWarn("please fill all the details");
+            setLoading(false);
         }
     }
 

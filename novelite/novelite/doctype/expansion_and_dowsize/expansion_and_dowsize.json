@@ -9,28 +9,50 @@
  "field_order": [
   "action",
   "sub_action",
-  "description"
+  "description",
+  "column_break_cge8f",
+  "customer",
+  "email_to"
  ],
  "fields": [
   {
    "fieldname": "action",
-   "fieldtype": "Data",
-   "label": "Action"
+   "fieldtype": "Select",
+   "label": "Expansion/Downsize",
+   "options": "Expansion\nDownsize"
   },
   {
    "fieldname": "sub_action",
-   "fieldtype": "Data",
-   "label": "Sub Action"
+   "fieldtype": "Select",
+   "label": "Service",
+   "options": "Seats\nAmenities\nBoth\nOthers"
   },
   {
    "fieldname": "description",
-   "fieldtype": "Data",
+   "fieldtype": "Text",
    "label": "Description"
+  },
+  {
+   "fieldname": "column_break_cge8f",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "default": "ragul.k@noveloffice.in",
+   "fieldname": "email_to",
+   "fieldtype": "Data",
+   "label": "Email To",
+   "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-26 11:19:26.825638",
+ "modified": "2024-04-27 21:51:29.008041",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion and Dowsize",

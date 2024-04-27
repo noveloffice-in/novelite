@@ -1,0 +1,32 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "",
+ "creation": "2024-04-27 22:21:19.341459",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Expansion and Dowsize",
+ "enabled": 1,
+ "event": "Save",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<h3>Hi Sir/Madam,</h3>\n\n<p>I want to book a <b>{{doc.room_type}}</b>, Please find the booking details below.</p>\n\n<h4>Booking Details</h4>\n\n<ul>\n    <li>Customer: {{ doc.customer }}</li>\n    <li>Location: {{ doc.location }}</li>\n    <li>Room Type: {{ doc.room_type }}</li>\n    <li>Room Name: {{ doc.room }}</li>\n    <li>Booking Date: {{ doc.booking_date }}</li>\n    <li>From Time: {{ doc.from_time }}</li>\n    <li>To Time: {{ doc.to_time }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>",
+ "message_type": "HTML",
+ "modified": "2024-04-27 22:21:19.341459",
+ "modified_by": "Administrator",
+ "module": "Novelite",
+ "name": "Expansion Downsize Notification",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "cc": "",
+   "receiver_by_document_field": "email_to"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "ERPNext Reports",
+ "sender_email": "erpnextreports@noveloffice.in",
+ "subject": "New {{ doc.action }} Request - {{doc.name}}"
+}
