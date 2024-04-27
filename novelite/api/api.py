@@ -325,16 +325,16 @@ def addDataToleadsAndVisitorParking():
     if data is None:
         frappe.throw("No data provided")
 
-    lead_id = data.get('billingLead')
+    # lead_id = data.get('billingLead')
     
-    if lead_id:
-        doc = frappe.get_doc("Leads", lead_id)
-        for i in doc.complementary_table:
-            i.vp_used = i.vp_used + 100
-            i.save()
-        doc.save()
-    else:
-        frappe.throw("Lead ID not provided")
+    # if lead_id:
+    #     doc = frappe.get_doc("Leads", lead_id)
+    #     for i in doc.complementary_table:
+    #         i.vp_used = i.vp_used + 100
+    #         i.save()
+    #     doc.save()
+    # else:
+    #     frappe.throw("Lead ID not provided")
 
     # Create and insert the Visitor Parking Pass document first to get a valid 'name'
     vps = frappe.new_doc("Visitor Parking Pass")
@@ -392,15 +392,15 @@ def removeDataFromLeadsAndVisitorParking(vps_id):
         frappe.throw(f"Visitor Parking Pass with ID {vps_id} not found")
     
     # Decrease vp_used by 100
-    lead_id = vps_doc.lead_id
-    if lead_id:
-        lead_doc = frappe.get_doc("Leads", lead_id)
-        for i in lead_doc.complementary_table:
-            i.vp_used = max(0, i.vp_used - 100)  # Ensure vp_used doesn't go below 0
-            i.save()
-        lead_doc.save()
-    else:
-        frappe.throw("Lead ID not provided in Visitor Parking Pass")
+    # lead_id = vps_doc.lead_id
+    # if lead_id:
+    #     lead_doc = frappe.get_doc("Leads", lead_id)
+    #     for i in lead_doc.complementary_table:
+    #         i.vp_used = max(0, i.vp_used - 100)  # Ensure vp_used doesn't go below 0
+    #         i.save()
+    #     lead_doc.save()
+    # else:
+    #     frappe.throw("Lead ID not provided in Visitor Parking Pass")
     
     # Delete the Visitor Parking Pass document
     frappe.delete_doc("Visitor Parking Pass", vps_id, ignore_permissions=True)

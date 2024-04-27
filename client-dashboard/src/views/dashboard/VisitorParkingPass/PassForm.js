@@ -204,7 +204,7 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimeField', 'TimeField', 'TimeField']}>
                                 <TimeField
-                                    label="Format with meridiem"
+                                    label="Time"
                                     defaultValue={userData.visitingDate}
                                     format="hh:mm a"
                                     onChange={(value) => { handleTimeChange(value.$d) }}
@@ -216,7 +216,7 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DateField', 'DateField']}>
                                 <DateField
-                                    label="Dash separator"
+                                    label="Date"
                                     defaultValue={userData.visitingDate}
                                     format="DD-MM-YYYY"
                                     onChange={(newValue) => handleDateChange(newValue.$d)}

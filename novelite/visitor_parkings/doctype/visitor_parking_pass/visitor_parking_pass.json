@@ -22,7 +22,9 @@
   "visitor_email",
   "vehicle_no",
   "visit_date",
-  "visit_time"
+  "visit_time",
+  "custom_qr_code",
+  "qr_code_image"
  ],
  "fields": [
   {
@@ -101,11 +103,22 @@
    "fieldname": "visit_time",
    "fieldtype": "Data",
    "label": "Visit Time"
+  },
+  {
+   "fieldname": "custom_qr_code",
+   "fieldtype": "Attach",
+   "label": "QR code"
+  },
+  {
+   "fieldname": "qr_code_image",
+   "fieldtype": "Attach Image",
+   "label": "QR code image",
+   "options": "custom_qr_code"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-03 15:26:45.643711",
+ "modified": "2024-04-27 22:53:27.962534",
  "modified_by": "Administrator",
  "module": "Visitor Parkings",
  "name": "Visitor Parking Pass",
