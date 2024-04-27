@@ -1,1 +1,0 @@
-import{G as r,j as t}from"./index-85be31c7.js";import{r as a}from"./createSvgIcon-4f2e1fd4.js";var e={},u=r;Object.defineProperty(e,"__esModule",{value:!0});var i=e.default=void 0,o=u(a()),n=t;i=e.default=(0,o.default)((0,n.jsx)("path",{d:"M12 5.99 19.53 19H4.47zM12 2 1 21h22zm1 14h-2v2h2zm0-6h-2v4h2z"}),"WarningAmberOutlined");export{i as d};
