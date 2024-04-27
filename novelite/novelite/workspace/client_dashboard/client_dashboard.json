@@ -1,0 +1,154 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"1SFpzeOEZF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Client Dashboard</span>\",\"col\":12}},{\"id\":\"R71Bf46CdF\",\"type\":\"card\",\"data\":{\"card_name\":\"Room Bookings\",\"col\":4}},{\"id\":\"OgmhfaBRjF\",\"type\":\"card\",\"data\":{\"card_name\":\"Invoices\",\"col\":4}},{\"id\":\"5S9poheviG\",\"type\":\"card\",\"data\":{\"card_name\":\"Tickets\",\"col\":4}},{\"id\":\"NdrnvsNsJm\",\"type\":\"card\",\"data\":{\"card_name\":\"Expansion/Downsize\",\"col\":4}},{\"id\":\"_FfV54bH3O\",\"type\":\"card\",\"data\":{\"card_name\":\"Visitor Parking Pass\",\"col\":4}}]",
+ "creation": "2024-04-27 22:00:44.000863",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "users",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Client Dashboard",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Invoices",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Invoice",
+   "link_count": 0,
+   "link_to": "Sales Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tickets",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Issue",
+   "link_count": 0,
+   "link_to": "Issue",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Expansion/Downsize",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Expansion and Downsize",
+   "link_count": 0,
+   "link_to": "Expansion and Dowsize",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Visitor Parking Pass",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Visitor Parking Pass",
+   "link_count": 0,
+   "link_to": "Visitor Parking Pass",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Room Bookings",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Locations",
+   "link_count": 0,
+   "link_to": "Room Locations",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Room Type",
+   "link_count": 0,
+   "link_to": "Room Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Rooms",
+   "link_count": 0,
+   "link_to": "Rooms",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Bookings",
+   "link_count": 0,
+   "link_to": "Room slots booking",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-04-27 22:19:50.901442",
+ "modified_by": "Administrator",
+ "module": "Novelite",
+ "name": "Client Dashboard",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [],
+ "title": "Client Dashboard"
+}
