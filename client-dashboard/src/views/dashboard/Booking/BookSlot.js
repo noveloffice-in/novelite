@@ -17,16 +17,22 @@ import { Button, CircularProgress, TextField } from '@mui/material';
 import ChildCard from '../../../components/shared/ChildCard';
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 
+//Toastify 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router';
+
 
 export default function BookSlot() {
 
     const roomName = useSelector((state) => state.bookingsSliceReducer.roomName);
     const roomType = useSelector((state) => state.bookingsSliceReducer.roomCategory);
     const location = useSelector((state) => state.bookingsSliceReducer.bookingLocation);
-    const accounType = useSelector((state) => state.novelprofileReducer.account_type);
+    const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     const companyName = useSelector((state) => state.novelprofileReducer.companyName);
-    const confirmed_location = useSelector((state) => state.novelprofileReducer.location);
+    const accounType = useSelector((state) => state.novelprofileReducer.account_type);
     const leadsID = useSelector((state) => state.novelprofileReducer.leadsID);
+    const confirmed_location = useSelector((state) => state.novelprofileReducer.location);
 
     const BCrumb = [
         {
@@ -51,17 +57,35 @@ export default function BookSlot() {
         },
     ];
 
-    const [date, setDate] = useState(dayjs());
-    const [fromTime, setFromTime] = useState(dayjs());
-    const [toTime, setToTime] = useState(dayjs());
+    const [date, setDate] = useState();
+    const [fromTime, setFromTime] = useState();
+    const [toTime, setToTime] = useState();
     const [disbleBtn, setDisableBtn] = useState(true);
+    const navigate = useNavigate();
+
+    //-----------------------------------------------------------Toast functions--------------------------------------------------//
+    const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+    const notifyError = (msg) => toast.error(msg, { toastId: "error" });
+    const notifyWarn = (msg) => toast.warn(msg, { toastId: "error" });
 
     //Date change
     const handleDateChange = (newValue) => {
         const date = new Date(newValue);
-        const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-        setDate(formattedDate);
-        setDisableBtn(false);
+        const selectedDate = dayjs(newValue);
+        const today = dayjs();
+
+        console.log('selectedDate = ', selectedDate);
+        console.log('today = ', today);
+
+        if (selectedDate.isBefore(today, 'day')) {
+            notifyWarn('You cannot select a time for a past date.');
+            setDate();
+            return;
+        } else {
+            const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+            setDate(formattedDate);
+            setDisableBtn(false);
+        }
     };
 
     //Time Change
@@ -83,6 +107,8 @@ export default function BookSlot() {
     const { createDoc, loading } = useFrappeCreateDoc();
     const handleSubmit = (e) => {
         e.preventDefault();
+        setDisableBtn(true);
+        
         let form = new FormData(e.target);
         let formObj = Object.fromEntries(form.entries());
 
@@ -90,25 +116,35 @@ export default function BookSlot() {
             customer: companyName,
             location: location,
             room_type: roomType,
+            customer_email: userEmail,
             room: roomName,
             booking_date: date,
             from_time: fromTime,
             to_time: toTime,
-            description: formObj.description
+            description: formObj.description,
         }
 
-        createDoc('Room slots booking', boookingData)
+        console.log('boookingData = ', boookingData);
+        if (date !== '' && fromTime !== '' && toTime !== '') {
+            createDoc('Room slots booking', boookingData)
             .then(() => {
-                console.log('Data Added');
+                notifySuccess("Slot has been Booked");
+                setTimeout(() => {
+                    navigate('/location');
+                }, 1500);
             }).catch((err) => {
                 console.log("inside catch " + JSON.stringify(err.message));
                 console.err(err.message);
-            })
+                    notifyError(err);
+                })
+        } else {
+            notifyWarn("Please Fill all the details");
+        }
 
-        console.log(formObj);
-        console.log("Date = ", date);
-        console.log("From time = ", fromTime);
-        console.log("toTime = ", toTime);
+        // console.log(formObj);
+        // console.log("Date = ", date);
+        // console.log("From time = ", fromTime);
+        // console.log("toTime = ", toTime);
     }
 
     return (
@@ -120,20 +156,20 @@ export default function BookSlot() {
                     <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']} >
-                                <DatePicker label="Plesase select date" value={date} onChange={(newValue) => { handleDateChange(newValue.$d) }} />
+                                <DatePicker label="Plesase select date" onChange={(newValue) => { handleDateChange(newValue.$d) }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="From" value={fromTime} onChange={(newValue) => { handleTimeChange(newValue, 'from') }} />
+                                <TimePicker label="From" onChange={(newValue) => { handleTimeChange(newValue, 'from') }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="To" value={toTime} onChange={(newValue) => { handleTimeChange(newValue, 'to') }} />
+                                <TimePicker label="To" onChange={(newValue) => { handleTimeChange(newValue, 'to') }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
@@ -155,6 +191,19 @@ export default function BookSlot() {
 
                 </Stack>
             </ChildCard>
+            {/* ---------------------------------------Toast Container Starts------------------------------------ */}
+            <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </PageContainer>
     )
 }

@@ -84,7 +84,7 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
               </Box>
             </Box>
             <Grid container>
-              <Grid item lg={6} xs={12} mt={4}>
+              <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Ticket Name
                 </Typography>
@@ -92,16 +92,16 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
                   {title}
                 </Typography>
               </Grid>
-              <Grid item lg={6} xs={12} mt={4}>
+              {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Status
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
                   {status}
                 </Typography>
-              </Grid>
+              </Grid> */}
 
-              <Grid item lg={6} xs={12} mt={4}>
+              <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Department
                 </Typography>
@@ -109,7 +109,7 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
                   {title}
                 </Typography>
               </Grid>
-              <Grid item lg={6} xs={12} mt={4}>
+              {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Creation date and time
                 </Typography>
@@ -117,7 +117,7 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
                   {formatDateTime(creation, 'Date')} <br />
                   {formatDateTime(creation, 'Time')}
                 </Typography>
-              </Grid>
+              </Grid> */}
               {rating > 0 ? <>
                 <Grid item lg={6} xs={12} mt={4}>
                   <Typography variant="body2" mb={1} color="text.secondary">
@@ -131,7 +131,7 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
                 </Grid>
                 <Grid item lg={6} xs={12} mt={4}>
                   <Typography variant="body2" color="text.secondary">
-                    Creation date and time
+                    Review Description
                   </Typography>
                   <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
                     {ratingDescription ? ratingDescription : 'No review description'}

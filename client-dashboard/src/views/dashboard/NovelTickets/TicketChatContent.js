@@ -60,7 +60,7 @@ export default function TicketChatContent({ data, title }) {
                                     </ListItemAvatar>
                                 </Box> */}
                                 <ListItemText
-                                    primary={<Typography variant="h4">Chats</Typography>}
+                                    primary={<Typography variant="h4">Chat</Typography>}
                                 />
                             </ListItem>
                         </Box>
@@ -247,7 +247,7 @@ export default function TicketChatContent({ data, title }) {
                             </ListItemAvatar>
                         </Box> */}
                         <ListItemText
-                            primary={<Typography variant="h5">{title}</Typography>}
+                            primary={<Typography variant="h5">Chat</Typography>}
                         />
                     </ListItem>
                     <Box
@@ -257,7 +257,7 @@ export default function TicketChatContent({ data, title }) {
                         }}
                     >
                     </Box>
-                    <Typography variant="h4">No Previous Chats</Typography>
+                    <Typography variant="h4">No Previous Chat</Typography>
                 </Box>
             )
             }

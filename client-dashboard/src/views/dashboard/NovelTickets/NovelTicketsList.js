@@ -404,7 +404,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         >
           <DialogTitle>
             <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
-              <Typography variant='h5'>Please Rate Us</Typography>
+              <Typography variant='h5'>{ticketId}</Typography>
               <IconButton onClick={handleClose2} aria-label="close">
                 <CloseIcon />
               </IconButton>
@@ -426,9 +426,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             />
             {/* ---------------------------------------Toast Container Ends------------------------------------ */}
             <Stack >
-              <Typography variant='p'>{ticketId}</Typography>
-              <Typography variant='p'>{ticketRatingSubject}</Typography>
-              <Typography component="legend">Rate us</Typography>
+              {/* <Typography variant='p'>{ticketId}</Typography> */}
+              <Typography variant='p' pb={2}>{ticketRatingSubject}</Typography>
+              {/* <Typography component="legend">Rate us</Typography> */}
               <Rating
                 name="simple-controlled"
                 value={rating}
