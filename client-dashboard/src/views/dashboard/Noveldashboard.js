@@ -53,7 +53,7 @@ const listings = [
   },
   {
     image: nob,
-    buildingName: "Novel Office bridge tech park",
+    buildingName: "Novel Office brigade tech park",
     location: "ITPL, Banglore"
   },
 ]
