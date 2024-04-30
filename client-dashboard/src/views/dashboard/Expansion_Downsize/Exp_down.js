@@ -109,13 +109,13 @@ export default function () {
                                 </Select>
                             </FormControl>
                             <FormControl fullWidth sx={{ mt: 2 }}>
-                                <InputLabel id="demo-simple-select-label" >Sub action</InputLabel>
+                                <InputLabel id="demo-simple-select-label" >Service</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={subAction}
                                     name='sub_action'
-                                    label="Sub action"
+                                    label="Service"
                                     onChange={handleSubAction}
                                 >
                                     {
