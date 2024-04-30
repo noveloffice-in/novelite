@@ -11,16 +11,16 @@
  "event": "Save",
  "idx": 0,
  "is_standard": 1,
- "message": "<h3>Hi Sir/Madam,</h3>\n\n<p>I want to book a <b>{{doc.room_type}}</b>, Please find the booking details below.</p>\n\n<h4>Booking Details</h4>\n\n<ul>\n    <li>Customer: {{ doc.customer }}</li>\n    <li>Location: {{ doc.location }}</li>\n    <li>Room Type: {{ doc.room_type }}</li>\n    <li>Room Name: {{ doc.room }}</li>\n    <li>Booking Date: {{ doc.booking_date }}</li>\n    <li>From Time: {{ doc.from_time }}</li>\n    <li>To Time: {{ doc.to_time }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n",
+ "message": "<h3>Hello Team,</h3>\n\n<p>A <b>{{doc.room_type}}</b>booking request has been made by <b>\"{{ doc.customer }}\"</b> on <b>\"{{ doc.booking_date }}\"</b> at <b>\"{{ doc.from_time }}\"</b>.</p>\n\n<h4>More Details:</h4>\n\n<ul>\n    <li>Location: {{ doc.location }}</li>\n    <li>Room Name: {{ doc.room }}</li>\n    <li>Booking Date: {{ doc.booking_date }}</li>\n    <li>From Time: {{ doc.from_time }}</li>\n    <li>To Time: {{ doc.to_time }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Kindly check the availability and confirm.</p>",
  "message_type": "Markdown",
- "modified": "2024-04-29 16:46:41.792238",
+ "modified": "2024-04-30 10:41:27.156149",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Booking Notification",
  "owner": "Administrator",
  "recipients": [
   {
-   "cc": "{{ doc.email_cc }}",
+   "cc": "{{ doc.email_cc }}\n{{ doc.email_cc_admin }}",
    "receiver_by_document_field": "email_to"
   }
  ],
@@ -28,5 +28,5 @@
  "send_to_all_assignees": 0,
  "sender": "ERPNext Reports",
  "sender_email": "erpnextreports@noveloffice.in",
- "subject": "New Room Booking {{doc.name}}"
+ "subject": "New Room Booking - {{doc.name}}"
 }

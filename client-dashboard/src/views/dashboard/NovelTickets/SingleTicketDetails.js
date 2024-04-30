@@ -24,16 +24,27 @@ export default function SingleTicketDetails() {
   const { id } = useParams();
 
   //.------------------------------------------------------Fetching TicketData----------------------------------------------//
-  const { data} = useFrappeGetDoc('Issue', id);
+  const { data } = useFrappeGetDoc('Issue', id);
 
   console.log("Data = ", data);
 
   return (
     <Container sx={{ width: '100%', p: 2 }}>
       <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-        {data && <Left id={data.name} title={data.subject} status={data.status} creation={data.creation} rating={data.rating} ratingDescription={data.review_description} />}
+        {data &&
+          <Left
+            id={data.name}
+            title={data.subject}
+            status={data.status}
+            creation={data.creation}
+            rating={data.rating}
+            ratingDescription={data.review_description}
+            issueSubtype={data.custom_issue_subtype}
+            issueType={data.issue_type}
+          />}
+
         {data && <Right id={data.name} />}
-      </Container> 
+      </Container>
       {data && <ChildCard>
         <NovelTicketChat id={data.name} title={data.subject} />
       </ChildCard>}
@@ -41,7 +52,7 @@ export default function SingleTicketDetails() {
   )
 }
 
-function Left({ id, title, status, creation, rating, ratingDescription }) {
+function Left({ id, title, status, creation, rating, ratingDescription, issueSubtype, issueType }) {
 
   const formatDateTime = (inputDatetime, returnType) => {
     const date = new Date(inputDatetime);
@@ -86,10 +97,10 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
             <Grid container>
               <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
-                  Ticket Name
+                  Issue Type
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {title}
+                  {issueType}
                 </Typography>
               </Grid>
               {/* <Grid item lg={6} xs={12} mt={4}>
@@ -103,10 +114,10 @@ function Left({ id, title, status, creation, rating, ratingDescription }) {
 
               <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
-                  Department
+                  Issue Subtype
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {title}
+                  {issueSubtype}
                 </Typography>
               </Grid>
               {/* <Grid item lg={6} xs={12} mt={4}>

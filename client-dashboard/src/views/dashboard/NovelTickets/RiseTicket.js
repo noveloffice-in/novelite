@@ -1,6 +1,6 @@
 import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
 import { Box, Stack, borderRadius, height, padding } from '@mui/system'
-import { useFrappeCreateDoc } from 'frappe-react-sdk';
+import { useFrappeCreateDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import React, { useEffect, useRef, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
 //Toastify 
@@ -20,6 +20,7 @@ import acVent from '../../../assets/images/acVent/AC Vent Number Identification.
 
 import { tooltipClasses } from '@mui/material/Tooltip';
 import { stubFalse } from 'lodash';
+import { setIssueType } from '../../../store/apps/tickets/TicketSlice';
 
 const style = {
     position: 'absolute',
@@ -59,7 +60,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading }) {
+export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading, issueTypesArray }) {
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
@@ -72,12 +73,16 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const [emailErr, setEmailErr] = useState(false);
     const [ticketLocation, setTicketocation] = useState("");
 
+    const priorityOptions = ["High", "Medium", "Low"];
+
+    const [issuePriority, setIssuePriority] = useState(priorityOptions[0])
+    
     const [ticketData, setTicketData] = useState({
         subject: "",
         description: "",
         location: localStorage.getItem('location') || filterLocation,
-        issue: "IT and Network",
-        issueType: "Internet not working | Slow Internet",
+        issueType: "",
+        issueSubType: "",
         contactName: "",
         contactNumber: "",
         alternateEmail: "",
@@ -87,6 +92,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         fileName: "",
         ventNumber: "",
         creation_via: "Ticket",
+        priority: issuePriority
     });
 
     const locationsDropdown = [
@@ -100,8 +106,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         { shortName: 'BTP1F', fullName: 'Novel Office Brigade-Whitefield' },
     ]
 
-    const issueOptions = {
-        "IT and Network": ["Internet not working | Slow Internet", "LAN Port | LAN Cable | Patch Cord issue", "Computer | Sytem", "EPAbx Setup", "GSM Issue", "Server", "Other"],
+
+    let issueOptions = {
+        "IT and Network": ["Internet not working | Slow Internet", "LAN Port", "LAN Cable", "Patch Cord issue", "Computer", "Sytem/Desktop", "EPAbx Setup", "GSM Issue", "Server", "Other"],
         "Parking": ["Request Additional Parking", "New Parking Sticker | New Parking User", "P.S. Lost", "Pay and Park", "P.S. Downsize", "Other"],
         "Security and Access": ["Access card Damaged", "Access card not working", "Access card lost", "New Access card", "Temporary Access Cards", "Other"],
         "Gate Pass": ["MAF", "Other"],
@@ -134,6 +141,10 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const [issueTypeDropdown, setIssueTypeDropdown] = useState(issueOptions[issueDropdown] ? issueOptions[issueDropdown][0] : "");
     const [issueTypeOptions, setIssueTypeOptions] = useState(issueOptions[issueDropdown] || []);
 
+    const issueType = useSelector((state) => state.ticketReducer.issueType);
+    const [issuetypeNew, setIssueTypeNew] = useState(issueType);
+    const [issueSubtypeNew, setIssueSubTypeNew] = useState('');
+
     //For outer submit btn trigger
     const isFirstRender = useRef(true);
 
@@ -148,28 +159,42 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     //For outer submit btn trigger
     useEffect(() => {
-
         if (!isFirstRender.current) {
             riseTicket();
         } else {
             isFirstRender.current = false;
         }
     }, [submitTicket])
+
+    //----------------------------------------------------------Issue types and subtypes fetch-----------------------------------------------//
+    //Subtypes
+    const { data: issueSubTypesArray } = useFrappeGetDocList('Issue SubType', {
+        fields: ['name', 'issue_type'],
+        filters: [['issue_type', '=', issuetypeNew]],
+        orderBy: {
+            field: 'name',
+            order: 'asc',
+        },
+    });
+
     //----------------------------------------------------------Issue and Issue Type Dropdown change-----------------------------------------------//
     const handleIssueDropdownChange = (e) => {
         const selectedIssue = e.target.value;
-        setIssueDropdown(selectedIssue);
-        const newIssueTypeOptions = issueOptions[selectedIssue] || ["Other"];
-        setIssueTypeOptions(newIssueTypeOptions);
-        setIssueTypeDropdown(newIssueTypeOptions[0]);
-        updateTicketData("issue", selectedIssue);
-        updateTicketData("issueType", newIssueTypeOptions[0]);
+        dispatch(setIssueType(selectedIssue));
+        setIssueTypeNew(selectedIssue);
+        // setIssueDropdown(selectedIssue);
+        // const newIssueTypeOptions = issueOptions[selectedIssue] || ["Other"];
+        // setIssueTypeOptions(newIssueTypeOptions);
+        // setIssueTypeDropdown(newIssueTypeOptions[0]);
+        // updateTicketData("issue", selectedIssue);
+        // updateTicketData("issueType", newIssueTypeOptions[0]);
     };
 
     const handleIssueTypeDropdownChange = (e) => {
         const selectedIssueType = e.target.value;
-        setIssueTypeDropdown(selectedIssueType);
-        updateTicketData("issueType", selectedIssueType);
+        setIssueSubTypeNew(selectedIssueType);
+        // setIssueTypeDropdown(selectedIssueType);
+        // updateTicketData("issueType", selectedIssueType);
     };
 
     const handleInputChange = (e) => {
@@ -215,7 +240,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const riseTicket = () => {
         const updatedTicketData = {
             ...ticketData,
-            issueType: issueTypeDropdown,
+            issueType: issuetypeNew,
+            issueSubType: issueSubtypeNew,
         };
         setContactErr(false);
         setShowLoading(true);
@@ -223,6 +249,12 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         setEmailErr(false);
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
+            setShowLoading(false);
+        } else if (ticketLocation === '') {
+            notifyWarn("Please Select the Location");
+            setShowLoading(false);
+        } else if (issueSubtypeNew === '') {
+            notifyWarn("Please select issue sub type");
             setShowLoading(false);
         } else if (updatedTicketData.contactName === "") {
             notifyWarn("Please fill the contact Name");
@@ -239,9 +271,6 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         } else if (updatedTicketData.contactNumber.length > 10) {
             notifyWarn("Please enter only 10 numbers");
             setShowLoading(false);
-        } else if (ticketLocation === '') {
-            notifyWarn("Please Select the Location");
-            setShowLoading(false);
         } else if (checkFileFormat(attachment)) {
             notifyWarn("File size cannot be more than 5MB and must be in PDF, PNG, JPG, or MP4 format");
             setShowLoading(false);
@@ -249,21 +278,23 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             setShowLoading(true);
             const updatedTicketData = {
                 ...ticketData,
-                issueType: issueTypeDropdown
+                issueType: issuetypeNew,
+                issueSubType: issueSubtypeNew,
             };
 
             const ticketDetails = {
                 subject: updatedTicketData.subject,
                 description: updatedTicketData.description,
                 location: ticketLocation,
-                issue_type: updatedTicketData.issue,
-                custom_issue_subtype: updatedTicketData.issueType,
+                issue_type: updatedTicketData.issueType,
+                custom_issue_subtype: updatedTicketData.issueSubType,
                 contact_name: updatedTicketData.contactName,
                 contact_phone: updatedTicketData.contactNumber,
                 contact_email: updatedTicketData.email,
                 contact_email_alternative: updatedTicketData.alternateEmail,
                 customer: customerName,
                 vent_number: updatedTicketData.ventNumber,
+                priority: issuePriority,
                 creation_via: "Ticket",
             }
 
@@ -295,7 +326,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     // })
                 }
             } else {
-                // createIssue(ticketDetails);
+                createIssue(ticketDetails);
                 console.log("ticket details = ", ticketDetails);
                 setShowLoading(false);
             }
@@ -321,16 +352,16 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     }
 
     //----------------------------------------------------------Location dropdown-----------------------------------------------//
-    const handleLocationChange = (e) => {
-        let changedLocation = e.target.value;
-        setFilterLocation(changedLocation);
-        setTicketData(prev => ({ ...prev, location: changedLocation }));
-        dispatch(setLocation(changedLocation));
-        console.log("Location = ", changedLocation);
-        if (e.target.value !== 'Property Location') {
-            localStorage.setItem('location', changedLocation);
-        }
-    }
+    // const handleLocationChange = (e) => {
+    //     let changedLocation = e.target.value;
+    //     setFilterLocation(changedLocation);
+    //     setTicketData(prev => ({ ...prev, location: changedLocation }));
+    //     dispatch(setLocation(changedLocation));
+    //     console.log("Location = ", changedLocation);
+    //     if (e.target.value !== 'Property Location') {
+    //         localStorage.setItem('location', changedLocation);
+    //     }
+    // }
 
     return (
         <>
@@ -395,29 +426,29 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 {/* -------------------------------------Issue type, Issue subtype dropdown-------------------------------------------  */}
                 <FormControl fullWidth sx={{ mt: 2 }}>
                     <InputLabel>Issue type</InputLabel>
-                    <Select value={issueDropdown} label="Issue type" onChange={handleIssueDropdownChange}>
-                        {issueName.map(issue => (
-                            <MenuItem key={issue} value={issue}>{issue}</MenuItem>
+                    <Select label="Issue type" value={issuetypeNew} onChange={handleIssueDropdownChange}>
+                        {issueTypesArray?.map(issue => (
+                            <MenuItem key={issue.name} value={issue.name}>{issue.name}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
-                {issueDropdown !== "Other" && (
+                {issuetypeNew !== "Other" && (
                     <FormControl fullWidth sx={{ mt: 2 }}>
                         <InputLabel>Issue sub type</InputLabel>
                         <Select
-                            value={issueTypeDropdown}
+                            // value={issueTypeDropdown}
                             label="Issue sub type"
                             onChange={handleIssueTypeDropdownChange}
                         >
-                            {issueTypeOptions.map(issueType => (
-                                <MenuItem key={issueType} value={issueType}>{issueType}</MenuItem>
+                            {issueSubTypesArray && issueSubTypesArray?.map(subType => (
+                                <MenuItem key={subType.name} value={subType.name}>{subType.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                 )}
 
                 {/* -------------------------------------Ticket subject-------------------------------------------  */}
-                {issueTypeDropdown === "Other" ? (
+                {issueSubtypeNew.includes("Other") ? (
                     <TextField
                         label="Ticket Title"
                         variant="standard"
@@ -429,7 +460,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 ) : null}
 
                 {/* -------------------------------------Vent number-------------------------------------------  */}
-                {issueDropdown === 'AC' ? <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
+                {issuetypeNew === 'AC' ? <Stack sx={{ mt: 1 }} justifyContent='end' alignItems='center' flexDirection='row'>
                     <TextField
                         label="Vent number"
                         name='ventNumber'
@@ -472,6 +503,16 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         onChange={handleTicketDataChange}
                     />
                 </Box>
+
+                {/* -------------------------------------Priority-------------------------------------------  */}
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                    <InputLabel>Priority</InputLabel>
+                    <Select label="Priority" value={issuePriority} onChange={(e)=>{setIssuePriority(e.target.value)}}>
+                        {priorityOptions?.map(element => (
+                            <MenuItem key={element} value={element}>{element}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
                 {/* -------------------------------------Attach file-------------------------------------------  */}
                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>

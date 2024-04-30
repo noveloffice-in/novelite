@@ -23,7 +23,7 @@ import {
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import CommentsDisabledOutlinedIcon from '@mui/icons-material/CommentsDisabledOutlined';
-import { SearchTicket, getTickets } from '../../../store/apps/tickets/TicketSlice';
+import { SearchTicket, getTickets, setIssueType } from '../../../store/apps/tickets/TicketSlice';
 
 //Dialouge
 import Dialog from '@mui/material/Dialog';
@@ -145,6 +145,19 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
+
+  //----------------------------------------------------------Issue types and subtypes fetch-----------------------------------------------//
+
+  const { data: issueTypesArray } = useFrappeGetDocList('Issue Type', {
+    fields: ['name'],
+    orderBy: {
+      field: 'name',
+      order: 'asc',
+    },
+  });
+  if (issueTypesArray) {
+    dispatch(setIssueType(issueTypesArray[0].name));
+  }
 
   //------------------------------------------------------Dialog, Tooltip-----------------------------------------------//
 
@@ -428,7 +441,17 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             </Stack>
           </DialogTitle>
           <DialogContent>
-            <RiseTicket confirmedLocations={confirmedLocations} filterLocation={filterLocation} setFilterLocation={setFilterLocation} setOpen1={setOpen1} mutate={mutate} submitTicket={submitTicket} setShowLoading={setShowLoading} />
+            {issueTypesArray &&
+              <RiseTicket
+                confirmedLocations={confirmedLocations}
+                filterLocation={filterLocation}
+                setFilterLocation={setFilterLocation}
+                setOpen1={setOpen1}
+                mutate={mutate}
+                submitTicket={submitTicket}
+                setShowLoading={setShowLoading}
+                issueTypesArray={issueTypesArray}
+              />}
           </DialogContent>
           <DialogActions>
             <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>

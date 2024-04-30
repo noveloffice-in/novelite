@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"1SFpzeOEZF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Client Dashboard</span>\",\"col\":12}},{\"id\":\"R71Bf46CdF\",\"type\":\"card\",\"data\":{\"card_name\":\"Room Bookings\",\"col\":4}},{\"id\":\"OgmhfaBRjF\",\"type\":\"card\",\"data\":{\"card_name\":\"Invoices\",\"col\":4}},{\"id\":\"5S9poheviG\",\"type\":\"card\",\"data\":{\"card_name\":\"Tickets\",\"col\":4}},{\"id\":\"NdrnvsNsJm\",\"type\":\"card\",\"data\":{\"card_name\":\"Expansion/Downsize\",\"col\":4}},{\"id\":\"_FfV54bH3O\",\"type\":\"card\",\"data\":{\"card_name\":\"Visitor Parking Pass\",\"col\":4}}]",
+ "content": "[{\"id\":\"1SFpzeOEZF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Client Dashboard</span>\",\"col\":12}},{\"id\":\"R71Bf46CdF\",\"type\":\"card\",\"data\":{\"card_name\":\"Room Bookings\",\"col\":4}},{\"id\":\"OgmhfaBRjF\",\"type\":\"card\",\"data\":{\"card_name\":\"Invoices\",\"col\":4}},{\"id\":\"5S9poheviG\",\"type\":\"card\",\"data\":{\"card_name\":\"Tickets\",\"col\":4}},{\"id\":\"NdrnvsNsJm\",\"type\":\"card\",\"data\":{\"card_name\":\"Expansion/Downsize\",\"col\":4}},{\"id\":\"_FfV54bH3O\",\"type\":\"card\",\"data\":{\"card_name\":\"Visitor Parking Pass\",\"col\":4}},{\"id\":\"B9s_gOWkOC\",\"type\":\"card\",\"data\":{\"card_name\":\"Others\",\"col\":4}}]",
  "creation": "2024-04-27 22:00:44.000863",
  "custom_blocks": [],
  "docstatus": 0,
@@ -27,25 +27,6 @@
    "label": "Sales Invoice",
    "link_count": 0,
    "link_to": "Sales Invoice",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tickets",
-   "link_count": 1,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Issue",
-   "link_count": 0,
-   "link_to": "Issue",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -136,9 +117,67 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Others",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Notifications",
+   "link_count": 0,
+   "link_to": "Notification",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tickets",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Issue",
+   "link_count": 0,
+   "link_to": "Issue",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Issue Type",
+   "link_count": 0,
+   "link_to": "Issue Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Issue Subtype",
+   "link_count": 0,
+   "link_to": "Issue SubType",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-04-27 22:19:50.901442",
+ "modified": "2024-04-30 09:31:43.109499",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Client Dashboard",

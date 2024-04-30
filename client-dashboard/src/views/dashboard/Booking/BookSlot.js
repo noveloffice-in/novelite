@@ -128,10 +128,10 @@ export default function BookSlot() {
         if (date !== '' && fromTime !== '' && toTime !== '') {
             createDoc('Room slots booking', boookingData)
                 .then(() => {
-                    notifySuccess("Slot has been Booked");
+                    notifySuccess("Your request was received successfully");
                     setTimeout(() => {
                         navigate('/location');
-                    }, 1500);
+                    }, 5000);
                 }).catch((err) => {
                     console.log("inside catch " + JSON.stringify(err.message));
                     console.err(err.message);
@@ -194,7 +194,7 @@ export default function BookSlot() {
             {/* ---------------------------------------Toast Container Starts------------------------------------ */}
             <ToastContainer
                 position="top-center"
-                autoClose={1000}
+                autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

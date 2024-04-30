@@ -78,9 +78,9 @@ export default function TicketChatContent({ data, title }) {
                                         return (
                                             <Box key={index}>
                                                 {comment.comment_by !== fullName ? (
-                                                    < Box display="flex">
+                                                    < Box display="flex" alignItems="center" mb={2}>
                                                         <ListItemAvatar>
-                                                            <img src={novelLogo} style={{ width: '45px', height: '45px' }}/>
+                                                            <img src={novelLogo} style={{ width: '45px', height: '45px' }} />
                                                             {/* <Avatar
                                                                 alt={user1}
                                                                 src={user1}
@@ -88,15 +88,11 @@ export default function TicketChatContent({ data, title }) {
                                                             /> */}
                                                         </ListItemAvatar>
                                                         <Box>
-                                                            <Typography variant="body2" color="grey.400" mb={1}>
-                                                                {data.creation}{' '}
-                                                                {formatDistanceToNowStrict(new Date(comment.creation), {
-                                                                    addSuffix: false,
-                                                                })}{' '}
-                                                                ago
+                                                            <Typography variant="caption" color="grey.400" mb={1}>
+                                                                {comment.comment_by}
                                                             </Typography>
                                                             <Box
-                                                                mb={2}
+                                                                my={0.5}
                                                                 sx={{
                                                                     p: 1,
                                                                     backgroundColor: 'grey.100',
@@ -106,33 +102,48 @@ export default function TicketChatContent({ data, title }) {
                                                             >
                                                                 {messages(comment.content)}
                                                             </Box>
-                                                        </Box>
-                                                    </Box>)
-                                                    :
-                                                    (<Box
-                                                        mb={1}
-                                                        display="flex"
-                                                        alignItems="flex-end"
-                                                        flexDirection="row-reverse"
-                                                    >
-                                                        <Box alignItems="flex-end" display="flex" flexDirection={'column'}>
-                                                            <Typography variant="body2" color="grey.400" mb={1}>
+                                                            <Typography variant="caption" color="grey.300" mb={1}>
                                                                 {data.creation}{' '}
                                                                 {formatDistanceToNowStrict(new Date(comment.creation), {
                                                                     addSuffix: false,
                                                                 })}{' '}
                                                                 ago
                                                             </Typography>
-                                                            <Box
-                                                                mb={2}
-                                                                sx={{
-                                                                    p: 1,
-                                                                    backgroundColor: 'primary.light',
-                                                                    ml: 'auto',
-                                                                    maxWidth: '320px',
-                                                                }}
-                                                            >
-                                                                {messages(comment.content)}
+                                                        </Box>
+                                                    </Box>)
+                                                    :
+                                                    (<Box
+                                                        mb={2}
+                                                        display="flex"
+                                                        alignItems="flex-end"
+                                                        flexDirection="row-reverse"
+                                                    >
+                                                        <Box display="flex" flexDirection="row-reverse" alignItems="center">
+                                                            <ListItemAvatar>
+                                                                <Avatar src={user1} style={{ width: '45px', height: '40px', marginBottom:'1rem', marginLeft:'0.5rem' }} />
+                                                            </ListItemAvatar>
+                                                            <Box alignItems="flex-end" display="flex" flexDirection={'column'}>
+                                                                <Typography variant="body2" color="grey.400" mb={1}>
+                                                                    {fullName}
+                                                                </Typography>
+                                                                <Box
+                                                                    my={0.5}
+                                                                    sx={{
+                                                                        p: 1,
+                                                                        backgroundColor: 'primary.light',
+                                                                        ml: 'auto',
+                                                                        maxWidth: '320px',
+                                                                    }}
+                                                                >
+                                                                    {messages(comment.content)}
+                                                                </Box>
+                                                                <Typography variant="body2" color="grey.300" mb={1}>
+                                                                    {data.creation}{' '}
+                                                                    {formatDistanceToNowStrict(new Date(comment.creation), {
+                                                                        addSuffix: false,
+                                                                    })}{' '}
+                                                                    ago
+                                                                </Typography>
                                                             </Box>
                                                         </Box>
                                                     </Box>)

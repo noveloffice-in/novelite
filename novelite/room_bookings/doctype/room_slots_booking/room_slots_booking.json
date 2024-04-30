@@ -13,6 +13,7 @@
   "room",
   "email_to",
   "email_cc",
+  "email_cc_admin",
   "column_break_rhkbq",
   "booking_date",
   "from_time",
@@ -91,11 +92,19 @@
    "fieldtype": "Data",
    "label": "Email CC",
    "options": "Email"
+  },
+  {
+   "default": "mr@noveloffice.in",
+   "description": "Building Admin's Email",
+   "fieldname": "email_cc_admin",
+   "fieldtype": "Data",
+   "label": "Email CC Admin",
+   "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-27 21:48:48.873169",
+ "modified": "2024-04-30 10:36:04.712451",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room slots booking",

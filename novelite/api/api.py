@@ -284,6 +284,7 @@ def issue():
         issue_info.contact_name = data.get('contact_name', "")
         issue_info.contact_phone = data.get('contact_phone', "")
         issue_info.contact_email = data.get('contact_email', "")
+        issue_info.priority = data.get('priority', "")
         issue_info.contact_email_alternative = data.get('contact_email_alternative', "")
 
         issue_info.insert(ignore_permissions=True)

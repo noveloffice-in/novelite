@@ -7,6 +7,8 @@ const initialState = {
   tickets: [],
   currentFilter: 'total_tickets',
   ticketSearch: '',
+  issueType:'',
+  issueSubtype:''
 };
 
 export const TicketSlice = createSlice({
@@ -22,6 +24,12 @@ export const TicketSlice = createSlice({
     SearchTicket: (state, action) => {
       state.ticketSearch = action.payload;
     },
+    setIssueType: (state, action) => {
+      state.issueType = action.payload;
+    },
+    setIssueSubType: (state, action) => {
+      state.issueSubtype = action.payload;
+    },
     DeleteTicket: (state, action) => {
       const index = state.tickets.findIndex((ticket) => ticket.Id === action.payload);
       state.tickets.splice(index, 1);
@@ -29,7 +37,7 @@ export const TicketSlice = createSlice({
   },
 });
 
-export const { getTickets, setVisibilityFilter, SearchTicket, DeleteTicket } = TicketSlice.actions;
+export const { getTickets, setVisibilityFilter, SearchTicket, DeleteTicket, setIssueType, setIssueSubType } = TicketSlice.actions;
 
 export const fetchTickets = () => async (dispatch) => {
   try {
