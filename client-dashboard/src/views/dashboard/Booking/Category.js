@@ -72,8 +72,8 @@ export default function Category() {
                 {data && data.room_type_details.map((card, index) => {
                     return (
                         <Grid item xs={12} sm={4} lg={3} key={card.room_type + index}>
-                            <Card variant="outlined" sx={{ maxWidth: 345 }}>
-                                <CardActionArea component={Link} to="/bookings" onClick={() => { dispatch(setRoomCategory(card.room_type)); dispatch(setPrice(card.price)) }}>
+                            <Card variant="outlined" sx={{ maxWidth: 345, height:'100%' }}>
+                                <CardActionArea component={Link} sx={{height:'100%'}} to="/bookings" onClick={() => { dispatch(setRoomCategory(card.room_type)); dispatch(setPrice(card.price)) }}>
                                     <CardMedia
                                         component="img"
                                         height="140"

@@ -6,6 +6,9 @@ import {
     Grid,
     Stack,
     Skeleton,
+    Card,
+    CardActionArea,
+    CardMedia,
 } from '@mui/material';
 import img1 from 'src/assets/images/products/s4.jpg';
 import PageContainer from '../../../components/container/PageContainer';
@@ -54,63 +57,38 @@ export default function Location() {
     return (
         <PageContainer title="Location - Novel Office">
             <Breadcrumb title="Location" items={BCrumb} />
-            {/* <Grid container spacing={3}>
-                {ecoCard.map((product, index) => (
-                    <Grid item xs={12} sm={4} lg={3} key={index}>
-                        <BlankCard>
-                            <Typography component={Link} to="/category" onClick={() => { dispatch(setBookingLocation(product.title)) }}>
-                                {isLoading ? (
-                                    <Skeleton variant="square" animation="wave" width="100%" height={270}></Skeleton>
-                                ) : (
-                                    <img src={product.photo} alt="img" width="100%" />
-                                )}
-                            </Typography>
-                            <CardContent sx={{ p: 3, pt: 2 }}>
-                                <Typography variant="h6">{product.title}</Typography>
-                                <Stack direction="row" alignItems="center" justifyContent="space-between" mt={1}>
-                                    <Stack direction="row" alignItems="center">
-                                        <Typography variant="h6">{product.subheader}</Typography>
-                                    </Stack>
-                                </Stack>
-                            </CardContent>
-                        </BlankCard>
-                    </Grid>
-                ))}
-            </Grid> */}
-            {/* <img src={locationData?.images[0].link_image}/> */}
+
             <Grid container spacing={3}>
-                {data?.map((location, index) => (
-                    <Grid item xs={12} sm={4} lg={3} key={location.name + index}>
-                        <BlankCard>
-                            {location.image ? <Typography component={Link} to="/category" onClick={() => { dispatch(setBookingLocation(location.name)) }}>
-                                {isLoading ? (
-                                    <Skeleton variant="square" animation="wave" width="100%" height={270}></Skeleton>
-                                ) : (
-                                    <img src={location.image} alt="img" width="100%" />
-                                )}
-                            </Typography> :
-                                <Typography component={Link} to="/category" onClick={() => { dispatch(setBookingLocation(location.name)) }}>
-                                    {isLoading ? (
-                                        <Skeleton variant="square" animation="wave" width="100%" height={270}></Skeleton>
-                                    ) : (
-                                        <img src={img1} alt="img" width="100%" />
-                                    )}
-                                </Typography>
-                            }
-                            <CardContent sx={{ p: 3, pt: 2 }}>
-                                {/* <Button variant='outlined' component={Link} to="/category" onClick={() => { dispatch(setBookingLocation(location.name)) }}>
-                                    <Typography variant="h6">{location.name}</Typography>
-                                </Button> */}
-                                <Stack direction="row" alignItems="center" justifyContent="space-between" mt={1}>
-                                    <Stack direction="row" alignItems="center">
-                                        <Typography variant="h6">{location.name}</Typography>
-                                    </Stack>
-                                </Stack>
-                            </CardContent>
-                        </BlankCard>
-                    </Grid>
-                ))}
+
+                {/* ------------------------------------------- */}
+                {/* Cards */}
+                {/* ------------------------------------------- */}
+                {data && data.map((card, index) => {
+                    return (
+                        <Grid item xs={12} sm={4} lg={3} key={card.name + index}>
+                            <Card variant="outlined" sx={{ maxWidth: 345, height: '100%' }}>
+                                <CardActionArea component={Link} sx={{ height: '100%' }} to="/category" onClick={() => { dispatch(setBookingLocation(card.name)) }}>
+                                    <CardMedia
+                                        component="img"
+                                        height="140"
+                                        image={card.image}
+                                        alt={card.name}
+                                    />
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            {card.name}
+                                        </Typography>
+                                        {/* <Typography variant="body2" color="text.primary">
+                                            &#x20B9; {card.price} / hour
+                                        </Typography> */}
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    )
+                })}
             </Grid>
+
         </PageContainer>
     )
 }

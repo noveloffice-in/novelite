@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -71,6 +71,8 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [ticketRatingSubject, setTicketRatingSubject] = useState('');
   const [ratingDescription, setRatingDescription] = useState('');
 
+  const isFirstRender = useRef(true);
+
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
   const notifyError = (msg) => toast.error(msg, { toastId: "error" });
@@ -80,6 +82,35 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     currentPage = currentPage - 1;
     setStart(currentPage * 10);
   }
+
+  //-----------------------------------------------------------Fetch Tickets for Review Pop up-----------------------------------------------//
+  const { data: closedTicketData } = useFrappeGetDocList('Issue', {
+    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'rating'],
+    filters: [['raised_by', '=', userEmail], ['status', '=', 'Closed']],
+    limit_start: 0,
+    limit: 10,
+    orderBy: {
+      field: 'modified',
+      order: 'desc',
+    },
+  });
+
+  //For outer submit btn trigger
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      if (closedTicketData?.length > 0) {
+        console.log("closedTicketData = ", closedTicketData);
+        if (closedTicketData[0].review_show_popup === 0) {
+          setTicketId(closedTicketData[0].name);
+          handleClickOpen2(closedTicketData[0].name, closedTicketData[0].subject);
+          // alert("show")
+        }
+      }
+    } else {
+      isFirstRender.current = false;
+    }
+  }, [closedTicketData])
+
 
   //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
 
@@ -91,11 +122,12 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
     if (event.target.value !== 'Property Location') {
       localStorage.setItem('location', changedLocation);
     }
+    mutate();
   };
 
   //-----------------------------------------------------------Fetch Tickets-----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
-    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'location', 'rating'],
+    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating'],
     filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
     limit_start: start,
     limit: 10,
@@ -107,9 +139,12 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   var tickets = [];
   if (data) {
-    dispatch(getTickets(data));
     tickets = data;
+    dispatch(getTickets(data));
   }
+
+  //For updating Issue
+  const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
 
   //------------------------------------------------------Dialog, Tooltip-----------------------------------------------//
 
@@ -133,6 +168,15 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
   const handleClose2 = () => {
     setOpen2(false);
+    if (ticketId) {
+      updateDocRating('Issue', ticketId, { review_show_popup: 1 })
+        .then((res) => {
+          console.log("review_show_popup updated to 1");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   };
 
   //ToolTip
@@ -152,7 +196,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   //------------------------------------------------------Rating-----------------------------------------------//
   const { updateDoc, loading, isCompleted } = useFrappeUpdateDoc();
   const sendRating = () => {
-    updateDoc('Issue', ticketId, { rating: rating, review_description: ratingDescription })
+    updateDoc('Issue', ticketId, { rating: rating, review_description: ratingDescription, review_show_popup: 1 })
       .then((res) => {
         notifySuccess("Rated Successfully");
         console.log(res);
@@ -212,6 +256,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
       ),
     );
   }
+
 
   //-----------------------------------------------------------END---------------------------------------------------------//
 
@@ -299,7 +344,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             </TableHead>
             <TableBody>
               {tickets && tickets.map((ticket) => (
-                <TableRow key={ticket.subject} hover>
+                <TableRow key={ticket.name} hover>
                   <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
                     <Box>
                       <Typography variant="h6" fontWeight="500" wrap>
@@ -367,7 +412,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           <Pagination count={totalPages} color="primary" onChange={pageChange} />
         </Box>
 
-        {/* ---------------------------------------Dialog Start---------------------------------- */}
+        {/* ---------------------------------------Raise Dialog Start---------------------------------- */}
         <Dialog
           fullWidth
           maxWidth='sm'
@@ -393,7 +438,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
             </Box>
           </DialogActions>
         </Dialog>
-        {/* ---------------------------------------Dialog Ends------------------------------------ */}
+        {/* ---------------------------------------Raise Dialog Ends------------------------------------ */}
 
         {/* ---------------------------------------Rating Dialog Start---------------------------------- */}
         <Dialog
@@ -439,7 +484,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
               <Box sx={{ mt: 2 }} >
                 <TextField
                   id="outlined-multiline-static"
-                  label="Review Description"
+                  label="Feedback"
                   multiline
                   rows={2}
                   style={{ width: '100%' }}

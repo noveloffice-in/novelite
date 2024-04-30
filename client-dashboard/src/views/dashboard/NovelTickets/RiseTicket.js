@@ -69,6 +69,8 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     const [contactErr, setContactErr] = useState(false);
     const [contactNumErr, setContactNumErr] = useState(false);
+    const [emailErr, setEmailErr] = useState(false);
+    const [ticketLocation, setTicketocation] = useState("");
 
     const [ticketData, setTicketData] = useState({
         subject: "",
@@ -80,12 +82,23 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         contactNumber: "",
         alternateEmail: "",
         customer: customerName,
-        email:customerEmailId,
+        email: customerEmailId,
         file: "",
         fileName: "",
         ventNumber: "",
         creation_via: "Ticket",
     });
+
+    const locationsDropdown = [
+        { shortName: 'NTP', fullName: 'Novel Tech Park - Kudlu Gate' },
+        { shortName: 'NOM', fullName: 'Novel Office Marathahalli' },
+        { shortName: 'NOC', fullName: 'Novel Office Central - MG Road' },
+        { shortName: 'NOQ', fullName: 'Novel Office Queens- Queens Road' },
+        { shortName: 'NOW', fullName: 'Novel Office WorkHub- Whitefield' },
+        { shortName: 'NBP', fullName: 'Novel Business Park - Adugodi' },
+        { shortName: 'NOB', fullName: 'Novel Office Brigade' },
+        { shortName: 'BTP1F', fullName: 'Novel Office Brigade-Whitefield' },
+    ]
 
     const issueOptions = {
         "IT and Network": ["Internet not working | Slow Internet", "LAN Port | LAN Cable | Patch Cord issue", "Computer | Sytem", "EPAbx Setup", "GSM Issue", "Server", "Other"],
@@ -207,6 +220,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         setContactErr(false);
         setShowLoading(true);
         setContactNumErr(false);
+        setEmailErr(false);
         if (updatedTicketData.subject === "") {
             notifyWarn("Please fill the ticket Subject");
             setShowLoading(false);
@@ -218,10 +232,14 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             notifyWarn("Please fill the contact Number");
             setContactNumErr(true);
             setShowLoading(false);
+        } else if (updatedTicketData.email === "") {
+            notifyWarn("Please fill the email id");
+            setEmailErr(true);
+            setShowLoading(false);
         } else if (updatedTicketData.contactNumber.length > 10) {
             notifyWarn("Please enter only 10 numbers");
             setShowLoading(false);
-        } else if (updatedTicketData.location === 'ALL' || updatedTicketData.location === '') {
+        } else if (ticketLocation === '') {
             notifyWarn("Please Select the Location");
             setShowLoading(false);
         } else if (checkFileFormat(attachment)) {
@@ -237,11 +255,12 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
             const ticketDetails = {
                 subject: updatedTicketData.subject,
                 description: updatedTicketData.description,
-                location: updatedTicketData.location,
+                location: ticketLocation,
                 issue_type: updatedTicketData.issue,
                 custom_issue_subtype: updatedTicketData.issueType,
                 contact_name: updatedTicketData.contactName,
                 contact_phone: updatedTicketData.contactNumber,
+                contact_email: updatedTicketData.email,
                 contact_email_alternative: updatedTicketData.alternateEmail,
                 customer: customerName,
                 vent_number: updatedTicketData.ventNumber,
@@ -276,7 +295,9 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                     // })
                 }
             } else {
-                createIssue(ticketDetails);
+                // createIssue(ticketDetails);
+                console.log("ticket details = ", ticketDetails);
+                setShowLoading(false);
             }
         }
     }
@@ -324,7 +345,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 }}>
 
                 {/* -------------------------------------Location Dropdown-------------------------------------------  */}
-                <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
+                {/* <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
                     {confirmedLocations?.length >= 2 ?
                         (<Box>
                             <FormControl fullWidth sx={{ mt: 2 }} >
@@ -347,6 +368,28 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         </Box>) :
                         (<Typography variant='h4' sx={{ mt: 2 }}>This customer is not linked to any Location</Typography>)
                     }
+                </Tooltip> */}
+                {/* -------------------------------------Location Dropdown-------------------------------------------  */}
+                <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
+                    <Box>
+                        <FormControl fullWidth sx={{ mt: 2 }} >
+                            <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
+                            <Select
+                                // disabled={confirmedLocations?.length === 2}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                // value={ticketLocation}
+                                label="Property Location"
+                                onChange={(e) => { setTicketocation(e.target.value) }}
+                            >
+                                {locationsDropdown?.map((location) => {
+                                    return (
+                                        <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </Tooltip>
 
                 {/* -------------------------------------Issue type, Issue subtype dropdown-------------------------------------------  */}
@@ -463,7 +506,12 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                         }
                     </Box>
                     <Box>
-                        <TextField label="Email" required variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" value={ticketData.email} onChange={handleInputChange} />
+                        {
+                            emailErr ?
+                                (<TextField label="Email" error required variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" value={ticketData.email} onChange={handleInputChange} />)
+                                :
+                                (<TextField label="Email" required variant="standard" style={{ width: '100%', marginTop: '16px' }} name="email" value={ticketData.email} onChange={handleInputChange} />)
+                        }
                         <TextField label="Alternate Email (Optional)" variant="standard" style={{ width: '100%', marginTop: '16px' }} name="alternateEmail" onChange={handleInputChange} />
                     </Box>
                 </Box>
