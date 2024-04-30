@@ -11,16 +11,16 @@
  "event": "Save",
  "idx": 0,
  "is_standard": 1,
- "message": "<h3>Hi Sir/Madam,</h3>\n\n<h4>{{ doc.action }} Details:</h4>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>",
+ "message": "<h3>Hello Team,</h3>\n\n<p>An {{ doc.action }} request has been made from <b>\u201c{{ doc.customer }}\u201d</b> client. PFB the details:</p>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Please reach out to the customers.</p>",
  "message_type": "HTML",
- "modified": "2024-04-27 22:33:54.803928",
+ "modified": "2024-04-30 13:05:32.556875",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion Downsize Notification",
  "owner": "Administrator",
  "recipients": [
   {
-   "cc": "",
+   "cc": "mr@noveloffice.in",
    "receiver_by_document_field": "email_to"
   }
  ],

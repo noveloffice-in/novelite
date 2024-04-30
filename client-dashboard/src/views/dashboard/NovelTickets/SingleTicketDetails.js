@@ -35,12 +35,12 @@ export default function SingleTicketDetails() {
           <Left
             id={data.name}
             title={data.subject}
-            status={data.status}
-            creation={data.creation}
             rating={data.rating}
-            ratingDescription={data.review_description}
+            ratingDescription={data.rating_description}
             issueSubtype={data.custom_issue_subtype}
             issueType={data.issue_type}
+            description={data.description}
+            priority={data.priority}
           />}
 
         {data && <Right id={data.name} />}
@@ -52,7 +52,7 @@ export default function SingleTicketDetails() {
   )
 }
 
-function Left({ id, title, status, creation, rating, ratingDescription, issueSubtype, issueType }) {
+function Left({ id, title, description, rating, ratingDescription, issueSubtype, issueType, priority }) {
 
   const formatDateTime = (inputDatetime, returnType) => {
     const date = new Date(inputDatetime);
@@ -95,14 +95,14 @@ function Left({ id, title, status, creation, rating, ratingDescription, issueSub
               </Box>
             </Box>
             <Grid container>
-              <Grid item lg={6} xs={12} mt={4} mx={2}>
+              {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Issue Type
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
                   {issueType}
                 </Typography>
-              </Grid>
+              </Grid> */}
               {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Status
@@ -112,14 +112,48 @@ function Left({ id, title, status, creation, rating, ratingDescription, issueSub
                 </Typography>
               </Grid> */}
 
-              <Grid item lg={6} xs={12} mt={4} mx={2}>
+              <Grid item lg={6} xs={12} mt={4}>
+                <Typography variant="body2" color="text.secondary">
+                  Issue Type
+                </Typography>
+                <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+                  {issueType}
+                </Typography>
+              </Grid>
+              <Grid item lg={6} xs={12} mt={4}>
+                <Typography variant="body2" color="text.secondary">
+                  Issue Subtype
+                </Typography>
+                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+                  {issueSubtype}
+                </Typography>
+              </Grid>
+
+              <Grid item lg={6} xs={12} mt={4}>
+                <Typography variant="body2" color="text.secondary">
+                  Priority
+                </Typography>
+                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+                  {priority}
+                </Typography>
+              </Grid>
+              <Grid item lg={6} xs={12} mt={4}>
+                <Typography variant="body2" color="text.secondary">
+                  Description
+                </Typography>
+                <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+                  {description ? description : "No ticket description"}
+                </Typography>
+              </Grid>
+
+              {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Issue Subtype
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
                   {issueSubtype}
                 </Typography>
-              </Grid>
+              </Grid> */}
               {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Creation date and time
@@ -129,25 +163,27 @@ function Left({ id, title, status, creation, rating, ratingDescription, issueSub
                   {formatDateTime(creation, 'Time')}
                 </Typography>
               </Grid> */}
-              {rating > 0 ? <>
-                <Grid item lg={6} xs={12} mt={4}>
-                  <Typography variant="body2" mb={1} color="text.secondary">
-                    Rating
-                  </Typography>
-                  <Rating
-                    name="read-only"
-                    value={rating}
-                    readOnly
-                  />
-                </Grid>
-                <Grid item lg={6} xs={12} mt={4}>
-                  <Typography variant="body2" color="text.secondary">
-                    Review Description
-                  </Typography>
-                  <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                    {ratingDescription ? ratingDescription : 'No review description'}
-                  </Typography>
-                </Grid></> : null}
+              {rating > 0 ?
+                <>
+                  <Grid item lg={6} xs={12} mt={4}>
+                    <Typography variant="body2" mb={0.5} color="text.secondary">
+                      Rating
+                    </Typography>
+                    <Rating
+                      name="read-only"
+                      value={rating}
+                      readOnly
+                    />
+                  </Grid>
+                  <Grid item lg={6} xs={12} mt={4}>
+                    <Typography variant="body2" color="text.secondary">
+                      Review Description
+                    </Typography>
+                    <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+                      {ratingDescription ? ratingDescription : 'No review description'}
+                    </Typography>
+                  </Grid>
+                </> : null}
             </Grid>
           </Box>
         </Box>

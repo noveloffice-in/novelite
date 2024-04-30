@@ -209,7 +209,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   //------------------------------------------------------Rating-----------------------------------------------//
   const { updateDoc, loading, isCompleted } = useFrappeUpdateDoc();
   const sendRating = () => {
-    updateDoc('Issue', ticketId, { rating: rating, review_description: ratingDescription, review_show_popup: 1 })
+    updateDoc('Issue', ticketId, { rating: rating, rating_description: ratingDescription, review_show_popup: 1 })
       .then((res) => {
         notifySuccess("Rated Successfully");
         console.log(res);
