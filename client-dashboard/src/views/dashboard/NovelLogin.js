@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PageContainer from '../../components/container/PageContainer';
 import { Box, Stack } from '@mui/system';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
@@ -24,6 +24,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CustomOutlinedInput from '../../components/forms/theme-elements/CustomOutlinedInput';
 import { IconEye, IconEyeOff } from '@tabler/icons';
+
+//Notification Sounds
+import SuccessSound from '../../notificationSounds/SuccessSound.wav'
+import WarnSound from '../../notificationSounds/WarningSound.wav'
+import ErrorSound from '../../notificationSounds/ErrorSound.wav'
 
 const style = {
     position: 'absolute',
@@ -64,9 +69,13 @@ export default function NovelLogin() {
         phoneNumber: ""
     })
 
+    //Notification
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
     const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
+    const successAudio = useRef(null);
+    const warnAudio = useRef(null);
+    const errorAudio = useRef(null);
 
     const handleOpen = () => setOpen(!open);
 
@@ -85,6 +94,7 @@ export default function NovelLogin() {
 
             login(userEmail, password).then((response) => {
                 notifySuccess('Logged in sucessfully');
+                successAudio.current.play();
                 dispatch(setUser(response.full_name));
                 console.log("Login User Name = ", response.full_name);
                 dispatch(setUserEmail(userEmail));
@@ -100,9 +110,11 @@ export default function NovelLogin() {
             }).catch((err) => {
                 console.log("inside catch " + JSON.stringify(err.message));
                 notifyError(err.message);
+                errorAudio.current.play();
             })
         } else {
             notifyWarn("Please fill all the details");
+            warnAudio.current.play();
         }
     }
 
@@ -296,6 +308,9 @@ export default function NovelLogin() {
                     theme="light"
                 />
             </Box>
+            <audio ref={successAudio} src={SuccessSound} />
+            <audio ref={warnAudio} src={WarnSound} />
+            <audio ref={errorAudio} src={ErrorSound} />
         </PageContainer>
     )
 }

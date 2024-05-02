@@ -76,7 +76,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const priorityOptions = ["High", "Medium", "Low"];
 
     const [issuePriority, setIssuePriority] = useState(priorityOptions[0])
-    
+
     const [ticketData, setTicketData] = useState({
         subject: "",
         description: "",
@@ -149,13 +149,13 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const isFirstRender = useRef(true);
 
     useEffect(() => {
-        if (issueDropdown !== "Other" && issueTypeDropdown !== "Other") {
+        if (issuetypeNew !== "Other" && issueSubtypeNew.includes("Other")) {
             setTicketData(prevState => ({
                 ...prevState,
-                subject: `${issueDropdown} - ${issueTypeDropdown}`
+                subject: `${issuetypeNew} - ${issueSubtypeNew}`
             }));
         }
-    }, [issueDropdown, issueTypeDropdown]);
+    }, [issuetypeNew, issueSubtypeNew]);
 
     //For outer submit btn trigger
     useEffect(() => {
@@ -247,16 +247,30 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         setShowLoading(true);
         setContactNumErr(false);
         setEmailErr(false);
-        if (updatedTicketData.subject === "") {
-            notifyWarn("Please fill the ticket Subject");
+
+        if (ticketLocation === "") {
+            notifyWarn("Please Select the location");
             setShowLoading(false);
-        } else if (ticketLocation === '') {
-            notifyWarn("Please Select the Location");
-            setShowLoading(false);
-        } else if (issueSubtypeNew === '') {
-            notifyWarn("Please select issue sub type");
-            setShowLoading(false);
-        } else if (updatedTicketData.contactName === "") {
+            return;
+        }
+
+        if (issuetypeNew === "Other" || issueSubtypeNew.includes("Other")) {
+            if (updatedTicketData.subject === "") {
+                notifyWarn("Please fill the ticket title");
+                setShowLoading(false);
+                return;
+            }
+        }
+
+        if (issuetypeNew !== "Other") {
+            if (issueSubtypeNew === '') {
+                notifyWarn("Please select issue sub type");
+                setShowLoading(false);
+                return;
+            }
+        }
+
+        if (updatedTicketData.contactName === "") {
             notifyWarn("Please fill the contact Name");
             setContactErr(true);
             setShowLoading(false);
@@ -448,7 +462,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 )}
 
                 {/* -------------------------------------Ticket subject-------------------------------------------  */}
-                {issueSubtypeNew.includes("Other") ? (
+                {issuetypeNew === "Other" || issueSubtypeNew.includes("Other") ? (
                     <TextField
                         label="Ticket Title"
                         variant="standard"
@@ -507,7 +521,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 {/* -------------------------------------Priority-------------------------------------------  */}
                 <FormControl fullWidth sx={{ mt: 2 }}>
                     <InputLabel>Priority</InputLabel>
-                    <Select label="Priority" value={issuePriority} onChange={(e)=>{setIssuePriority(e.target.value)}}>
+                    <Select label="Priority" value={issuePriority} onChange={(e) => { setIssuePriority(e.target.value) }}>
                         {priorityOptions?.map(element => (
                             <MenuItem key={element} value={element}>{element}</MenuItem>
                         ))}

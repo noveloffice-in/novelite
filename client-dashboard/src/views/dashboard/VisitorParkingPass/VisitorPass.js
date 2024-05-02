@@ -6,6 +6,7 @@ import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import { Typography } from '@mui/material';
 import PassFilter from './PassFilter';
 import PassTable from './PassTable';
+import VisitorPassTable from './VisitorPassTable';
 
 const BCrumb = [
     {
@@ -25,8 +26,11 @@ export default function VisitorPass() {
             {/* Filters */}
             {/* <PassFilter/> */}
 
-            {/* Table  */}
-            <PassTable/>
+            {/* Table Custom Pagination */}
+            {/* <PassTable/> */}
+
+            {/* Table Sales invoice */}
+            <VisitorPassTable/>
         </PageContainer>
     )
 }

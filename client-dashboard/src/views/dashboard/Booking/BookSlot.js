@@ -88,7 +88,22 @@ export default function BookSlot() {
         }
     };
 
-    //Time Change
+    // Helper function to convert time to minutes for comparison
+    const convertTimeToMinutes = (time) => {
+        if (fromTime && toTime) {
+            const [hourStr, minuteStr, ampm] = time.split(/:| /);
+            let hours = parseInt(hourStr, 10);
+            const minutes = parseInt(minuteStr, 10);
+            if (ampm === 'PM' && hours !== 12) {
+                hours += 12;
+            } else if (ampm === 'AM' && hours === 12) {
+                hours = 0;
+            }
+            return hours * 60 + minutes;
+        }
+    };
+
+    // Time Change
     const handleTimeChange = (newValue, change) => {
         const date = new Date(newValue);
         const hours = date.getHours();
@@ -96,12 +111,26 @@ export default function BookSlot() {
         const ampm = hours >= 12 ? 'PM' : 'AM';
         const formattedHours = hours % 12 || 12;
         const formattedTime = `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
-        if (change === 'from') {
-            setFromTime(formattedTime);
+
+        // Determine the source of change (from or to)
+        const sourceTime = change === 'from' ? fromTime : toTime;
+        const targetTime = change === 'from' ? formattedTime : fromTime;
+
+        const sourceTimeInMinutes = convertTimeToMinutes(sourceTime);
+        const targetTimeInMinutes = convertTimeToMinutes(targetTime);
+
+        // Check if target time is greater than source time
+        if (targetTimeInMinutes > sourceTimeInMinutes) {
+            setDisableBtn(false);
+            change === 'from' ? setFromTime(formattedTime) : setToTime(formattedTime);
         } else {
-            setToTime(formattedTime);
+            // Revert to previous value or set a default value
+            change === 'from' ? setFromTime(sourceTime) : setToTime(sourceTime);
+            setDisableBtn(true);
+            notifyWarn(change === 'from' ? 'From time must be less than to time' : 'To time must be greater than from time');
         }
     };
+
 
     //Submit
     const { createDoc, loading } = useFrappeCreateDoc();
@@ -125,21 +154,21 @@ export default function BookSlot() {
         }
 
         console.log('boookingData = ', boookingData);
-        if (date !== '' && fromTime !== '' && toTime !== '') {
-            createDoc('Room slots booking', boookingData)
-                .then(() => {
-                    notifySuccess("Your request was received successfully");
-                    setTimeout(() => {
-                        navigate('/location');
-                    }, 5000);
-                }).catch((err) => {
-                    console.log("inside catch " + JSON.stringify(err.message));
-                    console.err(err.message);
-                    notifyError(err);
-                })
-        } else {
-            notifyWarn("Please Fill all the details");
-        }
+        // if (date !== '' && fromTime !== '' && toTime !== '') {
+        //     createDoc('Room slots booking', boookingData)
+        //         .then(() => {
+        //             notifySuccess("Your request was received successfully");
+        //             setTimeout(() => {
+        //                 navigate('/location');
+        //             }, 5000);
+        //         }).catch((err) => {
+        //             console.log("inside catch " + JSON.stringify(err.message));
+        //             console.err(err.message);
+        //             notifyError(err);
+        //         })
+        // } else {
+        //     notifyWarn("Please Fill all the details");
+        // }
 
         // console.log(formObj);
         // console.log("Date = ", date);

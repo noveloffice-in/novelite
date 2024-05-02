@@ -7,6 +7,7 @@ import NovelTicketsList from './NovelTicketsList';
 import { useSelector } from 'react-redux';
 import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
 import io from 'socket.io-client';
+import { Box } from '@mui/system';
 
 const BCrumb = [
     {
@@ -110,11 +111,11 @@ export default function NovelTickets() {
     return (
         <PageContainer title="Tickets - Novel Office" description="this is Note page">
             <Breadcrumb title="Tickets" items={BCrumb} />
-            <ChildCard>
+            <Box>
                 <NovelTicketFilter userEmail={userEmail} filterLocation={filterLocation} />
                 <NovelTicketsList userEmail={userEmail} totalPages={totalPages} confirmedLocations={confirmedLocations}
                     filterLocation={filterLocation} setFilterLocation={setFilterLocation} />
-            </ChildCard>
+            </Box>
         </PageContainer>
     )
 }

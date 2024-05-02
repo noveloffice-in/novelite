@@ -43,7 +43,7 @@ export default function SingleTicketDetails() {
             priority={data.priority}
           />}
 
-        {data && <Right id={data.name} />}
+        {data && <Right id={data.name} statusTracker={data.issue_status_tracker} />}
       </Container>
       {data && <ChildCard>
         <NovelTicketChat id={data.name} title={data.subject} />
@@ -117,7 +117,7 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                   Issue Type
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {issueType}
+                  {issueType ? issueType : "No issue type"}
                 </Typography>
               </Grid>
               <Grid item lg={6} xs={12} mt={4}>
@@ -125,7 +125,7 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                   Issue Subtype
                 </Typography>
                 <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {issueSubtype}
+                  {issueSubtype ? issueSubtype : "No issue sub type"}
                 </Typography>
               </Grid>
 
@@ -192,7 +192,7 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
   )
 }
 
-function Right({ id }) {
+function Right({ id, statusTracker }) {
 
   //,------------------------------------------------------Fetching comment List----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
@@ -224,7 +224,7 @@ function Right({ id }) {
 
   return (
     <ChildCard sx={{ width: '50%' }}>
-      {data?.length !== 0 ? <Timeline
+      {statusTracker?.length !== 0 ? <Timeline
         sx={{
           [`& .${timelineOppositeContentClasses.root}`]: {
             flex: 0.2,
@@ -234,17 +234,17 @@ function Right({ id }) {
         <Box p={2}>
           <Typography variant="h4" sx={{ mt: "-1.3rem" }} mb={2}>Updates</Typography>
           <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
-            {data?.map((comment) => {
+            {statusTracker?.map((element) => {
               return (
                 <TimelineItem>
-                  <TimelineOppositeContent color="textSecondary">
-                    {formatDate(comment.creation)}
+                  <TimelineOppositeContent color="textSecondary" sx={{ fontSize: '0.6rem' }}>
+                    {formatDate(element.changed_on)}
                   </TimelineOppositeContent>
                   <TimelineSeparator>
                     <TimelineDot />
                     <TimelineConnector />
                   </TimelineSeparator>
-                  <TimelineContent>{messages(comment.content)}</TimelineContent>
+                  <TimelineContent>{messages(element.post_value)}</TimelineContent>
                 </TimelineItem>
               )
             })}

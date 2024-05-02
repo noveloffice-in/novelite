@@ -19,6 +19,9 @@ import {
   IconButton,
   CircularProgress,
   Rating,
+  Paper,
+  TableFooter,
+  TablePagination,
 } from '@mui/material';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -54,6 +57,9 @@ import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+//Notification sounds
+import closedTicketSound from '../../../notificationSounds/TicketClosedSound.wav'
+
 
 const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilterLocation, filterLocation }) => {
   const dispatch = useDispatch();
@@ -62,7 +68,6 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [toolTip, setToolTip] = useState(false);
-  const [start, setStart] = useState(0);
   const [submitTicket, setSubmitTicket] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   //rating
@@ -70,25 +75,24 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const [ticketId, setTicketId] = useState(0);
   const [ticketRatingSubject, setTicketRatingSubject] = useState('');
   const [ratingDescription, setRatingDescription] = useState('');
+  //Pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  //For Closed tickets Notification
   const isFirstRender = useRef(true);
+  const closedTicketAudio = useRef(null);
 
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
   const notifyError = (msg) => toast.error(msg, { toastId: "error" });
-
-  //-----------------------------------------------------------Pagination--------------------------------------------------//
-  const pageChange = (e, currentPage) => {
-    currentPage = currentPage - 1;
-    setStart(currentPage * 10);
-  }
 
   //-----------------------------------------------------------Fetch Tickets for Review Pop up-----------------------------------------------//
   const { data: closedTicketData } = useFrappeGetDocList('Issue', {
     fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'rating'],
     filters: [['raised_by', '=', userEmail], ['status', '=', 'Closed']],
     limit_start: 0,
-    limit: 10,
+    limit: 1,
     orderBy: {
       field: 'modified',
       order: 'desc',
@@ -103,6 +107,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         if (closedTicketData[0].review_show_popup === 0) {
           setTicketId(closedTicketData[0].name);
           handleClickOpen2(closedTicketData[0].name, closedTicketData[0].subject);
+          closedTicketAudio.current.play();
           // alert("show")
         }
       }
@@ -129,8 +134,8 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
     fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating'],
     filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
-    limit_start: start,
-    limit: 10,
+    limit_start: 0,
+    limit: 100000,
     orderBy: {
       field: 'creation',
       order: 'desc',
@@ -223,6 +228,21 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         notifyError(err);
       })
   }
+
+  //-----------------------------------------------------------Pagination--------------------------------------------------//
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tickets?.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
 
   //------------------------------------------------------Filtering-----------------------------------------------//
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
@@ -334,96 +354,137 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
         </Box>}
 
         {/* ---------------------------------------Table Start---------------------------------  */}
-        {data.length !== 0 && <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Ticket ID</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6">Ticket Name</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6">Status</Typography>
-                </TableCell>
-                {/* <TableCell>
+        {data?.length !== 0 &&
+          <Paper variant="outlined" sx={{ mt: 2 }}>
+            <TableContainer>
+              <Table
+                aria-label="custom sales invoice"
+                sx={{
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Ticket ID</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">Ticket Name</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">Status</Typography>
+                    </TableCell>
+                    {/* <TableCell>
                   <Typography variant="h6">Date</Typography>
                 </TableCell> */}
-                <TableCell>
-                  <Typography variant="h6">Rating</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tickets && tickets.map((ticket) => (
-                <TableRow key={ticket.name} hover>
-                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                    <Box>
-                      <Typography variant="h6" fontWeight="500" wrap>
-                        {ticket.name}
-                      </Typography>
+                    <TableCell>
+                      <Typography variant="h6">Rating</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
 
-                      {/* <Typography
-                        color="textSecondary"
-                        noWrap
-                        sx={{ maxWidth: '250px' }}
-                        variant="subtitle2"
-                        fontWeight="400"
-                      >
-                        {ticket.ticketDescription}
-                      </Typography> */}
-                    </Box>
-                  </TableCell>
-                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                    <Box>
-                      <Typography variant="h6" fontWeight="500" wrap >
-                        {ticket.subject}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
-                    <Chip
-                      sx={{
-                        backgroundColor:
-                          ticket.status === 'In-Progress'
-                            ? (theme) => theme.palette.success.light
-                            : ticket.status === 'Closed'
-                              ? (theme) => theme.palette.error.light
-                              : ticket.status === 'Pending'
-                                ? (theme) => theme.palette.warning.light
-                                : ticket.status === 'Pending',
+                <TableBody>
+                  {(rowsPerPage > 0
+                    ? tickets?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : tickets
+                  )?.map((ticket) => (
+                    <TableRow key={ticket.name} hover>
+                      <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                        <Box>
+                          <Typography variant="h6" fontWeight="500" wrap>
+                            {ticket.name}
+                          </Typography>
+
+                          {/* <Typography
+                                      color="textSecondary"
+                                      noWrap
+                                      sx={{ maxWidth: '250px' }}
+                                      variant="subtitle2"
+                                      fontWeight="400"
+                                    >
+                                      {ticket.ticketDescription}
+                                    </Typography> */}
+                        </Box>
+                      </TableCell>
+                      <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                        <Box>
+                          <Typography variant="h6" fontWeight="500" wrap >
+                            {ticket.subject}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
+                        <Chip
+                          sx={{
+                            backgroundColor:
+                              ticket.status === 'In-Progress'
+                                ? (theme) => theme.palette.success.light
+                                : ticket.status === 'Closed'
+                                  ? (theme) => theme.palette.error.light
+                                  : ticket.status === 'Pending'
+                                    ? (theme) => theme.palette.warning.light
+                                    : ticket.status === 'Re-Open'
+                                      ? (theme) => theme.palette.primary.light
+                                      : ticket.status === 'Re-Open',
+                          }}
+                          size="small"
+                          label={ticket.status}
+                        />
+                      </TableCell>
+                      {/* <TableCell>
+                                  <Typography>{ticket.creation.split(" ")[0]}</Typography>
+                                </TableCell> */}
+                      <TableCell >
+                        {/* <Badge color="secondary" badgeContent={0}> */}
+                        {ticket.rating > 0 ? <Rating
+                          name="read-only size-small"
+                          value={ticket.rating}
+                          size="small"
+                          readOnly
+                        /> : <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name, ticket.subject) }} >
+                          <Stack flexDirection='row' alignItems='center' gap={0.5}>
+                            Rate  <StarBorderPurple500Icon />
+                          </Stack>
+                        </Button>}
+                        {/* <CommentsDisabledOutlinedIcon /> */}
+                        {/* </Badge> */}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+
+                {/* ---------------------------------------Pagination---------------------------------  */}
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                      colSpan={6}
+                      count={data?.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      SelectProps={{
+                        inputprops: {
+                          'aria-label': 'rows per page',
+                        },
+                        native: true,
                       }}
-                      size="small"
-                      label={ticket.status}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActions}
                     />
-                  </TableCell>
-                  {/* <TableCell>
-                    <Typography>{ticket.creation.split(" ")[0]}</Typography>
-                  </TableCell> */}
-                  <TableCell >
-                    {/* <Badge color="secondary" badgeContent={0}> */}
-                    {ticket.rating > 0 ? <Rating
-                      name="read-only"
-                      value={ticket.rating}
-                      readOnly
-                    /> : <Button variant='outlined' disabled={ticket.status !== 'Closed'} onClick={() => { handleClickOpen2(ticket.name, ticket.subject) }} >
-                      <Stack flexDirection='row' alignItems='center' gap={0.5}>
-                        Rate  <StarBorderPurple500Icon />
-                      </Stack>
-                    </Button>}
-                    {/* <CommentsDisabledOutlinedIcon /> */}
-                    {/* </Badge> */}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>}
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+
+          </Paper>}
         {/* ---------------------------------------Table Ends---------------------------------  */}
-        <Box my={3} display="flex" justifyContent={'center'}>
-          <Pagination count={totalPages} color="primary" onChange={pageChange} />
-        </Box>
 
         {/* ---------------------------------------Raise Dialog Start---------------------------------- */}
         <Dialog
@@ -527,6 +588,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
           </DialogActions>
         </Dialog>
         {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
+        <audio ref={closedTicketAudio} src={closedTicketSound} />
       </Box>
     );
   }
@@ -534,3 +596,61 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 };
 
 export default NovelTicketsList;
+
+{/* ---------------------------------------Main Component Ends------------------------------------ */ }
+
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { useTheme } from '@emotion/react';
+
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
