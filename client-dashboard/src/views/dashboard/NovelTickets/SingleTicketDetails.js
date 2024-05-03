@@ -46,7 +46,7 @@ export default function SingleTicketDetails() {
         {data && <Right id={data.name} statusTracker={data.issue_status_tracker} />}
       </Container>
       {data && <ChildCard>
-        <NovelTicketChat id={data.name} title={data.subject} />
+        <NovelTicketChat id={data.name} title={data.subject} status={data.status} />
       </ChildCard>}
     </Container>
   )

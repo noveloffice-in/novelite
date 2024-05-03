@@ -149,12 +149,10 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
     const isFirstRender = useRef(true);
 
     useEffect(() => {
-        if (issuetypeNew !== "Other" && issueSubtypeNew.includes("Other")) {
-            setTicketData(prevState => ({
-                ...prevState,
-                subject: `${issuetypeNew} - ${issueSubtypeNew}`
-            }));
-        }
+        setTicketData(prevState => ({
+            ...prevState,
+            subject: `${issuetypeNew} - ${issueSubtypeNew}`
+        }));
     }, [issuetypeNew, issueSubtypeNew]);
 
     //For outer submit btn trigger
@@ -168,14 +166,26 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     //----------------------------------------------------------Issue types and subtypes fetch-----------------------------------------------//
     //Subtypes
-    const { data: issueSubTypesArray } = useFrappeGetDocList('Issue SubType', {
+    let { data: issueSubTypesArray } = useFrappeGetDocList('Issue SubType', {
         fields: ['name', 'issue_type'],
-        filters: [['issue_type', '=', issuetypeNew]],
+        filters: [['issue_type', 'in', `${issuetypeNew}, Other`]],
         orderBy: {
             field: 'name',
             order: 'asc',
         },
     });
+
+    if (issueSubTypesArray) {
+
+        const otherItems = issueSubTypesArray.filter(item => item.name === 'Other');
+
+        // Filter the items without name 'Other'
+        const nonOtherItems = issueSubTypesArray.filter(item => item.name !== 'Other');
+
+        // Concatenate the nonOtherItems array with otherItems array
+        issueSubTypesArray = [...nonOtherItems, ...otherItems];
+    }
+
 
     //----------------------------------------------------------Issue and Issue Type Dropdown change-----------------------------------------------//
     const handleIssueDropdownChange = (e) => {

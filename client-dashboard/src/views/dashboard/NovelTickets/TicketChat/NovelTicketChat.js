@@ -9,7 +9,7 @@ import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
 
-export default function NovelTicketChat({id, title}) {
+export default function NovelTicketChat({id, title, status}) {
 
   // let { id, title } = useParams();
   // console.log("Id is = ", id);
@@ -54,7 +54,7 @@ export default function NovelTicketChat({id, title}) {
         <Box flexGrow={1}>
           <TicketChatContent data={data} title={title} id={id} />
           <Divider />
-          <TicketChatSender id={id} mutate={mutate} />
+          {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
         </Box>
       </Box>
     // </PageContainer>

@@ -374,9 +374,9 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                     <TableCell>
                       <Typography variant="h6">Status</Typography>
                     </TableCell>
-                    {/* <TableCell>
-                  <Typography variant="h6">Date</Typography>
-                </TableCell> */}
+                    <TableCell>
+                      <Typography variant="h6">Chat</Typography>
+                    </TableCell>
                     <TableCell>
                       <Typography variant="h6">Rating</Typography>
                     </TableCell>
@@ -409,7 +409,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                       <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
                         <Box>
                           <Typography variant="h6" fontWeight="500" wrap >
-                            {ticket.subject}
+                            {ticket.subject.slice(0, 30)}...
                           </Typography>
                         </Box>
                       </TableCell>
@@ -431,9 +431,16 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                           label={ticket.status}
                         />
                       </TableCell>
-                      {/* <TableCell>
-                                  <Typography>{ticket.creation.split(" ")[0]}</Typography>
-                                </TableCell> */}
+                      <TableCell>
+                        {ticket.status === 'Closed' ?
+                          <CommentsDisabledOutlinedIcon />
+                          :
+                          <Badge color="secondary" badgeContent={1}>
+                            <CommentOutlinedIcon />
+                          </Badge>
+                        }
+                        {/* <Typography>{ticket.creation.split(" ")[0]}</Typography> */}
+                      </TableCell>
                       <TableCell >
                         {/* <Badge color="secondary" badgeContent={0}> */}
                         {ticket.rating > 0 ? <Rating
