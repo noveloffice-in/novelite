@@ -61,7 +61,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import closedTicketSound from '../../../notificationSounds/TicketClosedSound.wav'
 
 
-const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilterLocation, filterLocation }) => {
+const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, filterLocation, unReadMessages }) => {
   const dispatch = useDispatch();
 
   //Dialouge component
@@ -131,7 +131,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   };
 
   //-----------------------------------------------------------Fetch Tickets-----------------------------------------------//
-  const { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
+  let { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
     fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating'],
     filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
     limit_start: 0,
@@ -143,10 +143,22 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
   });
 
   var tickets = [];
+  let updatedData = [];
   if (data) {
     tickets = data;
+    updatedData = data.map(ticket => {
+      const matchingUnreadMessage = unReadMessages?.find(message => message.ticket === ticket.name);
+      if (matchingUnreadMessage) {
+        return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
+      } else {
+        return { ...ticket, unread_messages: 0 };
+      }
+    });
+
     dispatch(getTickets(data));
   }
+
+  console.log("updatedData = ", updatedData);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
@@ -385,8 +397,8 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
 
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? tickets?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : tickets
+                    ? updatedData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : updatedData
                   )?.map((ticket) => (
                     <TableRow key={ticket.name} hover>
                       <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
@@ -435,7 +447,7 @@ const NovelTicketsList = ({ userEmail, totalPages, confirmedLocations, setFilter
                         {ticket.status === 'Closed' ?
                           <CommentsDisabledOutlinedIcon />
                           :
-                          <Badge color="secondary" badgeContent={1}>
+                          <Badge color="secondary" badgeContent={ticket.unread_messages}>
                             <CommentOutlinedIcon />
                           </Badge>
                         }

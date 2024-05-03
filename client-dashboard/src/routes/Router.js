@@ -26,7 +26,7 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 // const EcomProductCheckout = Loadable(
 //   lazy(() => import('../views/apps/eCommerce/EcommerceCheckout')),
 // );
-// const UserProfile = Loadable(lazy(() => import('../views/apps/user-profile/UserProfile')));
+// const UserProfile = Loadable(lazy(() => import('../views/apps/user-profilep/UserProfile')));
 // const Followers = Loadable(lazy(() => import('../views/apps/user-profile/Followers')));
 // const Friends = Loadable(lazy(() => import('../views/apps/user-profile/Friends')));
 // const Gallery = Loadable(lazy(() => import('../views/apps/user-profile/Gallery')));
@@ -148,6 +148,10 @@ const Notifications = Loadable(lazy(() => import('../views/notification/Notifica
 const Upcoming = Loadable(lazy(() => import('../views/dashboard/Upcoming/Upcoming')));
 const UpcomingParent = Loadable(lazy(() => import('../views/dashboard/Upcoming/UpcomingParent')));
 
+//User Profile
+const UserProfile = Loadable(lazy(() => import('../views/apps/user-profile/UserProfile')));
+
+
 
 const Router = [
   {
@@ -187,6 +191,9 @@ const Router = [
       
       // Invoice 
       { path: '/invoice', exact: true, element: < Protected Component={SalesInvoice} /> },
+
+      //Profile
+      { path: '/user-profile', element: <UserProfile /> },
       
       //Not needed
       // { path: '/notifications', exact: true, element: < Protected Component={Notifications} /> },

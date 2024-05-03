@@ -20,8 +20,9 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import novelLogo from '../../../assets/images/logo/novel logo.webp'
+import { useFrappeUpdateDoc } from 'frappe-react-sdk';
 
-export default function TicketChatContent({ data, title }) {
+export default function TicketChatContent({ data, title, id }) {
 
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
 
@@ -43,6 +44,11 @@ export default function TicketChatContent({ data, title }) {
             str = str.toString();
         return str.replace(/(<([^>]+)>)/ig, '');
     }
+
+    //To update unread messages as read
+    // const { updateDoc } = useFrappeUpdateDoc();
+
+    // updateDoc('Issue Comment For Client', id, { unread_messages: 0 });
 
     return (
         <Box>
@@ -120,7 +126,7 @@ export default function TicketChatContent({ data, title }) {
                                                     >
                                                         <Box display="flex" flexDirection="row-reverse" alignItems="center">
                                                             <ListItemAvatar>
-                                                                <Avatar src={user1} style={{ width: '45px', height: '40px', marginBottom:'1rem', marginLeft:'0.5rem' }} />
+                                                                <Avatar src={user1} style={{ width: '45px', height: '40px', marginBottom: '1rem', marginLeft: '0.5rem' }} />
                                                             </ListItemAvatar>
                                                             <Box alignItems="flex-end" display="flex" flexDirection={'column'}>
                                                                 <Typography variant="body2" color="grey.400" mb={1}>

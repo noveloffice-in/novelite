@@ -15,6 +15,33 @@ import CustomToggle from '../../../../views/dashboard/CustomToggle';
 import { setUser } from '../../../../store/apps/userProfile/NovelProfileSlice';
 import Cookies from 'js-cookie';
 
+//Custom Profile Images
+import icon1 from 'src/assets/images/svgs/icon-account.svg';
+import icon2 from 'src/assets/images/svgs/icon-inbox.svg';
+import icon3 from 'src/assets/images/svgs/icon-tasks.svg';
+
+//Custom Profiles
+const customProfile = [
+  {
+    href: '/user-profile',
+    title: 'My Profile',
+    subtitle: 'Account Settings',
+    icon: icon1,
+  },
+  // {
+  //   href: '/apps/email',
+  //   title: 'My Inbox',
+  //   subtitle: 'Messages & Emails',
+  //   icon: icon2,
+  // },
+  // {
+  //   href: '/apps/notes',
+  //   title: 'My Tasks',
+  //   subtitle: 'To-do and Daily Tasks',
+  //   icon: icon3,
+  // },
+];
+
 const Profile = () => {
 
   const navigate = useNavigate();
@@ -139,7 +166,7 @@ const Profile = () => {
               <CustomToggle />
             </Stack>
             {/* <Divider /> */}
-            {/* {dropdownData.profile.map((profile) => (
+            {customProfile.map((profile) => (
               <Box key={profile.title}>
                 <Box sx={{ py: 2, px: 0 }} className="hover-text-primary">
                   <Link to={profile.href}>
@@ -190,7 +217,7 @@ const Profile = () => {
                   </Link>
                 </Box>
               </Box>
-            ))} */}
+            ))}
             <Box mt={2}>
               {/* <Box bgcolor="primary.light" p={3} mb={3} overflow="hidden" position="relative">
                 <Box display="flex" justifyContent="space-between">

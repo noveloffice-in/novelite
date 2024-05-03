@@ -5,7 +5,7 @@ import ChildCard from 'src/components/shared/ChildCard';
 import NovelTicketFilter from './NovelTicketFilter';
 import NovelTicketsList from './NovelTicketsList';
 import { useSelector } from 'react-redux';
-import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocCount, useFrappeGetDocList } from 'frappe-react-sdk';
 import io from 'socket.io-client';
 import { Box } from '@mui/system';
 
@@ -34,14 +34,16 @@ export default function NovelTickets() {
         }
     }, [userLocation, setFilterLocation]);
 
-    //--------------------------------------------------------Getting total count-------------------------------------------//
-    const { data } = useFrappeGetDocCount(
-        'Issue',
-        filterLocation === "ALL" ? ['raised_by', '=', userEmail] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
-        false,
-    );
-    const totalPages = Math.ceil(data / 10) || 1;
+    //--------------------------------------------------------Getting Unread Msgs count-------------------------------------------//
+    const { data: unReadMessages } = useFrappeGetDocList("Issue Comment For Client", {
+        fields: ['ticket', 'unread_messages'],
+        orderBy: {
+            field: 'modified',
+            order: 'desc',
+        }
+    })
 
+    console.log("unReadMessages = ", unReadMessages);
 
     //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
     // Fetch location of customers from leads
@@ -112,9 +114,17 @@ export default function NovelTickets() {
         <PageContainer title="Tickets - Novel Office" description="this is Note page">
             <Breadcrumb title="Tickets" items={BCrumb} />
             <Box>
-                <NovelTicketFilter userEmail={userEmail} filterLocation={filterLocation} />
-                <NovelTicketsList userEmail={userEmail} totalPages={totalPages} confirmedLocations={confirmedLocations}
-                    filterLocation={filterLocation} setFilterLocation={setFilterLocation} />
+                <NovelTicketFilter
+                    userEmail={userEmail}
+                    filterLocation={filterLocation}
+                />
+                <NovelTicketsList
+                    userEmail={userEmail}
+                    filterLocation={filterLocation}
+                    unReadMessages={unReadMessages}
+                    setFilterLocation={setFilterLocation}
+                    confirmedLocations={confirmedLocations}
+                />
             </Box>
         </PageContainer>
     )

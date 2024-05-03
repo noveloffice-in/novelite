@@ -4,15 +4,25 @@ import { Divider, Box } from '@mui/material';
 import PageContainer from '../../../../components/container/PageContainer';
 import AppCard from 'src/components/shared/AppCard';
 import TicketChatContent from '../TicketChatContent';
-import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
 
-export default function NovelTicketChat({id, title, status}) {
+export default function NovelTicketChat({ id, title, status }) {
 
   // let { id, title } = useParams();
   // console.log("Id is = ", id);
+
+  //To update unread messages as read
+  const { updateDoc } = useFrappeUpdateDoc();
+
+  useEffect(() => {
+    if (status !== 'Closed') {
+      updateDoc('Issue Comment For Client', id, { unread_messages: 0 });
+    }
+  }, [id])
+
 
   //------------------------------------------------------Fetching comment List----------------------------------------------//
   const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
@@ -27,36 +37,36 @@ export default function NovelTicketChat({id, title, status}) {
   });
   // console.log("DocInfo = ", data);
 
-  useFrappeDocTypeEventListener('Issue', (e) => {
-    console.log(e);
-  })
+  // useFrappeDocTypeEventListener('Issue', (e) => {
+  //   console.log(e);
+  // })
 
-  useFrappeDocumentEventListener('Issue', id, (d) => {
-    console.log("Event D = ", d);
-  })
+  // useFrappeDocumentEventListener('Issue', id, (d) => {
+  //   console.log("Event D = ", d);
+  // })
 
-  useFrappeEventListener('comment_added', (data) => {
-    console.log("Event = " + data);
-  })
+  // useFrappeEventListener('comment_added', (data) => {
+  //   console.log("Event = " + data);
+  // })
 
   return (
     // <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Left part */}
-        {/* ------------------------------------------- */}
+    <Box>
+      {/* ------------------------------------------- */}
+      {/* Left part */}
+      {/* ------------------------------------------- */}
 
-        {/*<TicketChatSidebar/>*/}
-        {/* ------------------------------------------- */}
-        {/* Right part */}
-        {/* ------------------------------------------- */}
+      {/*<TicketChatSidebar/>*/}
+      {/* ------------------------------------------- */}
+      {/* Right part */}
+      {/* ------------------------------------------- */}
 
-        <Box flexGrow={1}>
-          <TicketChatContent data={data} title={title} id={id} />
-          <Divider />
-          {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
-        </Box>
+      <Box flexGrow={1}>
+        <TicketChatContent data={data} title={title} id={id} />
+        <Divider />
+        {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
       </Box>
+    </Box>
     // </PageContainer>
   )
 }
