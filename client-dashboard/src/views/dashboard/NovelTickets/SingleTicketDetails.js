@@ -20,35 +20,60 @@ import { useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import NovelTicketChat from './TicketChat/NovelTicketChat';
 
+//Tab
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+
 export default function SingleTicketDetails() {
   const { id } = useParams();
 
   //.------------------------------------------------------Fetching TicketData----------------------------------------------//
   const { data } = useFrappeGetDoc('Issue', id);
 
-  console.log("Data = ", data);
+  //.-------------------------Tabs------------------------
+  const [value, setValue] = React.useState('1');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
 
   return (
-    <Container sx={{ width: '100%', p: 2 }}>
-      <Container sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%', p: 2 }}>
-        {data &&
-          <Left
-            id={data.name}
-            title={data.subject}
-            rating={data.rating}
-            ratingDescription={data.rating_description}
-            issueSubtype={data.custom_issue_subtype}
-            issueType={data.issue_type}
-            description={data.description}
-            priority={data.priority}
-          />}
+    <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2, width: '100%' }}>
 
-        {data && <Right id={data.name} statusTracker={data.issue_status_tracker} />}
-      </Container>
+      <ChildCard sx={{ minWidth: '50%' }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="Ticket Details" value="1" />
+              <Tab label="Updates" value="2" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            {data &&
+              <Left
+                id={data.name}
+                title={data.subject}
+                rating={data.rating}
+                ratingDescription={data.rating_description}
+                issueSubtype={data.custom_issue_subtype}
+                issueType={data.issue_type}
+                description={data.description}
+                priority={data.priority}
+              />}
+          </TabPanel>
+          <TabPanel value="2">
+            {data && <Right id={data.name} statusTracker={data.issue_status_tracker} />}
+          </TabPanel>
+        </TabContext>
+      </ChildCard>
+
       {data && <ChildCard>
         <NovelTicketChat id={data.name} title={data.subject} status={data.status} />
       </ChildCard>}
-    </Container>
+    </Box>
   )
 }
 
@@ -76,26 +101,21 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
   }
 
   return (
-    // <ChildCard sx={{ width: '50%' }}>
-    <ChildCard p={1}>
-      <Box>
-        <Typography variant="h4" pb={1}>Ticket Details</Typography>
-        <Box>
-          <Box >
-            <Box display="flex" alignItems="center">
-              <ConfirmationNumberTwoToneIcon sx={{ width: '70px', height: '70px' }} />
+    <Box >
+      <Box display="flex" alignItems="center">
+        <ConfirmationNumberTwoToneIcon sx={{ width: '70px', height: '70px' }} />
 
-              <Box sx={{ ml: 2 }}>
-                <Typography variant="h6" mb={0.5}>
-                  {id}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={0.5}>
-                  {title}
-                </Typography>
-              </Box>
-            </Box>
-            <Grid container>
-              {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
+        <Box sx={{ ml: 2 }}>
+          <Typography variant="h6" mb={0.5}>
+            {id}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={0.5}>
+            {title}
+          </Typography>
+        </Box>
+      </Box>
+      <Grid container>
+        {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Issue Type
                 </Typography>
@@ -103,7 +123,7 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                   {issueType}
                 </Typography>
               </Grid> */}
-              {/* <Grid item lg={6} xs={12} mt={4}>
+        {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Status
                 </Typography>
@@ -112,41 +132,41 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                 </Typography>
               </Grid> */}
 
-              <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Issue Type
-                </Typography>
-                <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {issueType ? issueType : "No issue type"}
-                </Typography>
-              </Grid>
-              <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Issue Subtype
-                </Typography>
-                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {issueSubtype ? issueSubtype : "No issue sub type"}
-                </Typography>
-              </Grid>
+        <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Issue Type
+          </Typography>
+          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+            {issueType ? issueType : "No issue type"}
+          </Typography>
+        </Grid>
+        <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Issue Subtype
+          </Typography>
+          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+            {issueSubtype ? issueSubtype : "No issue sub type"}
+          </Typography>
+        </Grid>
 
-              <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Priority
-                </Typography>
-                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {priority}
-                </Typography>
-              </Grid>
-              <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Description
-                </Typography>
-                <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {description ? description : "No ticket description"}
-                </Typography>
-              </Grid>
+        <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Priority
+          </Typography>
+          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+            {priority}
+          </Typography>
+        </Grid>
+        <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Description
+          </Typography>
+          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+            {description ? description : "No ticket description"}
+          </Typography>
+        </Grid>
 
-              {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
+        {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
                   Issue Subtype
                 </Typography>
@@ -154,7 +174,7 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                   {issueSubtype}
                 </Typography>
               </Grid> */}
-              {/* <Grid item lg={6} xs={12} mt={4}>
+        {/* <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
                   Creation date and time
                 </Typography>
@@ -163,32 +183,29 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
                   {formatDateTime(creation, 'Time')}
                 </Typography>
               </Grid> */}
-              {rating > 0 ?
-                <>
-                  <Grid item lg={6} xs={12} mt={4}>
-                    <Typography variant="body2" mb={0.5} color="text.secondary">
-                      Rating
-                    </Typography>
-                    <Rating
-                      name="read-only"
-                      value={rating}
-                      readOnly
-                    />
-                  </Grid>
-                  <Grid item lg={6} xs={12} mt={4}>
-                    <Typography variant="body2" color="text.secondary">
-                      Review Description
-                    </Typography>
-                    <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                      {ratingDescription ? ratingDescription : 'No review description'}
-                    </Typography>
-                  </Grid>
-                </> : null}
+        {rating > 0 ?
+          <>
+            <Grid item lg={6} xs={12} mt={4}>
+              <Typography variant="body2" mb={0.5} color="text.secondary">
+                Rating
+              </Typography>
+              <Rating
+                name="read-only"
+                value={rating}
+                readOnly
+              />
             </Grid>
-          </Box>
-        </Box>
-      </Box>
-    </ChildCard>
+            <Grid item lg={6} xs={12} mt={4}>
+              <Typography variant="body2" color="text.secondary">
+                Review Description
+              </Typography>
+              <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+                {ratingDescription ? ratingDescription : 'No review description'}
+              </Typography>
+            </Grid>
+          </> : null}
+      </Grid>
+    </Box>
   )
 }
 
@@ -223,7 +240,7 @@ function Right({ id, statusTracker }) {
   }
 
   return (
-    <ChildCard sx={{ width: '50%' }}>
+    <Box>
       {statusTracker?.length !== 0 ? <Timeline
         sx={{
           [`& .${timelineOppositeContentClasses.root}`]: {
@@ -231,9 +248,9 @@ function Right({ id, statusTracker }) {
           },
         }}
       >
-        <Box p={2}>
-          <Typography variant="h4" sx={{ mt: "-1.3rem" }} mb={2}>Updates</Typography>
-          <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '65vh', md: '65vh', lg: '60vh' } }}>
+        <Box>
+          {/* <Typography variant="h4" sx={{ mt: "-1.3rem" }} mb={2}>Updates</Typography> */}
+          <Scrollbar sx={{ overflow: 'auto', maxHeight: { xs: '60vh', md: '63vh', lg: '63vh' } }}>
             {statusTracker?.map((element) => {
               return (
                 <TimelineItem>
@@ -255,6 +272,6 @@ function Right({ id, statusTracker }) {
           <Typography variant='h4'>No Updates</Typography>
         </Stack>
       }
-    </ChildCard>
+    </Box>
   )
 }

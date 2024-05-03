@@ -32,9 +32,11 @@ export default function TicketChatContent({ data, title, id }) {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [data]);
+    // useEffect(() => {
+    //     scrollToBottom();
+    // }, [data]);
+
+    console.log("Data in chats= ", data);
 
     //--------------------------------------------------------Converting HTML to string-----------------------------------------//
     const messages = (str) => {
@@ -58,17 +60,18 @@ export default function TicketChatContent({ data, title, id }) {
                     {/* Header Part */}
                     {/* ------------------------------------------- */}
                     <Box>
-                        <Box display="flex" alignItems="center" p={2}>
-                            <ListItem dense disableGutters>
-                                {/* <Box component={Link} to='/tickets'>
+                        <Box display="flex" alignItems="center" pb={1}>
+                            {/* <ListItem dense disableGutters>
+                                <Box component={Link} to='/tickets'>
                                     <ListItemAvatar>
                                         <Avatar> <ArrowBackIcon /> </Avatar>
                                     </ListItemAvatar>
-                                </Box> */}
+                                </Box>
                                 <ListItemText
                                     primary={<Typography variant="h4">Chat</Typography>}
                                 />
-                            </ListItem>
+                            </ListItem> */}
+                            <Typography variant="h4">Chat</Typography>
                         </Box>
                         <Divider />
                     </Box>
@@ -83,7 +86,7 @@ export default function TicketChatContent({ data, title, id }) {
                                     {data?.map((comment, index) => {
                                         return (
                                             <Box key={index}>
-                                                {comment.comment_by !== fullName ? (
+                                                {comment.comment_by_name !== fullName ? (
                                                     < Box display="flex" alignItems="center" mb={2}>
                                                         <ListItemAvatar>
                                                             <img src={novelLogo} style={{ width: '45px', height: '45px' }} />
@@ -95,7 +98,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                         </ListItemAvatar>
                                                         <Box>
                                                             <Typography variant="caption" color="grey.400" mb={1}>
-                                                                {comment.comment_by}
+                                                                {comment.comment_by_name}
                                                             </Typography>
                                                             <Box
                                                                 my={0.5}
@@ -106,7 +109,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                                     maxWidth: '320px',
                                                                 }}
                                                             >
-                                                                {messages(comment.content)}
+                                                                {comment.message}
                                                             </Box>
                                                             <Typography variant="caption" color="grey.300" mb={1}>
                                                                 {data.creation}{' '}
@@ -141,7 +144,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                                         maxWidth: '320px',
                                                                     }}
                                                                 >
-                                                                    {messages(comment.content)}
+                                                                    {comment.message}
                                                                 </Box>
                                                                 <Typography variant="body2" color="grey.300" mb={1}>
                                                                     {data.creation}{' '}

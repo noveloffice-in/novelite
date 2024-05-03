@@ -408,3 +408,25 @@ def removeDataFromLeadsAndVisitorParking(vps_id):
     
     return "Done!"
 
+
+# ----------------------------------------Adding Data to Issue Comment For Client------------------------------------------------
+@frappe.whitelist(allow_guest=True)
+def addDataToIssueCommentForClient():
+    data = frappe.request.json
+
+    if data is None:
+        frappe.throw("No data provided")
+        
+    ticket_id = data.get('issue_id')
+    
+    doc = frappe.get_doc("Issue Comment For Client", ticket_id)
+    # for item in doc.all_amessages:
+    doc.append('all_amessages', {
+        'message': data.get('message'),
+        "comment_by_email": data.get('comment_by_email'),
+        # "comment_by_name": data.get('comment_by_name'),
+        "seen_by_customer": 1,
+    })
+    doc.save()
+    return "Message sent successfully"
+    

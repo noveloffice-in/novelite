@@ -23,7 +23,7 @@ import icon3 from 'src/assets/images/svgs/icon-tasks.svg';
 //Custom Profiles
 const customProfile = [
   {
-    href: '/user-profile',
+    href: '/customer-profile',
     title: 'My Profile',
     subtitle: 'Account Settings',
     icon: icon1,

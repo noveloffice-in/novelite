@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../../../../layouts/full/shared/breadcrumb/Breadcrumb';
-import { Divider, Box } from '@mui/material';
+import { Divider, Box, Typography } from '@mui/material';
 import PageContainer from '../../../../components/container/PageContainer';
 import AppCard from 'src/components/shared/AppCard';
 import TicketChatContent from '../TicketChatContent';
-import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeDocumentEventListener, useFrappeEventListener, useFrappeGetDoc, useFrappeGetDocList, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
@@ -25,16 +25,21 @@ export default function NovelTicketChat({ id, title, status }) {
 
 
   //------------------------------------------------------Fetching comment List----------------------------------------------//
-  const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
-    fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
-    filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
-    // limit_start: start,
-    limit: 10000,
-    orderBy: {
-      field: 'creation',
-      order: 'asc', //desc
-    },
-  });
+  // const { data, error, isValidating, mutate } = useFrappeGetDocList('Comment', {
+  //   fields: ['name', 'content', 'comment_email', 'creation', 'comment_by'],
+  //   filters: [['reference_doctype', '=', 'Issue'], ['reference_name', '=', id]],
+  //   // limit_start: start,
+  //   limit: 10000,
+  //   orderBy: {
+  //     field: 'creation',
+  //     order: 'asc', //desc
+  //   },
+  // });
+
+  //------------------------------------------------------getting Messages----------------------------------------------//
+  const { data: issueMessages, mutate } = useFrappeGetDoc('Issue Comment For Client', id);
+  console.log("issueMessages = ", issueMessages);
+
   // console.log("DocInfo = ", data);
 
   // useFrappeDocTypeEventListener('Issue', (e) => {
@@ -49,24 +54,29 @@ export default function NovelTicketChat({ id, title, status }) {
   //   console.log("Event = " + data);
   // })
 
-  return (
-    // <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
-    <Box>
-      {/* ------------------------------------------- */}
-      {/* Left part */}
-      {/* ------------------------------------------- */}
+  if (issueMessages) {
+    return (
+      // <PageContainer title="Tickets Chat - Novel Office" description="this is Chat page" id="ChatContainer" style={{ marginTop: '5px' }}>
+      <Box >
+        {/* ------------------------------------------- */}
+        {/* Left part */}
+        {/* ------------------------------------------- */}
 
-      {/*<TicketChatSidebar/>*/}
-      {/* ------------------------------------------- */}
-      {/* Right part */}
-      {/* ------------------------------------------- */}
+        {/*<TicketChatSidebar/>*/}
+        {/* ------------------------------------------- */}
+        {/* Right part */}
+        {/* ------------------------------------------- */}
 
-      <Box flexGrow={1}>
-        <TicketChatContent data={data} title={title} id={id} />
-        <Divider />
-        {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
+        <Box flexGrow={1}>
+          <TicketChatContent data={issueMessages.all_amessages} title={title} id={id} />
+          <Divider />
+          {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
+        </Box>
       </Box>
-    </Box>
-    // </PageContainer>
+      // </PageContainer>
+    )
+  } 
+  return (
+    <Typography> Chats not found for this Ticket</Typography>
   )
 }
