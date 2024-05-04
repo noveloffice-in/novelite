@@ -112,8 +112,8 @@ export default function TicketChatContent({ data, title, id }) {
                                                                 {comment.message}
                                                             </Box>
                                                             <Typography variant="caption" color="grey.300" mb={1}>
-                                                                {data.creation}{' '}
-                                                                {formatDistanceToNowStrict(new Date(comment.creation), {
+                                                                {/* {data.creation}{' '} */}
+                                                                {formatDistanceToNowStrict(new Date(comment.date_and_time ? comment.date_and_time : new Date()), {
                                                                     addSuffix: false,
                                                                 })}{' '}
                                                                 ago
@@ -147,8 +147,8 @@ export default function TicketChatContent({ data, title, id }) {
                                                                     {comment.message}
                                                                 </Box>
                                                                 <Typography variant="body2" color="grey.300" mb={1}>
-                                                                    {data.creation}{' '}
-                                                                    {formatDistanceToNowStrict(new Date(comment.creation), {
+                                                                    {/* {data.creation}{' '} */}
+                                                                    {formatDistanceToNowStrict(new Date(comment.date_and_time ? comment.date_and_time : new Date()), {
                                                                         addSuffix: false,
                                                                     })}{' '}
                                                                     ago

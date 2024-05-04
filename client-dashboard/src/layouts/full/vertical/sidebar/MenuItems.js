@@ -55,11 +55,15 @@ import {
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 
 import { uniqueId } from 'lodash';
+import { el } from 'date-fns/locale';
+
 
 const Menuitems = [
   {
     navlabel: true,
     subheader: 'Home',
+    permission: 0,
+    name: 'Home'
   },
 
   {
@@ -68,6 +72,8 @@ const Menuitems = [
     icon: GridViewOutlinedIcon,
     href: '/dashboard',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'Dashboard'
   },
   // {
   //   id: uniqueId(),
@@ -86,12 +92,16 @@ const Menuitems = [
   {
     navlabel: true,
     subheader: 'Services',
+    permission: 0,
+    name: 'Services'
   },
   {
     id: uniqueId(),
     title: 'Tickets',
     icon: IconTicket,
     href: '/tickets',
+    permission: 0,
+    name: 'Tickets'
   },
   {
     id: uniqueId(),
@@ -99,6 +109,8 @@ const Menuitems = [
     icon: IconFileDollar,
     href: '/invoice',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'Invoice'
   },
   {
     id: uniqueId(),
@@ -107,6 +119,8 @@ const Menuitems = [
     href: '/location',
     // chip: 'Upcoming',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'Bookings'
   },
   {
     id: uniqueId(),
@@ -115,10 +129,14 @@ const Menuitems = [
     href: '/Expansion_Downsize',
     // chip: 'Upcoming',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'Exp'
   },
   {
     navlabel: true,
     subheader: 'Upcoming',
+    permission: 0,
+    name: 'Upcoming'
   },
   {
     id: uniqueId(),
@@ -127,6 +145,8 @@ const Menuitems = [
     href: '/visitor_pass',
     // chip: 'i',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'VisitorPass'
   },
   {
     id: uniqueId(),
@@ -135,6 +155,8 @@ const Menuitems = [
     href: '/gatepass',
     chip: 'Upcoming',
     chipColor: 'secondary',
+    permission: 0,
+    name: 'GatePass'
   },
   // {
   //   id: uniqueId(),

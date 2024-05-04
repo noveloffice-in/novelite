@@ -68,7 +68,7 @@ export default function NovelTicketChat({ id, title, status }) {
         {/* ------------------------------------------- */}
 
         <Box flexGrow={1}>
-          <TicketChatContent data={issueMessages.all_amessages} title={title} id={id} />
+          <TicketChatContent data={issueMessages.all_messages} title={title} id={id} />
           <Divider />
           {status !== "Closed" && <TicketChatSender id={id} mutate={mutate} />}
         </Box>
