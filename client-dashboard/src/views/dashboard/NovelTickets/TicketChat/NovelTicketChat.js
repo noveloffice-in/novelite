@@ -38,7 +38,7 @@ export default function NovelTicketChat({ id, title, status }) {
 
   //------------------------------------------------------getting Messages----------------------------------------------//
   const { data: issueMessages, mutate } = useFrappeGetDoc('Issue Comment For Client', id);
-  console.log("issueMessages = ", issueMessages);
+  // console.log("issueMessages = ", issueMessages);
 
   // console.log("DocInfo = ", data);
 

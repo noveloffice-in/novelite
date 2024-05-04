@@ -36,7 +36,7 @@ export default function NovelTickets() {
 
     //--------------------------------------------------------Getting Unread Msgs count-------------------------------------------//
     const { data: unReadMessages } = useFrappeGetDocList("Issue Comment For Client", {
-        fields: ['ticket', 'unread_messages'],
+        fields: ['ticket_id', 'unread_messages'],
         orderBy: {
             field: 'modified',
             order: 'desc',

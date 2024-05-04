@@ -24,6 +24,8 @@ import {
 } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
 import ProfileTabs from './ProfileTabs';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Banner = () => {
   const ProfileImage = styled(Box)(() => ({
@@ -36,25 +38,20 @@ const Banner = () => {
     justifyContent: 'center',
     margin: '0 auto',
   }));
-  const [isLoading, setLoading] = React.useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+  const companyName = useSelector((state) => state.novelprofileReducer.companyName);
+  const userImage = useSelector((state) => state.novelprofileReducer.userImage);
+
+console.log("userEmail = ", userEmail);
+console.log("companyName = ", companyName);
+console.log("userImage = ", userImage);
+
 
   return (
     <>
       <BlankCard>
-        {isLoading ? (
-          <>
-            <Skeleton variant="square" animation="wave" width="100%" height={90}></Skeleton>
-          </>
-        ) : (
-          <CardMedia component="img" image={profilecover} alt={profilecover} width="100%" height={90} />
-        )}
+        <CardMedia component="img" image={profilecover} alt={profilecover} width="100%" height={90} />
         <Grid container spacing={0} justifyContent="center" alignItems="center">
           {/* Post | Followers | Following */}
           <Grid
@@ -72,7 +69,7 @@ const Banner = () => {
             }}
           >
             <Stack direction="row" textAlign="center" justifyContent="center" gap={6} m={3}>
-              <Box>
+              {/* <Box>
                 <Typography color="text.secondary">
                   <IconFileDescription width="20" />
                 </Typography>
@@ -93,7 +90,7 @@ const Banner = () => {
                 <Typography color="textSecondary" variant="h6" fontWeight={400}>
                   Followers
                 </Typography>
-              </Box>
+              </Box> */}
               <Box>
                 <Typography color="text.secondary">
                   <IconUserCheck width="20" />
@@ -102,7 +99,7 @@ const Banner = () => {
                   2,659
                 </Typography>
                 <Typography color="textSecondary" variant="h6" fontWeight={400}>
-                  Following
+                  users
                 </Typography>
               </Box>
             </Stack>
@@ -145,10 +142,10 @@ const Banner = () => {
                 </ProfileImage>
                 <Box mt={1}>
                   <Typography fontWeight={600} variant="h5">
-                    Mathew Anderson
+                    {companyName}
                   </Typography>
                   <Typography color="textSecondary" variant="h6" fontWeight={400}>
-                    Designer
+                    {userEmail}
                   </Typography>
                 </Box>
               </Box>
@@ -169,7 +166,7 @@ const Banner = () => {
             }}
           >
             <Stack direction={'row'} gap={2} alignItems="center" justifyContent="center" my={2}>
-              <Fab size="small" color="primary" sx={{ backgroundColor: '#1877F2' }}>
+              {/* <Fab size="small" color="primary" sx={{ backgroundColor: '#1877F2' }}>
                 <IconBrandFacebook size="16" />
               </Fab>
               <Fab size="small" color="primary" sx={{ backgroundColor: '#1DA1F2' }}>
@@ -180,9 +177,9 @@ const Banner = () => {
               </Fab>
               <Fab size="small" color="error" sx={{ backgroundColor: '#CD201F' }}>
                 <IconBrandYoutube size="18" />
-              </Fab>
-              <Button color="primary" variant="contained">
-                Add To Story
+              </Fab> */}
+              <Button color="primary" variant="contained" component={Link} to={`/dashboard`}>
+                Home
               </Button>
             </Stack>
           </Grid>

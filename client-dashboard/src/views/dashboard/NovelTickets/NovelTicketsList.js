@@ -147,7 +147,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   if (data) {
     tickets = data;
     updatedData = data.map(ticket => {
-      const matchingUnreadMessage = unReadMessages?.find(message => message.ticket === ticket.name);
+      const matchingUnreadMessage = unReadMessages?.find(message => message.ticket_id === ticket.name);
       if (matchingUnreadMessage) {
         return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
       } else {
@@ -158,7 +158,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
     dispatch(getTickets(data));
   }
 
-  console.log("updatedData = ", updatedData);
+  // console.log("updatedData = ", updatedData);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
@@ -443,7 +443,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
                           label={ticket.status}
                         />
                       </TableCell>
-                      <TableCell>
+                      <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
                         {ticket.status === 'Closed' ?
                           <CommentsDisabledOutlinedIcon />
                           :

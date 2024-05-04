@@ -150,6 +150,7 @@ const UpcomingParent = Loadable(lazy(() => import('../views/dashboard/Upcoming/U
 
 //User Profile
 const CustomerProfile = Loadable(lazy(() => import('../views/dashboard/CustomerProfile/CustomerProfile')));
+const UsersList = Loadable(lazy(() => import('../views/dashboard/CustomerProfile/UsersList')));
 
 
 const Router = [
@@ -193,6 +194,7 @@ const Router = [
 
       //Profile
       { path: '/customer-profile', element: <CustomerProfile /> },
+      { path: '/users-list', element: <UsersList /> },
 
       //Not needed
       // { path: '/notifications', exact: true, element: < Protected Component={Notifications} /> },
