@@ -8,7 +8,8 @@ const initialState = {
   location: "",
   userImage: "",
   leadsID:[],
-  notificationCount : 0
+  notificationCount : 0,
+  adminStatus: 'Non-Admin'
 };
 
 export const NovelProfileSlice = createSlice({
@@ -38,10 +39,13 @@ export const NovelProfileSlice = createSlice({
     },
     setNotificationCount: (state, action) => {
       state.notificationCount = action.payload;
+    },
+    setAdminStatus: (state, action) => {
+      state.adminStatus = action.payload;
     }
   },
 });
 
-export const { setUser, setUserEmail, setAccountType, setLocation, setCompanyName, setUserImage, setLeadsID, setNotificationCount } = NovelProfileSlice.actions;
+export const { setUser, setUserEmail, setAccountType, setLocation, setCompanyName, setUserImage, setLeadsID, setNotificationCount, setAdminStatus } = NovelProfileSlice.actions;
 
 export default NovelProfileSlice.reducer

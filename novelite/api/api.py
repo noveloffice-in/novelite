@@ -417,15 +417,73 @@ def addDataToIssueCommentForClient():
     if data is None:
         frappe.throw("No data provided")
         
-    ticket_id = data.get('issue_id')
+    try: 
+        ticket_id = data.get('issue_id')
+        
+        doc = frappe.get_doc("Issue Comment For Client", ticket_id)
+        # for item in doc.all_amessages:
+        doc.append('all_messages', {
+            'message': data.get('message'),
+            "comment_by_email": data.get('comment_by_email'),
+            "seen_by_customer": 1,
+        })
+        doc.save()
+        return "Message sent successfully"
+    except Exception as e:
+        frappe.log_error(_("Error in message sending: ").format(str(e)))
+        frappe.response["http_status_code"] = 500
+        return {"error": str(e)}
+
+# ----------------------------------------Getting App Users and permissions------------------------------------------------
+@frappe.whitelist()
+def get_document_by_email(user_email):
+    try:
+        document = frappe.get_doc("App Users", {"user": user_email})
+        return document
+    except Exception as e:
+        frappe.log_error(_("Error in fetching document by email: {0}").format(str(e)))
+        frappe.response["http_status_code"] = 500
+        return {"error": str(e)}
+
+
+# ----------------------------------------Getting Members and their permissions------------------------------------------------
+# Define a custom endpoint using the `frappe.whitelist` decorator
+@frappe.whitelist(allow_guest=True)
+def get_user_permissions_by_email(user_email):
+    try:
+        # Query the document based on the user email
+        app_user = frappe.get_doc("App Users", {"user": user_email})
+        
+        # Initialize a list to store user data
+        user_permissions = []
+        
+        if app_user.user_type == "Admin":
+            # Iterate through members
+            for member in app_user.get("members"):
+                # Fetch user data from app users
+                user = frappe.get_doc("App Users", member.user)
+                
+                # Initialize a list to store permissions for the current member
+                permissions_list = []
+                
+                # Iterate through permissions of the current member
+                for permission in user.permissions:
+                    permissions_list.append({
+                        "permittedComponent": permission.permissions,
+                    })
+                
+                # Append username and permissions to the list
+                user_permissions.append({
+                    "username": user.name,
+                    "permissions": permissions_list
+                })
+            
+            # Return the user data as a JSON response
+            return user_permissions
     
-    doc = frappe.get_doc("Issue Comment For Client", ticket_id)
-    # for item in doc.all_amessages:
-    doc.append('all_messages', {
-        'message': data.get('message'),
-        "comment_by_email": data.get('comment_by_email'),
-        "seen_by_customer": 1,
-    })
-    doc.save()
-    return "Message sent successfully"
-    
+    except Exception as e:
+        # Handle any errors
+        frappe.log_error(_("Error in fetching user permissions by email: {0}").format(str(e)))
+        frappe.response["http_status_code"] = 500
+        return {"error": str(e)}
+

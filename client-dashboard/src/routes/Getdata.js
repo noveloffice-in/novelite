@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAccountType, setCompanyName, setLeadsID, setUserImage } from '../store/apps/userProfile/NovelProfileSlice';
+import { setAccountType, setAdminStatus, setCompanyName, setLeadsID, setUserImage } from '../store/apps/userProfile/NovelProfileSlice';
 
 export default function Getdata(props) {
     const { Component } = props;
@@ -24,6 +24,12 @@ export default function Getdata(props) {
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
 
     const dispatch = useDispatch();
+
+    //Getting data from App user to set wheather user is Admin / Non-Admin
+    const {data: appUserData} = useFrappeGetDoc('App Users', userEmail);
+    if(appUserData){
+        dispatch(setAdminStatus(appUserData.user_type));
+    }
 
     //Getting the user ndetails using the cookies
     let c = Cookies.set(getUserCookie);

@@ -143,10 +143,9 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   });
 
   var tickets = [];
-  let updatedData = [];
   if (data) {
-    tickets = data;
-    updatedData = data.map(ticket => {
+    // tickets = data;
+    tickets = data.map(ticket => {
       const matchingUnreadMessage = unReadMessages?.find(message => message.ticket_id === ticket.name);
       if (matchingUnreadMessage) {
         return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
@@ -158,7 +157,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
     dispatch(getTickets(data));
   }
 
-  // console.log("updatedData = ", updatedData);
+  // console.log("tickets = ", tickets);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
@@ -397,8 +396,8 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
 
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? updatedData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : updatedData
+                    ? tickets?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : tickets
                   )?.map((ticket) => (
                     <TableRow key={ticket.name} hover>
                       <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>

@@ -41,12 +41,9 @@ const Banner = () => {
 
   const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
+  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
   const userImage = useSelector((state) => state.novelprofileReducer.userImage);
-
-console.log("userEmail = ", userEmail);
-console.log("companyName = ", companyName);
-console.log("userImage = ", userImage);
-
+  const adminStatus = useSelector((state)=>state.novelprofileReducer.adminStatus);
 
   return (
     <>
@@ -92,7 +89,10 @@ console.log("userImage = ", userImage);
                 </Typography>
               </Box> */}
               <Box>
-                <Typography color="text.secondary">
+                <Button color="primary" variant="contained" component={Link} to={`/dashboard`}>
+                  Go to Dashboard
+                </Button>
+                {/* <Typography color="text.secondary">
                   <IconUserCheck width="20" />
                 </Typography>
                 <Typography variant="h4" fontWeight="600">
@@ -100,7 +100,7 @@ console.log("userImage = ", userImage);
                 </Typography>
                 <Typography color="textSecondary" variant="h6" fontWeight={400}>
                   users
-                </Typography>
+                </Typography> */}
               </Box>
             </Stack>
           </Grid>
@@ -142,7 +142,7 @@ console.log("userImage = ", userImage);
                 </ProfileImage>
                 <Box mt={1}>
                   <Typography fontWeight={600} variant="h5">
-                    {companyName}
+                    {fullName}
                   </Typography>
                   <Typography color="textSecondary" variant="h6" fontWeight={400}>
                     {userEmail}
@@ -165,7 +165,7 @@ console.log("userImage = ", userImage);
               },
             }}
           >
-            <Stack direction={'row'} gap={2} alignItems="center" justifyContent="center" my={2}>
+            {adminStatus === 'Admin' && <Stack direction={'row'} gap={2} alignItems="center" justifyContent="center" my={2}>
               {/* <Fab size="small" color="primary" sx={{ backgroundColor: '#1877F2' }}>
                 <IconBrandFacebook size="16" />
               </Fab>
@@ -179,9 +179,18 @@ console.log("userImage = ", userImage);
                 <IconBrandYoutube size="18" />
               </Fab> */}
               <Button color="primary" variant="contained" component={Link} to={`/dashboard`}>
-                Home
+                Add User
               </Button>
-            </Stack>
+              <Box>
+                <Typography variant="h4" fontWeight="600">
+                  2,659
+                </Typography>
+                <Typography color="textSecondary" variant="h6" fontWeight={400}>
+                  users
+                </Typography>
+              </Box>
+            </Stack>}
+
           </Grid>
         </Grid>
         {/**TabbingPart**/}

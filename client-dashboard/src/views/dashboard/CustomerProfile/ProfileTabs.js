@@ -1,26 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import { IconHeart, IconPhoto, IconUserCircle } from '@tabler/icons';
 import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProfileTabs = () => {
   const location = useLocation();
   const [value, setValue] = React.useState(location.pathname);
+  const adminStatus = useSelector((state) => state.novelprofileReducer.adminStatus);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  
   const ProfileTabs = [
     {
       label: 'Profile',
       icon: <IconUserCircle size="20" />,
       to: '/customer-profile',
     },
-    {
+  ];
+
+  if (adminStatus === 'Admin') {
+    let usersOption = {
       label: 'Users',
       icon: <IconUserCircle size="20" />,
       to: '/users-list',
     }
-  ];
+    ProfileTabs.push(usersOption);
+  }
+
 
   return (
     <Box sx={{ backgroundColor: (theme) => theme.palette.grey[100] }}>

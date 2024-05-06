@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Menuitems from './MenuItems';
 import { useLocation } from 'react-router';
 import { Box, List, useMediaQuery } from '@mui/material';
@@ -10,38 +10,37 @@ import NavGroup from './NavGroup/NavGroup';
 import { uniqueId } from 'lodash';
 import { IconFileDollar, IconTicket } from '@tabler/icons';
 import axios from 'axios';
+import { useFrappeGetDoc } from 'frappe-react-sdk';
 
 const SidebarItems = () => {
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const pathDirect = pathname;
+  const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
   const pathWithoutLastPart = pathname.slice(0, pathname.lastIndexOf('/'));
   const customizer = useSelector((state) => state.customizer);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const hideMenu = lgUp ? customizer.isCollapse && !customizer.isSidebarHover : '';
-  const dispatch = useDispatch();
-
   const [menuChanged, setMenuChanged] = useState(false);
 
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+   //-------------------------------------------------Fetching App Users and permissions-----------------------------------------//
   const fetchData = () => {
-    axios.get('https://jsonplaceholder.typicode.com/posts')
+    axios.post('/api/method/novelite.api.api.get_document_by_email', { user_email: userEmail })
       .then((res) => {
-        res.data.forEach(element => {
-          if (element.id === 2) {
-            Menuitems.forEach(ele => {
-              if (ele.name !== 'Invoice' && ele.name !==  "Tickets" && ele.name !== 'Bookings') {
-                ele.permission = 1;
-                console.log("inside ", ele.name);
-              }
-            })
-          }
-        });
+        res.data.message.permissions.forEach((element) => {
+          Menuitems.forEach((component) => {
+            if (component.name === element.permissions) {
+              component.permission = 1;
+            }
+          })
+        })
         setMenuChanged(true)
       })
   }
-
-  fetchData();
-  console.log("Fetch data = ", Menuitems);
-
 
   // if(fullName === "Guest"){
   //   Menuitems.splice(3,1);

@@ -59,13 +59,12 @@ import { el } from 'date-fns/locale';
 
 
 const Menuitems = [
-  {
-    navlabel: true,
-    subheader: 'Home',
-    permission: 0,
-    name: 'Home'
-  },
-
+  // {
+  //   navlabel: true,
+  //   subheader: 'Home',
+  //   permission: 0,
+  //   name: 'Home'
+  // },
   {
     id: uniqueId(),
     title: 'Dashboard',
@@ -89,12 +88,12 @@ const Menuitems = [
   //   icon: IconShoppingCart,
   //   href: '/dashboards/ecommerce',
   // },
-  {
-    navlabel: true,
-    subheader: 'Services',
-    permission: 0,
-    name: 'Services'
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: 'Services',
+  //   permission: 0,
+  //   name: 'Services'
+  // },
   {
     id: uniqueId(),
     title: 'Tickets',
@@ -130,7 +129,7 @@ const Menuitems = [
     // chip: 'Upcoming',
     chipColor: 'secondary',
     permission: 0,
-    name: 'Exp'
+    name: 'Expansion/Downsize'
   },
   {
     navlabel: true,
