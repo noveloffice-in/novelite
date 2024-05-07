@@ -87,7 +87,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         contactNumber: "",
         alternateEmail: "",
         customer: customerName,
-        email: customerEmailId,
+        email: '',
         file: "",
         fileName: "",
         ventNumber: "",

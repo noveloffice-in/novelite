@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PageContainer from '../../../components/container/PageContainer'
-import { Grid } from '@mui/material'
+import { Button, FormControlLabel, Grid, TextField } from '@mui/material'
 import Banner from './Banner'
 import { useSelector } from 'react-redux';
-import { useFrappeGetDoc } from 'frappe-react-sdk';
+import { useFrappeGetDoc, useFrappePostCall } from 'frappe-react-sdk';
 import axios from 'axios';
 
 //Table 
@@ -34,7 +34,15 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import Checkbox from '@mui/material/Checkbox';
+
+//Dialouge
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Stack } from '@mui/system';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function UsersList() {
 
@@ -42,18 +50,69 @@ export default function UsersList() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [usersList, setUsersList] = useState([]);
     const [pending, setPending] = useState(true);
+    const [permissionChange, setPermissionChange] = useState(false);
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+    const [user, setUser] = useState('');
 
+    const [selectedPermissions, setSelectedPermissions] = useState([]);
+    const [permissionList, setPermissionList] = useState([
+        { permittedComponent: 'Dashboard' },
+        { permittedComponent: 'Tickets' },
+        { permittedComponent: 'Invoice' },
+        { permittedComponent: 'Bookings' },
+        { permittedComponent: 'Expansion/Downsize' },
+    ]);
+
+    //-----------------------------------------------------------Fetching user permission-----------------------------------------------//
     useEffect(() => {
         axios.post('/api/method/novelite.api.api.get_user_permissions_by_email', { user_email: userEmail })
             .then((res) => {
                 setUsersList(res.data.message);
                 setPending(false);
-                console.log(res.data.message);
+                console.log("Data = ", res.data.message);
             })
     }, [])
 
-    // Avoid a layout jump when reaching the last page with empty rows.
+    //-----------------------------------------------------------Permission changes-----------------------------------------------//
+    const handleCheckboxChange = (event, permission) => {
+        const isChecked = event.target.checked;
+        setPermissionChange(true);
+        if (isChecked) {
+            // If checkbox is checked, add permission to selectedPermissions
+            setSelectedPermissions(prevPermissions => [...prevPermissions, { permittedComponent: permission }]);
+        } else {
+            // If checkbox is unchecked, remove permission from selectedPermissions
+            setSelectedPermissions(prevPermissions => prevPermissions.filter(item => item.permittedComponent !== permission));
+        }
+    };
+    
+    //Permisson Changes
+    const handlePermissionSubmit = ()=>{
+        let sendingData = { user_email: user, permissions_array:selectedPermissions }
+        console.log("selectedPermissions = ", selectedPermissions);
+        axios.post('/api/method/novelite.api.api.update_permissions', sendingData)
+        .then((res)=>{
+            console.log(res);
+        })
+    }
+    
+    //-----------------------------------------------------------Dialouge-----------------------------------------------//
+    //Dialouge component
+    const [open1, setOpen1] = useState(false);
+    
+    //Dialog for rise ticket
+    const handleClickOpen = (permissionsArr, username) => {
+        setOpen1(true);
+        setUser(username);
+        setPermissionChange(false);
+        setSelectedPermissions(permissionsArr);
+    };
+    
+    const handleClose1 = () => {
+        setOpen1(false);
+    };
+    
+    //-----------------------------------------------------------Pagination-----------------------------------------------//
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersList?.length) : 0;
 
     const handleChangePage = (event, newPage) => {
@@ -73,125 +132,128 @@ export default function UsersList() {
                 </Grid>
 
                 <Box pt={1}>
-                {!pending && <Paper variant="outlined">
-
-                    <TableContainer>
-
-                        <Table
-                            aria-label="custom sales invoice"
-                            sx={{
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography variant="h6">User</Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="h6">Permissions</Typography>
-                                    </TableCell>
-
-                                    {/* <TableCell>
-                                        <Typography variant="h6">Due Date</Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="h6">Location</Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="h6">Status</Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="h6">Download</Typography>
-                                    </TableCell> */}
-                                </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                                {(rowsPerPage > 0
-                                    ? usersList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : usersList
-                                )?.map((row) => (
-                                    <TableRow key={row.username}>
+                    {!pending && <Paper variant="outlined">
+                        <TableContainer>
+                            <Table
+                                aria-label="custom sales invoice"
+                                sx={{
+                                    whiteSpace: 'nowrap',
+                                }}
+                            >
+                                <TableHead>
+                                    <TableRow>
                                         <TableCell>
-                                            <Typography variant="h6">{row.username}</Typography>
+                                            <Typography variant="h6">Users</Typography>
                                         </TableCell>
-
                                         <TableCell>
-                                            {
-                                                row.permissions.map((permission) => {
-                                                    return (
-                                                        <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent}>
-                                                            {permission.permittedComponent}
-                                                        </Typography>
-                                                    )
-                                                })
-                                            }
+                                            <Typography variant="h6">Permissions</Typography>
                                         </TableCell>
-
-                                        {/* <TableCell>
-                                            <Typography variant="h6">{row.due_date}</Typography>
-                                        </TableCell>
-
                                         <TableCell>
-                                            <Typography color="textSecondary" variant="h6" fontWeight="400">
-                                                {row.location === null ? "----" : row.location}
-                                            </Typography>
+                                            <Typography variant="h6">Action</Typography>
                                         </TableCell>
-
-                                        <TableCell>
-                                            <Chip color={statusFilter === 'Paid' ? 'success' : statusFilter === 'Credit Note' ? 'error' : statusFilter === 'Pending' ? 'primary' : 'secondary'}
-                                                sx={{
-                                                    borderRadius: '6px',
-                                                }}
-                                                size="small"
-                                                label={statusFilter === 'All' ? (row.status === "Credit Note Issued" ? "Paid" : row.status === "Return" ? "Credit Note" : row.status) : statusFilter}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell >
-                                            <Box color='secondary' marginLeft='1.5rem' component={Link} target='_blank' href={`http://${window.location.hostname}/api/method/frappe.utils.print_format.download_pdf?doctype=Sales Invoice&name=${row.name}&format=Business Center&no_letterhead=1&letterhead=No Letterhead &settings={}&_lang=en-US`}>
-                                                <FileDownloadOutlinedIcon />
-                                            </Box>
-                                        </TableCell> */}
                                     </TableRow>
-                                ))}
+                                </TableHead>
 
-                                {emptyRows > 0 && (
-                                    <TableRow style={{ height: 53 * emptyRows }}>
-                                        <TableCell colSpan={6} />
+                                <TableBody>
+                                    {(rowsPerPage > 0
+                                        ? usersList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : usersList
+                                    )?.map((row) => (
+                                        <TableRow key={row.username}>
+                                            <TableCell>
+                                                <Typography variant="h6">{row.username}</Typography>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                {
+                                                    row.permissions.map((permission) => {
+                                                        return (
+                                                            <>
+                                                                <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent}>
+                                                                    {permission.permittedComponent}
+                                                                </Typography>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button variant='outlined' onClick={() => { handleClickOpen(row.permissions, row.username) }}>Edit</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+
+                                    {emptyRows > 0 && (
+                                        <TableRow style={{ height: 53 * emptyRows }}>
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+
+                                <TableFooter>
+                                    <TableRow>
+                                        <TablePagination
+                                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                            colSpan={6}
+                                            count={usersList?.length}
+                                            rowsPerPage={rowsPerPage}
+                                            page={page}
+                                            SelectProps={{
+                                                inputprops: {
+                                                    'aria-label': 'rows per page',
+                                                },
+                                                native: true,
+                                            }}
+                                            onPageChange={handleChangePage}
+                                            onRowsPerPageChange={handleChangeRowsPerPage}
+                                            ActionsComponent={TablePaginationActions}
+                                        />
                                     </TableRow>
-                                )}
-                            </TableBody>
+                                </TableFooter>
 
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                        colSpan={6}
-                                        count={usersList?.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        SelectProps={{
-                                            inputprops: {
-                                                'aria-label': 'rows per page',
-                                            },
-                                            native: true,
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                        ActionsComponent={TablePaginationActions}
-                                    />
-                                </TableRow>
-                            </TableFooter>
+                            </Table>
 
-                        </Table>
-
-                    </TableContainer>
-                </Paper>}
+                        </TableContainer>
+                    </Paper>}
                 </Box>
 
             </Grid>
+            {/* ---------------------------------------Raise Dialog Start---------------------------------- */}
+            <Dialog
+                fullWidth
+                maxWidth='sm'
+                open={open1}
+                onClose={handleClose1}
+            >
+                <DialogTitle>
+                    <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+                        <Typography variant='h5'>Edit Permissions</Typography>
+                        <IconButton onClick={handleClose1} aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    </Stack>
+                </DialogTitle>
+                <DialogContent>
+                    {permissionList.map((element) => {
+                        const isChecked = selectedPermissions.some((ele) => ele.permittedComponent === element.permittedComponent);
+                        return (
+                            <FormControlLabel
+                                key={element.permittedComponent}
+                                control={<Checkbox checked={isChecked} />}
+                                label={element.permittedComponent}
+                                onChange={(event) => handleCheckboxChange(event, element.permittedComponent)}
+                            />
+                        );
+                    })}
+                </DialogContent>
+                <DialogActions>
+                    <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
+                        <Button variant="outlined" onClick={handlePermissionSubmit} disabled={!permissionChange}>
+                            Submit
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
         </PageContainer>
     )
 }

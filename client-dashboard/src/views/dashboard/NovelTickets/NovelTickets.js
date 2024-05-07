@@ -59,11 +59,11 @@ export default function NovelTickets() {
     var confirmedLocations = getLeadsId();
     if (confirmedLocations) {
         if (filterLocation === null) {
-            if (confirmedLocations.length !== 0) {
-                setFilterLocation(confirmedLocations[0]);
-            } else {
-                setFilterLocation("ALL");
-            }
+            setFilterLocation("ALL");
+            // if (confirmedLocations.length !== 0) {
+            //     setFilterLocation(confirmedLocations[0]);
+            // } else {
+            // }
         }
         confirmedLocations = confirmedLocations?.map(location => {
             switch (location) {

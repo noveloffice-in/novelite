@@ -10,7 +10,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function TicketChatSender({ id, mutate }) {
+export default function TicketChatSender({ id, fetchChats }) {
 
     const dispatch = useDispatch();
     const [msg, setMsg] = React.useState('');
@@ -83,7 +83,7 @@ export default function TicketChatSender({ id, mutate }) {
             axios.post('/api/method/novelite.api.api.addDataToIssueCommentForClient', messageData)
                 .then((res) => {
                     notifySuccess(res.data.message)
-                    mutate();
+                    fetchChats();
                 })
                 .catch((err) => {
                     notifyError(err)

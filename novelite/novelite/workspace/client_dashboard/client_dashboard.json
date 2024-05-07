@@ -141,7 +141,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Tickets",
-   "link_count": 3,
+   "link_count": 4,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -175,9 +175,19 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Issue Comment For Client",
+   "link_count": 0,
+   "link_to": "Issue Comment For Client",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-04-30 09:31:43.109499",
+ "modified": "2024-05-07 15:25:45.340956",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Client Dashboard",

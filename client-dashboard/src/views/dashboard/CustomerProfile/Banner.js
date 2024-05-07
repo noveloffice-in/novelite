@@ -140,7 +140,7 @@ const Banner = () => {
                     }}
                   />
                 </ProfileImage>
-                <Box mt={1}>
+                <Box my={1.5}>
                   <Typography fontWeight={600} variant="h5">
                     {fullName}
                   </Typography>
@@ -181,14 +181,14 @@ const Banner = () => {
               <Button color="primary" variant="contained" component={Link} to={`/dashboard`}>
                 Add User
               </Button>
-              <Box>
+              {/* <Box>
                 <Typography variant="h4" fontWeight="600">
                   2,659
                 </Typography>
                 <Typography color="textSecondary" variant="h6" fontWeight={400}>
                   users
                 </Typography>
-              </Box>
+              </Box> */}
             </Stack>}
 
           </Grid>

@@ -157,7 +157,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
     dispatch(getTickets(data));
   }
 
-  // console.log("tickets = ", tickets);
+  console.log("tickets = ", tickets);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();

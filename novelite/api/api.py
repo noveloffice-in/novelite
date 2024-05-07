@@ -420,7 +420,7 @@ def addDataToIssueCommentForClient():
     try: 
         ticket_id = data.get('issue_id')
         
-        doc = frappe.get_doc("Issue Comment For Client", ticket_id)
+        doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
         # for item in doc.all_amessages:
         doc.append('all_messages', {
             'message': data.get('message'),
@@ -433,6 +433,35 @@ def addDataToIssueCommentForClient():
         frappe.log_error(_("Error in message sending: ").format(str(e)))
         frappe.response["http_status_code"] = 500
         return {"error": str(e)}
+    
+# ----------------------------------------Getting data from Issue Comment For Client------------------------------------------------
+@frappe.whitelist()
+def get_ticket_by_id():
+    data = frappe.request.json
+
+    if data is None:
+        frappe.throw("No data provided")
+
+    try:
+        ticket_id = data.get('issue_id')
+        
+        # Fetch the document based on the ticket_id
+        doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
+
+        doc.unread_messages = 0
+        doc.save()
+        
+        # Return the document as a JSON response
+        return doc
+    
+    except Exception as e:
+        # Log the error
+        frappe.log_error("Error in get_ticket_by_id: {}".format(e))
+        
+        # Return an error response
+        frappe.response["http_status_code"] = 500
+        return {"error": "An error occurred while fetching the ticket."}
+
 
 # ----------------------------------------Getting App Users and permissions------------------------------------------------
 @frappe.whitelist()
@@ -486,4 +515,36 @@ def get_user_permissions_by_email(user_email):
         frappe.log_error(_("Error in fetching user permissions by email: {0}").format(str(e)))
         frappe.response["http_status_code"] = 500
         return {"error": str(e)}
+
+
+# ----------------------------------------Updating permissions------------------------------------------------
+@frappe.whitelist(allow_guest=True)
+def update_permissions():
+    data = frappe.request.json
+    permmission_arr = data.get('permissions_array')
+    user_email = data.get('user_email')
+    try:
+        # Fetch the App User document based on the user email
+        app_user = frappe.get_doc("App User", {"user": user_email})
+        
+        # Clear existing permissions
+        app_user.permissions = []
+
+        # Iterate through the permissions array and add them to the permissions child table
+        for permission in permmission_arr:
+            app_user.append("permissions", {
+                "doctype": "App Permissions",
+                "permissions": permission.get("permittedComponent")
+            })
+        
+        # Save the changes
+        app_user.save()
+        
+        return {"success": True, "message": "Permissions updated successfully"}
+    
+    except Exception as e:
+        # Handle any errors
+        frappe.log_error(_("Error in updating permissions for user {0}: {1}").format(user_email, str(e)))
+        frappe.response["http_status_code"] = 500
+        return {"success": False, "error": str(e)}
 
