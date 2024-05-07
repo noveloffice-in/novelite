@@ -146,7 +146,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   if (data) {
     // tickets = data;
     tickets = data.map(ticket => {
-      console.log("unReadMessages = ", unReadMessages);
+      // console.log("unReadMessages = ", data);
       const matchingUnreadMessage = unReadMessages?.find(message => message.ticket_id === ticket.name);
       if (matchingUnreadMessage) {
         return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
@@ -155,10 +155,10 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
       }
     });
 
-    dispatch(getTickets(data));
+    // console.log("tickets = ", tickets);
+    // dispatch(getTickets(tickets));
   }
 
-  // console.log("tickets = ", tickets);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
@@ -457,6 +457,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
                           <CommentsDisabledOutlinedIcon />
                           :
                           <Badge color="secondary" badgeContent={ticket.unread_messages}>
+                            <Typography variant='h5'>{ticket.unread_messages}</Typography>
                             <CommentOutlinedIcon />
                           </Badge>
                         }

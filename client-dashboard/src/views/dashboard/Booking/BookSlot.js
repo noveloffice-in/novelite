@@ -141,6 +141,18 @@ export default function BookSlot() {
         let form = new FormData(e.target);
         let formObj = Object.fromEntries(form.entries());
 
+        // const fromTimeMinutes = dayjs(fromTime).hour() * 60 + dayjs(fromTime).minute();
+        // const toTimeMinutes = dayjs(toTime).hour() * 60 + dayjs(toTime).minute();
+
+        // console.log("fromTimeMinutes = ", handleTimeChange(fromTime, 'from'));
+        // console.log("toTimeMinutes = ", handleTimeChange(toTime, 'to'));
+
+        // if (toTimeMinutes <= fromTimeMinutes) {
+        //     notifyWarn('To time must be greater than from time.');
+        //     setDisableBtn(false);
+        //     return;
+        // }
+
         const boookingData = {
             customer: companyName,
             location: location,
@@ -154,21 +166,21 @@ export default function BookSlot() {
         }
 
         console.log('boookingData = ', boookingData);
-        // if (date !== '' && fromTime !== '' && toTime !== '') {
-        //     createDoc('Room slots booking', boookingData)
-        //         .then(() => {
-        //             notifySuccess("Your request was received successfully");
-        //             setTimeout(() => {
-        //                 navigate('/location');
-        //             }, 5000);
-        //         }).catch((err) => {
-        //             console.log("inside catch " + JSON.stringify(err.message));
-        //             console.err(err.message);
-        //             notifyError(err);
-        //         })
-        // } else {
-        //     notifyWarn("Please Fill all the details");
-        // }
+        if (date !== '' && fromTime !== '' && toTime !== '') {
+            createDoc('Room slots booking', boookingData)
+                .then(() => {
+                    notifySuccess("Your request was received successfully");
+                    setTimeout(() => {
+                        navigate('/location');
+                    }, 5000);
+                }).catch((err) => {
+                    console.log("inside catch " + JSON.stringify(err.message));
+                    console.err(err.message);
+                    notifyError(err);
+                })
+        } else {
+            notifyWarn("Please Fill all the details");
+        }
 
         // console.log(formObj);
         // console.log("Date = ", date);
@@ -192,13 +204,13 @@ export default function BookSlot() {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="From" onChange={(newValue) => { handleTimeChange(newValue, 'from') }} />
+                                <TimePicker label="From" />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="To" onChange={(newValue) => { handleTimeChange(newValue, 'to') }} />
+                                <TimePicker label="To"  />
                             </DemoContainer>
                         </LocalizationProvider>
 

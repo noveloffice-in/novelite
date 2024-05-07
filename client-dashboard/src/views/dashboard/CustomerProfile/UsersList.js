@@ -44,6 +44,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/system';
 import CloseIcon from '@mui/icons-material/Close';
 
+//Toastify 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function UsersList() {
 
     const [page, setPage] = useState(0);
@@ -63,15 +67,22 @@ export default function UsersList() {
         { permittedComponent: 'Expansion/Downsize' },
     ]);
 
-    //-----------------------------------------------------------Fetching user permission-----------------------------------------------//
+    //-----------------------------------------------------------Toast functions--------------------------------------------------//
+    const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
+    const notifyError = (msg) => toast.error(msg, { toastId: "error" });
+    const notifyWarn = (msg) => toast.warn(msg, { toastId: "error" });
+
     useEffect(() => {
+        fetchPermissions();
+    }, [])
+    //-----------------------------------------------------------Fetching user permission-----------------------------------------------//
+    const fetchPermissions = () => {
         axios.post('/api/method/novelite.api.api.get_user_permissions_by_email', { user_email: userEmail })
             .then((res) => {
                 setUsersList(res.data.message);
                 setPending(false);
-                console.log("Data = ", res.data.message);
             })
-    }, [])
+    }
 
     //-----------------------------------------------------------Permission changes-----------------------------------------------//
     const handleCheckboxChange = (event, permission) => {
@@ -85,21 +96,24 @@ export default function UsersList() {
             setSelectedPermissions(prevPermissions => prevPermissions.filter(item => item.permittedComponent !== permission));
         }
     };
-    
+
     //Permisson Changes
-    const handlePermissionSubmit = ()=>{
-        let sendingData = { user_email: user, permissions_array:selectedPermissions }
+    const handlePermissionSubmit = () => {
+        let sendingData = { user_email: user, permissions_array: selectedPermissions }
         console.log("selectedPermissions = ", selectedPermissions);
         axios.post('/api/method/novelite.api.api.update_permissions', sendingData)
-        .then((res)=>{
-            console.log(res);
-        })
+            .then((res) => {
+                notifySuccess(res.data.message);
+                handleClose1();
+                fetchPermissions();
+                console.log(res.data.message);
+            })
     }
-    
+
     //-----------------------------------------------------------Dialouge-----------------------------------------------//
     //Dialouge component
     const [open1, setOpen1] = useState(false);
-    
+
     //Dialog for rise ticket
     const handleClickOpen = (permissionsArr, username) => {
         setOpen1(true);
@@ -107,11 +121,11 @@ export default function UsersList() {
         setPermissionChange(false);
         setSelectedPermissions(permissionsArr);
     };
-    
+
     const handleClose1 = () => {
         setOpen1(false);
     };
-    
+
     //-----------------------------------------------------------Pagination-----------------------------------------------//
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersList?.length) : 0;
 
@@ -254,6 +268,19 @@ export default function UsersList() {
                     </Box>
                 </DialogActions>
             </Dialog>
+            {/* ---------------------------------------Toast Container Starts------------------------------------ */}
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </PageContainer>
     )
 }

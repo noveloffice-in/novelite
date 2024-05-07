@@ -43,8 +43,6 @@ export default function NovelTickets() {
         }
     })
 
-    console.log("unReadMessages = ", unReadMessages);
-
     //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
     // Fetch location of customers from leads
     const getLeadsId = () => {
