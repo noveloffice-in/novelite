@@ -477,7 +477,7 @@ def get_document_by_email(user_email):
 
 # ----------------------------------------Getting Members and their permissions------------------------------------------------
 # Define a custom endpoint using the `frappe.whitelist` decorator
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def get_user_permissions_by_email(user_email):
     try:
         # Query the document based on the user email
@@ -518,7 +518,7 @@ def get_user_permissions_by_email(user_email):
 
 
 # ----------------------------------------Updating permissions------------------------------------------------
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def update_permissions():
     data = frappe.request.json
     permmission_arr = data.get('permissions_array')

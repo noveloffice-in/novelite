@@ -107,7 +107,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
         if (closedTicketData[0].review_show_popup === 0) {
           setTicketId(closedTicketData[0].name);
           handleClickOpen2(closedTicketData[0].name, closedTicketData[0].subject);
-          closedTicketAudio.current.play();
+          closedTicketAudio?.current.play();
           // alert("show")
         }
       }
@@ -146,6 +146,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   if (data) {
     // tickets = data;
     tickets = data.map(ticket => {
+      console.log("unReadMessages = ", unReadMessages);
       const matchingUnreadMessage = unReadMessages?.find(message => message.ticket_id === ticket.name);
       if (matchingUnreadMessage) {
         return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
@@ -157,21 +158,30 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
     dispatch(getTickets(data));
   }
 
-  console.log("tickets = ", tickets);
+  // console.log("tickets = ", tickets);
 
   //For updating Issue
   const { updateDoc: updateDocRating } = useFrappeUpdateDoc();
 
   //----------------------------------------------------------Issue types and subtypes fetch-----------------------------------------------//
 
-  const { data: issueTypesArray } = useFrappeGetDocList('Issue Type', {
+  let { data: issueTypesArray } = useFrappeGetDocList('Issue Type', {
     fields: ['name'],
     orderBy: {
       field: 'name',
       order: 'asc',
     },
   });
+
   if (issueTypesArray) {
+
+    const otherItems = issueTypesArray.filter(item => item.name === 'Other');
+
+    // Filter the items without name 'Other'
+    const nonOtherItems = issueTypesArray.filter(item => item.name !== 'Other');
+
+    // Concatenate the nonOtherItems array with otherItems array
+    issueTypesArray = [...nonOtherItems, ...otherItems];
     dispatch(setIssueType(issueTypesArray[0].name));
   }
 

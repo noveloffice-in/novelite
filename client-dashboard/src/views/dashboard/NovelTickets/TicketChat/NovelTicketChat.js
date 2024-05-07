@@ -17,7 +17,7 @@ export default function NovelTicketChat({ id, title, status }) {
 
   useEffect(() => {
     fetchChats();
-  }, [id]);
+  }, []);
 
 
   //------------------------------------------------------getting Messages----------------------------------------------//
