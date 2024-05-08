@@ -516,43 +516,7 @@ def get_user_permissions_by_email(user_email):
         frappe.response["http_status_code"] = 500
         return {"error": str(e)}
 
-
-# ----------------------------------------Updating permissions------------------------------------------------
-# @frappe.whitelist()
-# def update_permissions():
-#     data = frappe.request.json
-#     permmission_arr = data.get('permissions_array')
-#     user_email = data.get('user_email')
-
-#     try:
-#         app_user = frappe.get_doc("App User", user_email)
-        
-#         app_user.permissions = []
-
-#         # Iterate through the permissions array and add them to the permissions child table
-#         # for permission in permmission_arr:
-#         #     return permission
-#         #     app_user.append("permissions", {
-#         #         "doctype": "App Permissions",
-#         #         "permissions": permission.get("permittedComponent")
-#         #     })
-        
-#         # # Save the changes
-#         # app_user.save()
-        
-#         if permmission_arr:
-#             for pem in permmission_arr['permittedComponent']:
-#                 return pem
-        
-#         # return {"success": True, "message": "Permissions updated successfully"}
-    
-#     except Exception as e:
-#         # Handle any errors
-#         frappe.log_error(_("Error in updating permissions for user {0}: {1}").format(user_email, str(e)))
-#         frappe.response["http_status_code"] = 500
-#         return {"success": False, "error": str(e)}
-
-
+# ----------------------------------------Updating Permissions------------------------------------------------
 @frappe.whitelist()
 def update_permissions():
     data = frappe.request.json
@@ -577,3 +541,4 @@ def update_permissions():
         return "Permissions updated successfully"
     except Exception as e:
         return f"Error: {str(e)}"
+    

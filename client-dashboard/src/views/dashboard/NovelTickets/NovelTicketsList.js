@@ -61,7 +61,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import closedTicketSound from '../../../notificationSounds/TicketClosedSound.wav'
 
 
-const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, filterLocation, unReadMessages }) => {
+const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, filterLocation }) => {
   const dispatch = useDispatch();
 
   //Dialouge component
@@ -132,7 +132,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
 
   //-----------------------------------------------------------Fetch Tickets-----------------------------------------------//
   let { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
-    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating'],
+    fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating', 'unread_messages'],
     filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
     limit_start: 0,
     limit: 100000,
@@ -142,21 +142,11 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
     },
   });
 
-  var tickets = [];
+  let tickets = [];
   if (data) {
-    // tickets = data;
-    tickets = data.map(ticket => {
-      // console.log("unReadMessages = ", data);
-      const matchingUnreadMessage = unReadMessages?.find(message => message.ticket_id === ticket.name);
-      if (matchingUnreadMessage) {
-        return { ...ticket, unread_messages: matchingUnreadMessage.unread_messages };
-      } else {
-        return { ...ticket, unread_messages: 0 };
-      }
-    });
-
-    // console.log("tickets = ", tickets);
-    // dispatch(getTickets(tickets));
+    tickets = data;
+    console.log("tickets = ", data);
+    dispatch(getTickets(data));
   }
 
 
@@ -457,7 +447,6 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
                           <CommentsDisabledOutlinedIcon />
                           :
                           <Badge color="secondary" badgeContent={ticket.unread_messages}>
-                            <Typography variant='h5'>{ticket.unread_messages}</Typography>
                             <CommentOutlinedIcon />
                           </Badge>
                         }

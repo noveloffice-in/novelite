@@ -22,8 +22,6 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const openC = counter ? counter.filter((t) => t.status === 'Open').length : "0";
     const closeC = counter ? counter.filter((t) => t.status === 'Closed').length : "0";
 
-    // const filterByLocation = ()=>{}
-
     const totalIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',

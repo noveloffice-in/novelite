@@ -33,16 +33,7 @@ export default function NovelTickets() {
             setFilterLocation(location);
         }
     }, [userLocation, setFilterLocation]);
-
-    //--------------------------------------------------------Getting Unread Msgs count-------------------------------------------//
-    const { data: unReadMessages } = useFrappeGetDocList("Issue Comment For Client", {
-        fields: ['ticket_id', 'unread_messages'],
-        orderBy: {
-            field: 'modified',
-            order: 'desc',
-        }
-    })
-
+    
     //--------------------------------------------------------Fetch Lead's Locations-----------------------------------------//
     // Fetch location of customers from leads
     const getLeadsId = () => {
@@ -119,7 +110,6 @@ export default function NovelTickets() {
                 <NovelTicketsList
                     userEmail={userEmail}
                     filterLocation={filterLocation}
-                    unReadMessages={unReadMessages}
                     setFilterLocation={setFilterLocation}
                     confirmedLocations={confirmedLocations}
                 />

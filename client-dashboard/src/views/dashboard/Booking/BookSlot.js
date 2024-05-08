@@ -141,18 +141,16 @@ export default function BookSlot() {
         let form = new FormData(e.target);
         let formObj = Object.fromEntries(form.entries());
 
-        // const fromTimeMinutes = dayjs(fromTime).hour() * 60 + dayjs(fromTime).minute();
-        // const toTimeMinutes = dayjs(toTime).hour() * 60 + dayjs(toTime).minute();
+        // Check if toTime is lesser or equal to fromTime
+        const fromTimeMinutes = dayjs(fromTime, 'hh:mm A').hour() * 60 + dayjs(fromTime, 'hh:mm A').minute();
+        const toTimeMinutes = dayjs(toTime, 'hh:mm A').hour() * 60 + dayjs(toTime, 'hh:mm A').minute();
 
-        // console.log("fromTimeMinutes = ", handleTimeChange(fromTime, 'from'));
-        // console.log("toTimeMinutes = ", handleTimeChange(toTime, 'to'));
-
-        // if (toTimeMinutes <= fromTimeMinutes) {
-        //     notifyWarn('To time must be greater than from time.');
-        //     setDisableBtn(false);
-        //     return;
-        // }
-
+        if (toTimeMinutes <= fromTimeMinutes) {
+            notifyWarn('To time must be greater than from time.');
+            setDisableBtn(false);
+            return;
+        }
+        
         const boookingData = {
             customer: companyName,
             location: location,
@@ -164,23 +162,26 @@ export default function BookSlot() {
             to_time: toTime,
             description: formObj.description,
         }
-
+        
+        console.log('toTimeMinutes = ', toTimeMinutes);
+        console.log('fromTimeMinutes = ', fromTimeMinutes);
         console.log('boookingData = ', boookingData);
-        if (date !== '' && fromTime !== '' && toTime !== '') {
-            createDoc('Room slots booking', boookingData)
-                .then(() => {
-                    notifySuccess("Your request was received successfully");
-                    setTimeout(() => {
-                        navigate('/location');
-                    }, 5000);
-                }).catch((err) => {
-                    console.log("inside catch " + JSON.stringify(err.message));
-                    console.err(err.message);
-                    notifyError(err);
-                })
-        } else {
-            notifyWarn("Please Fill all the details");
-        }
+        setDisableBtn(false);
+        // if (date !== '' && fromTime !== '' && toTime !== '') {
+        //     createDoc('Room slots booking', boookingData)
+        //         .then(() => {
+        //             notifySuccess("Your request was received successfully");
+        //             setTimeout(() => {
+        //                 navigate('/location');
+        //             }, 5000);
+        //         }).catch((err) => {
+        //             console.log("inside catch " + JSON.stringify(err.message));
+        //             console.err(err.message);
+        //             notifyError(err);
+        //         })
+        // } else {
+        //     notifyWarn("Please Fill all the details");
+        // }
 
         // console.log(formObj);
         // console.log("Date = ", date);
@@ -210,7 +211,7 @@ export default function BookSlot() {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="To"  />
+                                <TimePicker label="To" />
                             </DemoContainer>
                         </LocalizationProvider>
 
