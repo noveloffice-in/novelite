@@ -448,7 +448,8 @@ def get_ticket_by_id():
         # Fetch the document based on the ticket_id
         doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
 
-        doc.unread_messages = 0
+        for item in doc.all_messages:
+            item.seen_by_customer = 1
         doc.save()
         
         # Return the document as a JSON response

@@ -17,7 +17,7 @@ export default function Queries() {
             <CardContent sx={{ p: 2 }}>
                 <Grid container spacing={3} justifyContent="space-around">
                 <Grid item sm={4}>
-                        <Box mb="-20px">
+                        <Box mb="-45px">
                             <img src={busiessImg} alt={busiessImg} style={{height:"12rem"}} />
                         </Box>
                     </Grid>

@@ -36,6 +36,7 @@
    "options": "App Members"
   },
   {
+   "depends_on": "eval:doc.user_type === \"Non Admin\";",
    "fieldname": "permissions",
    "fieldtype": "Table",
    "label": "Permissions",
@@ -44,7 +45,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-06 11:48:30.972727",
+ "modified": "2024-05-08 15:35:15.898681",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "App Users",

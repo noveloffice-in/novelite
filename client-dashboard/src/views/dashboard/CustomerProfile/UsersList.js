@@ -145,7 +145,7 @@ export default function UsersList() {
                     <Banner />
                 </Grid>
 
-                <Box pt={1}>
+                {usersList.length !== 0 ? <Box pt={1}>
                     {!pending && <Paper variant="outlined">
                         <TableContainer>
                             <Table
@@ -229,7 +229,11 @@ export default function UsersList() {
 
                         </TableContainer>
                     </Paper>}
-                </Box>
+                </Box> : 
+                <Stack pt={4} alignItems='center' justifyContent='center' width='100%'>
+                    <Typography variant='p'>No users</Typography>
+                </Stack>
+                }
 
             </Grid>
             {/* ---------------------------------------Raise Dialog Start---------------------------------- */}

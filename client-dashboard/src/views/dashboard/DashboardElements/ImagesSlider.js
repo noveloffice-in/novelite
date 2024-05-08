@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { IconMapPin } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
-import './ImageSlider.css'
 
 const CoverImgStyle = styled(CardContent)({
     position: 'absolute',
