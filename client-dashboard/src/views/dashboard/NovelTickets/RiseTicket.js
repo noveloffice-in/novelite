@@ -428,7 +428,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 <Tooltip disableFocusListener disableTouchListener placement="top" TransitionComponent={Zoom} title="Property for which you want to rise ticket">
                     <Box>
                         <FormControl fullWidth sx={{ mt: 2 }} >
-                            <InputLabel id="demo-simple-select-label">Property Location</InputLabel>
+                            <InputLabel id="demo-simple-select-label" required>Property Location</InputLabel>
                             <Select
                                 // disabled={confirmedLocations?.length === 2}
                                 labelId="demo-simple-select-label"
@@ -449,7 +449,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
                 {/* -------------------------------------Issue type, Issue subtype dropdown-------------------------------------------  */}
                 <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel>Issue type</InputLabel>
+                    <InputLabel required>Issue type</InputLabel>
                     <Select label="Issue type" value={issuetypeNew} onChange={handleIssueDropdownChange}>
                         {issueTypesArray?.map(issue => (
                             <MenuItem key={issue.name} value={issue.name}>{issue.name}</MenuItem>
@@ -458,7 +458,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 </FormControl>
                 {issuetypeNew !== "Other" && (
                     <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel>Issue sub type</InputLabel>
+                        <InputLabel required>Issue sub type</InputLabel>
                         <Select
                             // value={issueTypeDropdown}
                             label="Issue sub type"

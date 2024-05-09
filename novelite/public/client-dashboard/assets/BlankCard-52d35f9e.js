@@ -1,0 +1,1 @@
+import{d as t,j as i,P as n}from"./index-8b3b8eba.js";import{C as d}from"./Card-db1260bf.js";const r=({children:s,className:a})=>{const o=t(e=>e.customizer);return i.jsx(d,{sx:{p:0,position:"relative"},className:a,elevation:o.isCardShadow?9:0,variant:o.isCardShadow?void 0:"outlined",children:s})};r.propTypes={children:n.node};const l=r;export{l as B};

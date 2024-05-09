@@ -74,9 +74,6 @@ export default function BookSlot() {
         const selectedDate = dayjs(newValue);
         const today = dayjs();
 
-        console.log('selectedDate = ', selectedDate);
-        console.log('today = ', today);
-
         if (selectedDate.isBefore(today, 'day')) {
             notifyWarn('You cannot select a time for a past date.');
             setDate();
@@ -104,37 +101,20 @@ export default function BookSlot() {
     };
 
     // Time Change
-    const handleTimeChange = (newValue, change) => {
+
+    const handleTimeChange = (newValue, change)=>{
         const date = new Date(newValue);
         const hours = date.getHours();
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'PM' : 'AM';
         const formattedHours = hours % 12 || 12;
         const formattedTime = `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
-
-        // Determine the source of change (from or to)
-        const sourceTime = change === 'from' ? fromTime : toTime;
-        const targetTime = change === 'from' ? formattedTime : fromTime;
-
-        const sourceTimeInMinutes = convertTimeToMinutes(sourceTime);
-        const targetTimeInMinutes = convertTimeToMinutes(targetTime);
-
-        // Check if target time is greater than source time
-        if (targetTimeInMinutes > sourceTimeInMinutes) {
-            setDisableBtn(false);
-            change === 'from' ? setFromTime(formattedTime) : setToTime(formattedTime);
-        } else {
-            // Revert to previous value or set a default value
-            change === 'from' ? setFromTime(sourceTime) : setToTime(sourceTime);
-            setDisableBtn(true);
-            notifyWarn(change === 'from' ? 'From time must be less than to time' : 'To time must be greater than from time');
-        }
-    };
-
+        change === 'from' ? setFromTime(formattedTime) : setToTime(formattedTime);
+    }
 
     //Submit
     const { createDoc, loading } = useFrappeCreateDoc();
-    const handleSubmit = (e) => {s
+    const handleSubmit = (e) => {
         e.preventDefault();
         setDisableBtn(true);
 
@@ -142,14 +122,14 @@ export default function BookSlot() {
         let formObj = Object.fromEntries(form.entries());
 
         // Check if toTime is lesser or equal to fromTime
-        // const fromTimeMinutes = dayjs(fromTime, 'hh:mm A').hour() * 60 + dayjs(fromTime, 'hh:mm A').minute();
-        // const toTimeMinutes = dayjs(toTime, 'hh:mm A').hour() * 60 + dayjs(toTime, 'hh:mm A').minute();
-
-        // if (toTimeMinutes <= fromTimeMinutes) {
-        //     notifyWarn('To time must be greater than from time.');
-        //     setDisableBtn(false);
-        //     return;
-        // }
+        const fromTimeMinutes = dayjs(fromTime, 'hh:mm A').hour() * 60 + dayjs(fromTime, 'hh:mm A').minute();
+        const toTimeMinutes = dayjs(toTime, 'hh:mm A').hour() * 60 + dayjs(toTime, 'hh:mm A').minute();
+    
+        if (toTimeMinutes <= fromTimeMinutes) {
+            notifyWarn('To time must be greater than from time.');
+            setDisableBtn(false);
+            return;
+        }
         
         const boookingData = {
             customer: companyName,
@@ -163,10 +143,8 @@ export default function BookSlot() {
             description: formObj.description,
         }
         
-        // console.log('toTimeMinutes = ', toTimeMinutes);
-        // console.log('fromTimeMinutes = ', fromTimeMinutes);
-        // console.log('boookingData = ', boookingData);
-        setDisableBtn(false);
+        console.log('boookingData = ', boookingData);
+
         if (date !== '' && fromTime !== '' && toTime !== '') {
             createDoc('Room slots booking', boookingData)
                 .then(() => {
@@ -183,10 +161,6 @@ export default function BookSlot() {
             notifyWarn("Please Fill all the details");
         }
 
-        // console.log(formObj);
-        // console.log("Date = ", date);
-        // console.log("From time = ", fromTime);
-        // console.log("toTime = ", toTime);
     }
 
     return (
@@ -205,13 +179,13 @@ export default function BookSlot() {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="From" />
+                                <TimePicker label="From" onChange={(newValue)=>{handleTimeChange(newValue, 'from')}} />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="To" />
+                                <TimePicker label="To" onChange={(newValue)=>{handleTimeChange(newValue, 'to')}} />
                             </DemoContainer>
                         </LocalizationProvider>
 

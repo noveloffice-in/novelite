@@ -85,7 +85,7 @@ export default function ImagesSlider({image, name, location}) {
                                             {name}
                                         </Typography>
                                     </Box>
-                                    <Stack direction="row" alignItems="center">
+                                    <Stack direction="row" alignItems="center" >
                                         <Stack direction="row" alignItems="center" gap={0.2} >
                                             <IconMapPin size="18" /> {location}
                                         </Stack>

@@ -134,7 +134,7 @@ const Menuitems = [
   {
     navlabel: true,
     subheader: 'Upcoming',
-    permission: 0,
+    permission: 1,
     name: 'Upcoming'
   },
   {
@@ -144,7 +144,7 @@ const Menuitems = [
     href: '/visitor_pass',
     // chip: 'i',
     chipColor: 'secondary',
-    permission: 0,
+    permission: 1,
     name: 'VisitorPass'
   },
   {
@@ -154,7 +154,7 @@ const Menuitems = [
     href: '/gatepass',
     chip: 'Upcoming',
     chipColor: 'secondary',
-    permission: 0,
+    permission: 1,
     name: 'GatePass'
   },
   // {

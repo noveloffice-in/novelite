@@ -29,7 +29,7 @@ const SidebarItems = () => {
 
    //-------------------------------------------------Fetching App Users and permissions-----------------------------------------//
   const fetchData = () => {
-    axios.post('/api/method/novelite.api.api.get_document_by_email', { user_email: userEmail })
+    axios.post('/api/method/novelite.api.user_permissions.get_document_by_email', { user_email: userEmail })
       .then((res) => {
         res.data.message.permissions.forEach((element) => {
           Menuitems.forEach((component) => {

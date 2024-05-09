@@ -80,7 +80,7 @@ export default function TicketChatSender({ id, fetchChats }) {
                 issue_id: id,
                 comment_by_email: userEmail,
             }
-            axios.post('/api/method/novelite.api.api.addDataToIssueCommentForClient', messageData)
+            axios.post('/api/method/novelite.api.issue_comment_for_client.addDataToIssueCommentForClient', messageData)
                 .then((res) => {
                     notifySuccess(res.data.message)
                     fetchChats();

@@ -306,15 +306,14 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
 
   if (data) {
     return (
-      <Box mt={4}>
+      <Box mt={1}>
 
         {/* --------------------------------All Tickets Button and Dropdown---------------------------------  */}
         <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'}>
-          {/* <Box>
-          </Box> */}
+
           <Box sx={{ mb: 2 }} >
             {confirmedLocations?.length >= 2 ?
-              (<FormControl sx={{ m: 1, minWidth: 170 }}>
+              (<FormControl sx={{ minWidth: 170 }}>
                 <InputLabel id="demo-simple-select-autowidth-label">Property Location</InputLabel>
                 <Select
                   labelId="demo-simple-select-autowidth-label"

@@ -77,7 +77,7 @@ export default function UsersList() {
     }, [])
     //-----------------------------------------------------------Fetching user permission-----------------------------------------------//
     const fetchPermissions = () => {
-        axios.post('/api/method/novelite.api.api.get_user_permissions_by_email', { user_email: userEmail })
+        axios.post('/api/method/novelite.api.user_permissions.get_user_permissions_by_email', { user_email: userEmail })
             .then((res) => {
                 setUsersList(res.data.message);
                 setPending(false);
@@ -101,7 +101,7 @@ export default function UsersList() {
     const handlePermissionSubmit = () => {
         let sendingData = { user_email: user, permissions_array: selectedPermissions }
         console.log("selectedPermissions = ", selectedPermissions);
-        axios.post('/api/method/novelite.api.api.update_permissions', sendingData)
+        axios.post('/api/method/novelite.api.user_permissions.update_permissions', sendingData)
             .then((res) => {
                 notifySuccess(res.data.message);
                 handleClose1();
@@ -160,6 +160,9 @@ export default function UsersList() {
                                             <Typography variant="h6">Users</Typography>
                                         </TableCell>
                                         <TableCell>
+                                            <Typography variant="h6">User Role</Typography>
+                                        </TableCell>
+                                        <TableCell>
                                             <Typography variant="h6">Permissions</Typography>
                                         </TableCell>
                                         <TableCell>
@@ -176,6 +179,10 @@ export default function UsersList() {
                                         <TableRow key={row.username}>
                                             <TableCell>
                                                 <Typography variant="h6">{row.username}</Typography>
+                                            </TableCell>
+                                            
+                                            <TableCell>
+                                                <Typography variant="h6" color="textSecondary">{row.userRole}</Typography>
                                             </TableCell>
 
                                             <TableCell>
@@ -242,7 +249,7 @@ export default function UsersList() {
                 maxWidth='sm'
                 open={open1}
                 onClose={handleClose1}
-            >
+            > 
                 <DialogTitle>
                     <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
                         <Typography variant='h5'>Edit Permissions</Typography>

@@ -22,7 +22,7 @@ export default function NovelTicketChat({ id, title, status }) {
 
   //------------------------------------------------------getting Messages----------------------------------------------//
   const fetchChats = () => {
-    axios.post('/api/method/novelite.api.api.get_ticket_by_id', { issue_id: id })
+    axios.post('/api/method/novelite.api.issue_comment_for_client.get_ticket_by_id', { issue_id: id })
       .then((res) => {
         setIssueMessages(res.data.message)
       })
