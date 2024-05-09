@@ -7,13 +7,16 @@ import { Box } from '@mui/system';
 import { Stack } from '@mui/material';
 
 import ChildCard from 'src/components/shared/ChildCard';
-import { IconBriefcase, IconDeviceDesktop, IconMail, IconMapPin } from '@tabler/icons';
+import { IconBriefcase, IconDeviceDesktop, IconMail, IconMapPin, IconUserCircle, IconCircles } from '@tabler/icons';
+import { useFrappeGetDoc } from 'frappe-react-sdk';
 
 export default function CustomerProfile() {
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
     const companyName = useSelector((state) => state.novelprofileReducer.companyName);
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     // const userImage = useSelector((state) => state.novelprofileReducer.userImage);
+
+    const {data: userData} = useFrappeGetDoc('App Users', userEmail);
 
     return (
         <PageContainer title="User - Novel Office" description="this is User Profile page">
@@ -23,24 +26,30 @@ export default function CustomerProfile() {
                     <Banner />
                 </Grid>
 
-                <Stack alignItems='center' justifyContent='center' width='100%'>
+
+                {userData && <Stack alignItems='center' justifyContent='center' width='100%'>
                     <Box p={1}>
                         <ChildCard>
                             <Typography fontWeight={600} variant="h4" mb={2}>
-                                {fullName}
+                                {userData.user_name}
                             </Typography>
                             {/* <Typography color="textSecondary" variant="subtitle2" mb={2}>
                                 Hello, I am Mathew Anderson. I love making websites and graphics. Lorem ipsum dolor sit amet,
                                 consectetur adipiscing elit.
                             </Typography> */}
                             <Stack direction="row" gap={2} alignItems="center" mb={3}>
-                                <IconBriefcase size="21" />
+                                <IconUserCircle size="21" />
                                 <Typography variant="h6"> {companyName}</Typography>
                             </Stack>
                             <Stack direction="row" gap={2} alignItems="center" mb={3}>
                                 <IconMail size="21" />
-                                <Typography variant="h6">{userEmail}</Typography>
+                                <Typography variant="h6">{userData.user}</Typography>
                             </Stack>
+                            <Stack direction="row" gap={2} alignItems="center" mb={3}>
+                                <IconCircles size="21" />
+                                <Typography variant="h6">{userData.user_type}</Typography>
+                            </Stack>
+  
                             {/* <Stack direction="row" gap={2} alignItems="center" mb={3}>
                                 <IconDeviceDesktop size="21" />
                                 <Typography variant="h6">www.xyz.com</Typography>
@@ -51,7 +60,7 @@ export default function CustomerProfile() {
                             </Stack> */}
                         </ChildCard>
                     </Box>
-                </Stack>
+                </Stack>}
             </Grid>
         </PageContainer>
     )

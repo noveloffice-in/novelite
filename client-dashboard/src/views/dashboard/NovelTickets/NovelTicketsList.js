@@ -220,6 +220,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   //Submit btn trigger inside modal
   const handleSubmit = () => {
     setSubmitTicket(!submitTicket);
+    setShowLoading(true);
   }
 
   //------------------------------------------------------Rating-----------------------------------------------//

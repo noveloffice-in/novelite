@@ -10,6 +10,9 @@
  "field_order": [
   "user",
   "user_type",
+  "column_break_ebdwe",
+  "user_name",
+  "section_break_mkoan",
   "members",
   "permissions"
  ],
@@ -41,11 +44,25 @@
    "fieldtype": "Table",
    "label": "Permissions",
    "options": "App Permissions"
+  },
+  {
+   "fetch_from": "user.full_name",
+   "fieldname": "user_name",
+   "fieldtype": "Data",
+   "label": "User Name"
+  },
+  {
+   "fieldname": "column_break_ebdwe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_mkoan",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-08 15:35:15.898681",
+ "modified": "2024-05-09 10:16:32.464436",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "App Users",

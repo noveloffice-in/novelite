@@ -39,7 +39,8 @@ def get_user_permissions_by_email(user_email):
                 
                 # Append username and permissions to the list
                 user_permissions.append({
-                    "username": user.name,
+                    "userEmail": user.name,
+                    "userName":user.user_name,
                     "userRole": user.user_type,
                     "permissions": permissions_list
                 })

@@ -157,10 +157,13 @@ export default function UsersList() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>
-                                            <Typography variant="h6">Users</Typography>
+                                            <Typography variant="h6">Name</Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="h6">User Role</Typography>
+                                            <Typography variant="h6">Email</Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="h6">Role</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="h6">Permissions</Typography>
@@ -178,7 +181,11 @@ export default function UsersList() {
                                     )?.map((row) => (
                                         <TableRow key={row.username}>
                                             <TableCell>
-                                                <Typography variant="h6">{row.username}</Typography>
+                                                <Typography variant="h6">{row.userName}</Typography>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                <Typography variant="h6">{row.userEmail}</Typography>
                                             </TableCell>
                                             
                                             <TableCell>
