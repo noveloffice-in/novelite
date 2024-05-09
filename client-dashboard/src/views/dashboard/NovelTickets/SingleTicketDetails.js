@@ -62,6 +62,7 @@ export default function SingleTicketDetails() {
                 issueType={data.issue_type}
                 description={data.description}
                 priority={data.priority}
+                location={data.location}
               />}
           </TabPanel>
           <TabPanel value="2">
@@ -77,7 +78,7 @@ export default function SingleTicketDetails() {
   )
 }
 
-function Left({ id, title, description, rating, ratingDescription, issueSubtype, issueType, priority }) {
+function Left({ id, title, description, rating, ratingDescription, issueSubtype, issueType, priority, location }) {
 
   const formatDateTime = (inputDatetime, returnType) => {
     const date = new Date(inputDatetime);
@@ -98,6 +99,29 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
     } else {
       return formattedTime
     }
+  }
+
+  //For location abbrivation
+  let allLocations = [
+    { shortName: "NTP", fullName: "Novel Tech Park - Kudlu Gate" },
+    { shortName: "NOM", fullName: "Novel Office Marathahalli" },
+    { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
+    { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
+    { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
+    { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
+    { shortName: "NOB", fullName: "Novel Office Brigade" },
+    { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+  ]
+
+  //Converting location 
+  const getLocationName = (location) => {
+    let locationObj = allLocations.find((element) => {
+      return element.shortName == location;
+    })
+    if (locationObj) {
+      return locationObj.fullName
+    }
+    return "No Location";
   }
 
   return (
@@ -165,6 +189,23 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
             {description ? description : "No ticket description"}
           </Typography>
         </Grid>
+
+        <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Location
+          </Typography>
+          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
+            {getLocationName(location)}
+          </Typography>
+        </Grid>
+        {/* <Grid item lg={6} xs={12} mt={4}>
+          <Typography variant="body2" color="text.secondary">
+            Description
+          </Typography>
+          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
+            {description ? description : "No ticket description"}
+          </Typography>
+        </Grid> */}
 
         {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
