@@ -11,28 +11,21 @@ const BoxStyled = styled(Box)(() => ({
     },
 }));
 
-const SalesFilter = ({ data, setStatusFilter }) => {
+const SalesFilter = ({ salesInvoiceData, setStatusFilter }) => {
     const [pending, setPending] = useState([]);
     const [paid, setPaid] = useState([]);
     const [creditNote, setCreditNote] = useState([]);
 
     //-----------------------------------------------------------Filtering the Invoices-----------------------------------------------//
-
     useEffect(() => {
-        setPending(data?.filter((element) => {
-            return element.status === 'Overdue' ||
-                element.status === 'Unpaid' ||
-                element.status === 'Partly Paid' ||
-                element.status === 'Unpaid and Discounted' ||
-                element.status === 'Overdue and Discounted' ||
-                element.status === 'Partly Paid and Discounted'
+        setPending(salesInvoiceData?.filter((element) => {
+            return element.new_status === 'Pending'
         }))
-        setPaid(data?.filter((element) => {
-            return element.status === 'Paid' ||
-                element.status === 'Credit Note Issued'
+        setPaid(salesInvoiceData?.filter((element) => {
+            return element.new_status === 'Paid'
         }))
-        setCreditNote(data?.filter((element) => {
-            return element.status === 'Return'
+        setCreditNote(salesInvoiceData?.filter((element) => {
+            return element.new_status === 'Credit Note'
         }))
     }, [])
 
@@ -41,10 +34,10 @@ const SalesFilter = ({ data, setStatusFilter }) => {
             <Grid container spacing={3} textAlign="center">
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={data.length !== 0 ? () => setStatusFilter('ALL') : undefined}
-                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: data.length !== 0 ? 'pointer' : 'default'  }}
+                        onClick={salesInvoiceData.length !== 0 ? () => setStatusFilter('ALL') : undefined}
+                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: salesInvoiceData.length !== 0 ? 'pointer' : 'default'  }}
                     >
-                        <Typography variant="h3">{data.length}</Typography>
+                        <Typography variant="h3">{salesInvoiceData.length}</Typography>
                         <Typography variant="h6">ALL</Typography>
                     </BoxStyled>
                 </Grid>

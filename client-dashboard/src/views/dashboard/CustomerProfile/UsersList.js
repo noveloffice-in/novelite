@@ -140,7 +140,7 @@ export default function UsersList() {
 
     return (
         <PageContainer title="User - Novel Office" description="this is User Profile page">
-            <Grid p={1}>
+            <Grid>
                 <Grid item sm={12}>
                     <Banner />
                 </Grid>
@@ -218,7 +218,7 @@ export default function UsersList() {
                                     )}
                                 </TableBody>
 
-                                <TableFooter>
+                                {usersList.length > 5 && <TableFooter>
                                     <TableRow>
                                         <TablePagination
                                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
@@ -237,7 +237,7 @@ export default function UsersList() {
                                             ActionsComponent={TablePaginationActions}
                                         />
                                     </TableRow>
-                                </TableFooter>
+                                </TableFooter>}
 
                             </Table>
 

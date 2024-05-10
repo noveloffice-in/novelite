@@ -23,110 +23,30 @@ import {
     Link,
 } from '@mui/material';
 
+import { Stack } from '@mui/system';
+import LastPageIcon from '@mui/icons-material/LastPage';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-
-import { Stack } from '@mui/system';
-import { useFrappeGetDocList } from 'frappe-react-sdk';
-import { useSelector } from 'react-redux';
-import ParentCard from '../../../components/shared/ParentCard';
-
-function TablePaginationActions(props) {
-    const theme = useTheme();
-    const { count, page, rowsPerPage, onPageChange } = props;
-
-    const handleFirstPageButtonClick = (event) => {
-        onPageChange(event, 0);
-    };
-
-    const handleBackButtonClick = (event) => {
-        onPageChange(event, page - 1);
-    };
-
-    const handleNextButtonClick = (event) => {
-        onPageChange(event, page + 1);
-    };
-
-    const handleLastPageButtonClick = (event) => {
-        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-
-    return (
-        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-            <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
-                aria-label="first page"
-            >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-            </IconButton>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </IconButton>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-            >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-            </IconButton>
-        </Box>
-    );
-}
-
-TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-};
-
-
-export default function Table1({ data, statusFilter, setStatusFilter }) {
+export default function Table1({ statusFilter, salesInvoiceData }) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [filterData, setFilterData] = useState(data);
-
-    // let url = `http://${window.location.hostname}/api/method/frappe.utils.print_format.download_pdf?doctype=Sales Invoice&name=${row.name}&format=Business Center&no_letterhead=1&letterhead=No Letterhead &settings={}&_lang=en-US`;
+    const [filterData, setFilterData] = useState(salesInvoiceData);
 
     useEffect(() => {
-        if (statusFilter === "Pending") {
-            setFilterData(data?.filter((element) => {
-                return element.status === 'Overdue' ||
-                    element.status === 'Unpaid' ||
-                    element.status === 'Partly Paid' ||
-                    element.status === 'Unpaid and Discounted' ||
-                    element.status === 'Overdue and Discounted' ||
-                    element.status === 'Partly Paid and Discounted'
-            }))
-        } else if (statusFilter === "Paid") {
-            setFilterData(data?.filter((element) => {
-                return element.status === 'Paid' ||
-                    element.status === 'Credit Note Issued'
-            }))
-        } else if (statusFilter === "Credit Note") {
-            setFilterData(data?.filter((element) => {
-                return element.status === 'Return'
+        if (statusFilter !== "ALL") {
+            setFilterData(salesInvoiceData?.filter((element) => {
+                return element.new_status === statusFilter
             }))
         } else {
-            setFilterData(data);
+            setFilterData(salesInvoiceData);
         }
-
     }, [statusFilter])
 
-
+    //-----------------------------------------------------------Pagination-----------------------------------------------//
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterData?.length) : 0;
 
@@ -139,40 +59,10 @@ export default function Table1({ data, statusFilter, setStatusFilter }) {
         setPage(0);
     };
 
-    let statusArray = [
-        'ALL',
-        'Pending',
-        'Paid',
-        'Credit Note'
-    ]
-
+    //-----------------------------------------------------------Component Start-----------------------------------------------//
     return (
         <Stack>
-            <Box display="flex" justifyContent={'space-between'} alignItems={'center'}>
-                <Box>
-                    <Typography>Invoice List</Typography>
-                </Box>
-                <Box sx={{ mb: 2 }} >
-                    <FormControl sx={{ m: 1, minWidth: 140 }}>
-                        <InputLabel id="demo-simple-select-autowidth-label">Status</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-autowidth-label"
-                            id="demo-simple-select-autowidth"
-                            value={statusFilter}
-                            label="Status"
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                        >
-                            {statusArray.map((status, index) => {
-                                return (
-                                    <MenuItem key={status + index} value={status}>{status}</MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Box>
             <Paper variant="outlined">
-
                 <TableContainer>
 
                     <Table
@@ -232,12 +122,12 @@ export default function Table1({ data, statusFilter, setStatusFilter }) {
                                     </TableCell>
 
                                     <TableCell>
-                                        <Chip color={statusFilter === 'Paid' ? 'success' : statusFilter === 'Credit Note' ? 'error' : statusFilter === 'Pending' ? 'primary' : 'secondary'}
+                                        <Chip color={row.new_status === 'Paid' ? 'success' : row.new_status === 'Credit Note' ? 'error' : row.new_status === 'Pending' ? 'warning' : 'secondary'}
                                             sx={{
                                                 borderRadius: '6px',
                                             }}
                                             size="small"
-                                            label={statusFilter === 'All' ? (row.status === "Credit Note Issued" ? "Paid" : row.status === "Return" ? "Credit Note" : row.status) : statusFilter}
+                                            label={row.new_status}
                                         />
                                     </TableCell>
 
@@ -256,7 +146,7 @@ export default function Table1({ data, statusFilter, setStatusFilter }) {
                             )}
                         </TableBody>
 
-                        <TableFooter>
+                        {<TableFooter>
                             <TableRow>
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
@@ -275,7 +165,7 @@ export default function Table1({ data, statusFilter, setStatusFilter }) {
                                     ActionsComponent={TablePaginationActions}
                                 />
                             </TableRow>
-                        </TableFooter>
+                        </TableFooter>}
 
                     </Table>
 
@@ -284,3 +174,62 @@ export default function Table1({ data, statusFilter, setStatusFilter }) {
         </Stack>
     )
 }
+
+//-----------------------------------------------------------Table and Pagination-----------------------------------------------//
+
+function TablePaginationActions(props) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};

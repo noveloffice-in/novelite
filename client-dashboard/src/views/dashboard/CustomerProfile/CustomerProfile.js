@@ -7,7 +7,7 @@ import { Box } from '@mui/system';
 import { Stack } from '@mui/material';
 
 import ChildCard from 'src/components/shared/ChildCard';
-import { IconBriefcase, IconDeviceDesktop, IconMail, IconMapPin, IconUserCircle, IconCircles } from '@tabler/icons';
+import { IconBriefcase, IconDeviceDesktop, IconMail, IconMapPin, IconUserCircle, IconCircles, IconLicense } from '@tabler/icons';
 import { useFrappeGetDoc } from 'frappe-react-sdk';
 
 export default function CustomerProfile() {
@@ -16,7 +16,7 @@ export default function CustomerProfile() {
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     // const userImage = useSelector((state) => state.novelprofileReducer.userImage);
 
-    const {data: userData} = useFrappeGetDoc('App Users', userEmail);
+    const { data: userData } = useFrappeGetDoc('App Users', userEmail);
 
     return (
         <PageContainer title="User - Novel Office" description="this is User Profile page">
@@ -49,7 +49,22 @@ export default function CustomerProfile() {
                                 <IconCircles size="21" />
                                 <Typography variant="h6">{userData.user_type}</Typography>
                             </Stack>
-  
+                            <Stack direction="row" gap={2} alignItems="center" mb={3}>
+                                <IconLicense size="21" />
+                                <Stack direction={{xs:"column", md:"row", lg:"row"}} gap={{xs:0, md:2, lg:2}}>
+                                    {
+                                        userData.permissions.map((permission) => {
+                                            return (
+                                                <>
+                                                    <Typography variant="h6">{permission.permissions}</Typography>
+                                                    <br />
+                                                </>
+                                            )
+                                        })
+                                    }
+                                </Stack>
+                            </Stack>
+
                             {/* <Stack direction="row" gap={2} alignItems="center" mb={3}>
                                 <IconDeviceDesktop size="21" />
                                 <Typography variant="h6">www.xyz.com</Typography>
