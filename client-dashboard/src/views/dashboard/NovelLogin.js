@@ -180,9 +180,9 @@ export default function NovelLogin() {
                         xl={4}
                         display="flex"
                         justifyContent="center"
-                        alignItems="center"
+                        alignItems={{ xs: 'start', md: 'center', lg: 'center' }}
                     >
-                        <Card elevation={24} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: { xs: '350px', md: '350px', lg: '450px' } }}>
+                        <Card elevation={24} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: { xs: '350px', md: '350px', lg: '450px' }, marginTop: { xs: '20%', md: '0px', lg: '0px' } }}>
                             <Box display="flex" alignItems="center" justifyContent="center">
                                 <Logo />
                             </Box>
