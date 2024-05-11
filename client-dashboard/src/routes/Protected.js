@@ -19,23 +19,30 @@ export default function Protected(props) {
         getUserCookie,
     } = useFrappeAuth();
 
-    const fullName = useSelector((state) => state.novelprofileReducer.fullName);
 
     //Getting the user ndetails using the cookies
     let c = Cookies.set(getUserCookie);
-    // console.log(Cookies.get('user_id'));
+    // console.log("Cookies = ", Cookies.get('user_id'));
 
-    useEffect(()=>{
-        if (fullName === 'Guest') {
-            naviagate('/dashboard');
-            return;
-        } else {
-            if (Cookies.get('user_id') == undefined) {
-                // console.log("This is user = ", Cookies.get('user_id'));
-                naviagate('/');
+
+    useEffect(() => {
+        const handleBackButton = (event) => {
+            if (Cookies.get('user_id') === 'Guest') {
+                naviagate('/login');
             }
         }
-    },[])
+
+        if (Cookies.get('user_id') === 'Guest') {
+            naviagate('/login');
+        }
+
+        window.addEventListener('popstate', handleBackButton);
+
+        // Cleanup when component unmounts
+        return () => {
+            window.removeEventListener('popstate', handleBackButton);
+        };
+    }, [])
 
     return (
         <Component />

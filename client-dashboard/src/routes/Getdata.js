@@ -26,28 +26,36 @@ export default function Getdata(props) {
     const dispatch = useDispatch();
 
     //Getting data from App user to set wheather user is Admin / Non-Admin
-    const {data: appUserData} = useFrappeGetDoc('App Users', userEmail);
-    if(appUserData){
+    const { data: appUserData } = useFrappeGetDoc('App Users', userEmail);
+    if (appUserData) {
         dispatch(setAdminStatus(appUserData.user_type));
     }
 
     //Getting the user ndetails using the cookies
     let c = Cookies.set(getUserCookie);
-    // console.log(Cookies.get('user_id'));
+    console.log(" Cookie inside login ", Cookies.get('user_id'));
 
     useEffect(() => {
-        if (fullName === 'Guest') {
-            naviagate('/dashboard');
-            return;
-        } else {
-            if (Cookies.get('user_id') == undefined) {
-                // console.log("This is user = ", Cookies.get('user_id'));
-                naviagate('/');
+        const handleBackButton = (event) => {
+            if (Cookies.get('user_id') !== 'Guest') {
+                naviagate('/dashboard');
             } else {
-
+                naviagate('/login');
             }
+        };
+
+        if (Cookies.get('user_id') !== 'Guest') {
+            naviagate('/dashboard');
+        } else {
+            naviagate('/login');
         }
 
+        window.addEventListener('popstate', handleBackButton);
+
+        // Cleanup when component unmounts
+        return () => {
+            window.removeEventListener('popstate', handleBackButton);
+        };
     }, [])
 
     // console.log(fullName);
@@ -77,7 +85,7 @@ export default function Getdata(props) {
             dispatch(setUserImage(""))
         }
         // console.log("DATA = ", userData);
-        
+
         //Getting leads and setting only lead Ids in store
         const getLeadID = () => {
             const { data: customerData } = useFrappeGetDoc(
@@ -85,8 +93,8 @@ export default function Getdata(props) {
             );
             return customerData?.leads;
         }
-        
-        const leadsIDs = getLeadID()?.map((lead)=>{
+
+        const leadsIDs = getLeadID()?.map((lead) => {
             return lead.leads
         });
 
