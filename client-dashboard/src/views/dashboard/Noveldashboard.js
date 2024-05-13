@@ -19,12 +19,13 @@ import nom from '../../assets/images/dashboard/nom.png'
 import now from '../../assets/images/dashboard/now.png'
 import img from '../../assets/images/dashboard/img.png'
 import img2 from '../../assets/images/dashboard/img2.png'
-
+import { useFrappeGetDocList } from 'frappe-react-sdk';
+ 
 const listings = [
   {
     image: nom,
     buildingName: "MSR Tech Park",
-    location: "Marathalli, Banglore"
+    location: "Marathalli, Banglore" //Done
   },
   {
     image: now,
@@ -34,12 +35,12 @@ const listings = [
   {
     image: ntp,
     buildingName: "Novel Tech Park",
-    location: "HSR Extension, Banglore"
+    location: "HSR Extension, Banglore" //Done
   },
   {
     image: noc,
     buildingName: "Novel Office Central",
-    location: "MG Road, Banglore"
+    location: "MG Road, Banglore" //Done
   },
   {
     image: nbp,
@@ -49,12 +50,12 @@ const listings = [
   {
     image: noq,
     buildingName: "Novel Office Queens Road",
-    location: "Queens Road, Banglore"
+    location: "Queens Road, Banglore" //done
   },
   {
     image: nob,
     buildingName: "Novel Office brigade tech park",
-    location: "ITPL, Banglore"
+    location: "ITPL, Banglore" //Done
   },
 ]
 
@@ -73,6 +74,25 @@ const event = [
 
 export default function noveldashboard() {
 
+  const { data: locationData} = useFrappeGetDocList('Room Locations', {
+    fields: ['location_name', 'image', 'address'],
+    filters: [],
+    orderBy: {
+      field: 'name', 
+      order: 'asc',
+    },
+  })
+
+  const { data: eventData} = useFrappeGetDocList('Novel Events', {
+    fields: ['event_name', 'starts_on', 'image'],
+    orderBy: {
+      field: 'name', 
+      order: 'asc',
+    },
+  })
+
+  console.log("Event Data = ", eventData);
+
   const userName = useSelector((state) => state.novelprofileReducer.fullName)
 
   return (
@@ -84,10 +104,10 @@ export default function noveldashboard() {
       <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
         <Grid container spacing={2} >
           {
-            listings.map((listing, index) => {
+            locationData.map((listing, index) => {
               return (
-                <Grid item xs={12} sm={4} lg={3} key={listing.buildingName}>
-                  <ImagesSlider key={listing.location} image={listing.image} name={listing.buildingName} location={listing.location} />
+                <Grid item xs={12} sm={4} lg={4} key={listing.buildingName}>
+                  <ImagesSlider key={listing.location_name} image={listing.image} name={listing.location_name} location={listing.address} />
                 </Grid>
               )
             })
@@ -98,10 +118,10 @@ export default function noveldashboard() {
       <Typography variant='h3' mt={2} pl={1} >Upcoming Events</Typography>
       <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
         <Grid container spacing={2}>
-          {event.map((event, index) => {
+          {eventData.map((event, index) => {
             return (
               <Grid item xs={12} sm={6} lg={6} key={event.eventName}>
-                <NovelEvents key={event.eventName} image={event.image} name={event.eventName} date={event.date} />
+                <NovelEvents key={event.event_name} image={event.image} name={event.event_name} date={event.starts_on} />
               </Grid>
             )
           })}
