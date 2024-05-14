@@ -250,7 +250,7 @@ export default function UsersList() {
                 }
 
             </Grid>
-            {/* ---------------------------------------Raise Dialog Start---------------------------------- */}
+            {/* ---------------------------------------Edit User Dialog Start---------------------------------- */}
             <Dialog
                 fullWidth
                 maxWidth='sm'

@@ -20,7 +20,7 @@ import now from '../../assets/images/dashboard/now.png'
 import img from '../../assets/images/dashboard/img.png'
 import img2 from '../../assets/images/dashboard/img2.png'
 import { useFrappeGetDocList } from 'frappe-react-sdk';
- 
+
 const listings = [
   {
     image: nom,
@@ -74,19 +74,19 @@ const event = [
 
 export default function noveldashboard() {
 
-  const { data: locationData} = useFrappeGetDocList('Room Locations', {
+  const { data: locationData } = useFrappeGetDocList('Room Locations', {
     fields: ['location_name', 'image', 'address'],
     filters: [],
     orderBy: {
-      field: 'name', 
+      field: 'name',
       order: 'asc',
     },
   })
 
-  const { data: eventData} = useFrappeGetDocList('Novel Events', {
+  const { data: eventData } = useFrappeGetDocList('Novel Events', {
     fields: ['event_name', 'starts_on', 'image'],
     orderBy: {
-      field: 'name', 
+      field: 'name',
       order: 'asc',
     },
   })
@@ -97,14 +97,14 @@ export default function noveldashboard() {
 
   return (
     <PageContainer title="Dashboard - Novel Office" description="this is Cards page">
-      <WelcomeCardNovel title={userName} mb={2}/>
+      <WelcomeCardNovel title={userName} mb={2} />
       <Queries />
 
       <Typography variant='h3' mt={2} mb={2} pl={1} >Featured listings</Typography>
       <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
         <Grid container spacing={2} >
           {
-            locationData.map((listing, index) => {
+            locationData && locationData.map((listing, index) => {
               return (
                 <Grid item xs={12} sm={4} lg={4} key={listing.buildingName}>
                   <ImagesSlider key={listing.location_name} image={listing.image} name={listing.location_name} location={listing.address} />
@@ -118,7 +118,7 @@ export default function noveldashboard() {
       <Typography variant='h3' mt={2} pl={1} >Upcoming Events</Typography>
       <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
         <Grid container spacing={2}>
-          {eventData.map((event, index) => {
+          {eventData && eventData.map((event, index) => {
             return (
               <Grid item xs={12} sm={6} lg={6} key={event.eventName}>
                 <NovelEvents key={event.event_name} image={event.image} name={event.event_name} date={event.starts_on} />

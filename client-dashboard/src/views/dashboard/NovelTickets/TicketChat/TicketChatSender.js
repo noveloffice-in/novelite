@@ -1,19 +1,37 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IconButton, InputBase, Box, Popover } from '@mui/material';
+import { IconButton, InputBase, Box, Button } from '@mui/material';
 // import Picker from 'emoji-picker-react';
 import { IconPaperclip, IconPhoto, IconSend } from '@tabler/icons';
 import { sendMsg } from 'src/store/apps/chat/ChatSlice';
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
+
+//Attachment
+import { styled } from '@mui/material/styles';
+
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+//Attachment Style
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 export default function TicketChatSender({ id, fetchChats }) {
 
     const dispatch = useDispatch();
     const [msg, setMsg] = React.useState('');
+    const [attachment, setAttachment] = React.useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [chosenEmoji, setChosenEmoji] = React.useState();
 
@@ -112,13 +130,26 @@ export default function TicketChatSender({ id, fetchChats }) {
                     onChange={handleChatMsgChange}
                 />
                 <IconButton
-                    aria-label="delete"
+                    aria-label="send"
                     onClick={onChatMsgSubmit}
                     disabled={!msg}
                     type='submit'
                     color="primary"
                 >
                     <IconSend stroke={1.5} size="20" />
+                </IconButton>
+                <IconButton >
+                    {/* <IconPaperclip stroke={1.5} size="20" /> */}
+
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="outlined"
+                        sx={{backgroundColor:'none', color:"none"}}
+                        >
+                        <IconPaperclip/>
+                        <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+                    </Button>
                 </IconButton>
             </form>
             <ToastContainer
