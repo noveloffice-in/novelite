@@ -329,6 +329,7 @@ const Banner = () => {
               component="form"
             >
               <Box>
+                {/* Name */}
                 <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                   <TextField
                     label="Name"
@@ -339,6 +340,7 @@ const Banner = () => {
                     error={errorField === 'first_name'}
                   />
                 </FormControl>
+                {/* Email */}
                 <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                   <TextField
                     label="Email"
@@ -350,6 +352,8 @@ const Banner = () => {
                   />
                 </FormControl>
               </Box>
+
+              {/* Password */}
               <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password" required >Password</InputLabel>
                 <OutlinedInput
@@ -374,6 +378,7 @@ const Banner = () => {
                 />
               </FormControl>
 
+              {/* Confirm Password */}
               <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password" required >Confirm Password</InputLabel>
                 <OutlinedInput

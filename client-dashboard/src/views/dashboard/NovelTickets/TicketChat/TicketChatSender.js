@@ -27,7 +27,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-export default function TicketChatSender({ id, fetchChats }) {
+export default function TicketChatSender({ id, fetchChats, issueMessages }) {
 
     const dispatch = useDispatch();
     const [msg, setMsg] = React.useState('');
@@ -39,14 +39,13 @@ export default function TicketChatSender({ id, fetchChats }) {
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
     const { createDoc, isCompleted, } = useFrappeCreateDoc();
 
+    // console.log("issueMessages = ", issueMessages.all_messages[0].parent);
+
+    const parentId = issueMessages.length !== 0 ? issueMessages.all_messages[0].parent : null;
     //Toast
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
-
-    // useEffect(()=>{
-    // let checkMsg = setInterval(()=>{
-    //     mutate();
-    // }, 2000);
+    const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
 
     //     return ()=> clearInterval(checkMsg);
     // },[])
@@ -65,51 +64,75 @@ export default function TicketChatSender({ id, fetchChats }) {
     const formattedDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
     // console.log("Date is  ", formattedDate);
 
+
+    //--------------------------------------------------------File Attachments-----------------------------------------//
+    const sendAttachment = (e) => {
+        setAttachment(e.target.files[0])
+        console.log(e.target.files[0]);
+        setMsg(e.target.files[0].name);
+    }
+
+    const checkFileFormat = (file) => {
+        if (!file) {
+            return false;
+        } else if (file.size > 5242880) {
+            return true;
+        }
+        const extension = file.name.split('.').pop().toLowerCase();
+        const allowedFormats = ['pdf', 'png', 'jpg'];
+        if (!allowedFormats.includes(extension)) {
+            return true;
+        }
+        return false;
+    }
+
     //--------------------------------------------------------Send Chat-----------------------------------------//
     const onChatMsgSubmit = (e) => {
-        e.preventDefault();
-        // e.stopPropagation();
 
-        //, Chat sending to Comments
-        // let message = {
-        //     reference_doctype: "Issue",
-        //     comment_type: "Comment",
-        //     reference_name: id,
-        //     creation: formattedDate,
-        //     comment_email: userEmail,
-        //     comment_by: fullName,
-        //     content: msg
-        // }
-        // console.log("Message = ", message);
-
-        // createDoc('Comment', message)
-        //     .then(() => {
-        //         // console.log('Comment Added');
-        //         mutate();
-        //     }).catch((err) => {
-        //         console.log("inside catch " + JSON.stringify(err.message));
-        //         console.err(err.message);
-        //     })
-
-        //, New api call to add Comment
         if (msg !== "") {
-            let messageData = {
+            const messageData = {
                 message: msg,
                 issue_id: id,
                 comment_by_email: userEmail,
+                parentId: parentId
             }
-            axios.post('/api/method/novelite.api.issue_comment_for_client.addDataToIssueCommentForClient', messageData)
-                .then((res) => {
-                    notifySuccess(res.data.message)
-                    fetchChats();
-                })
-                .catch((err) => {
-                    notifyError(err)
-                    console.log(err);
-                })
+
+            if (attachment) {
+                if (checkFileFormat(attachment)) {
+                    notifyWarn("File size cannot be more than 5MB and must be in PDF, PNG, or JPG format");
+                } else {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(attachment);
+                    reader.onloadend = function () {
+                        const base64data = reader.result;
+
+                        // Include base64 data in messageData
+                        messageData.file = base64data;
+                        sendChat(messageData);
+                        setAttachment(null);
+                        console.log("1");
+                    }
+                }
+            } else {
+                sendChat(messageData);
+                setAttachment(null);
+                console.log("3");
+            }
         }
         setMsg('');
     };
+
+    const sendChat = (data) => {
+        axios.post('/api/method/novelite.api.issue_comment_for_client.addDataToIssueCommentForClient', data)
+            .then((res) => {
+                notifySuccess(res.data.message)
+                fetchChats();
+            })
+            .catch((err) => {
+                notifyError(err)
+                console.log(err);
+            })
+    }
 
     return (
         <Box p={2}>
@@ -145,10 +168,10 @@ export default function TicketChatSender({ id, fetchChats }) {
                         component="label"
                         role={undefined}
                         variant="outlined"
-                        sx={{backgroundColor:'none', color:"none"}}
-                        >
-                        <IconPaperclip/>
-                        <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+                        sx={{ backgroundColor: 'none', color: "none" }}
+                    >
+                        <IconPaperclip />
+                        <VisuallyHiddenInput type="file" onChange={(e) => sendAttachment(e)} />
                     </Button>
                 </IconButton>
             </form>

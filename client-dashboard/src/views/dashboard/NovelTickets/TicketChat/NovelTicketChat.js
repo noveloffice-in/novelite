@@ -14,17 +14,31 @@ export default function NovelTicketChat({ id, title, status }) {
 
   const [issueMessages, setIssueMessages] = useState([])
 
-
   useEffect(() => {
-    fetchChats();
-  }, []);
+    updateSeen();
+    const intervalId = setInterval(fetchChats, 2000);
 
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   //------------------------------------------------------getting Messages----------------------------------------------//
   const fetchChats = () => {
     axios.post('/api/method/novelite.api.issue_comment_for_client.get_ticket_by_id', { issue_id: id })
       .then((res) => {
         setIssueMessages(res.data.message)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  //------------------------------------------------------getting Messages----------------------------------------------//
+  const updateSeen = () => {
+    axios.post('/api/method/novelite.api.issue_comment_for_client.update_seen_by_customer', { issue_id: id })
+      .then((res) => {
+        console.log('Seen');
       })
       .catch((err) => {
         console.log(err);
@@ -47,7 +61,7 @@ export default function NovelTicketChat({ id, title, status }) {
         <Box flexGrow={1}>
           <TicketChatContent data={issueMessages.all_messages} title={title} id={id} />
           <Divider />
-          {status !== "Closed" && <TicketChatSender id={id} fetchChats={fetchChats} />}
+          {status !== "Closed" && <TicketChatSender id={id} fetchChats={fetchChats} issueMessages={issueMessages} />}
         </Box>
       </Box>
       // </PageContainer>
