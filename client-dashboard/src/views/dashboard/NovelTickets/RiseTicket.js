@@ -65,6 +65,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
     const customerEmailId = useSelector((state) => state.novelprofileReducer.userEmail);
     const [attachment, setAttachment] = useState(null);
     const [openToolTip, setOpenToolTip] = useState(false);
@@ -87,7 +88,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
         contactName: "",
         contactNumber: "",
         alternateEmail: "",
-        customer: customerName,
+        customer: companyName,
         email: '',
         file: "",
         fileName: "",
@@ -317,7 +318,7 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 contact_phone: updatedTicketData.contactNumber,
                 contact_email: updatedTicketData.email,
                 contact_email_alternative: updatedTicketData.alternateEmail,
-                customer: customerName,
+                customer: companyName,
                 vent_number: updatedTicketData.ventNumber,
                 priority: issuePriority,
                 creation_via: "Ticket",
