@@ -220,6 +220,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   //Submit btn trigger inside modal
   const handleSubmit = () => {
     setSubmitTicket(!submitTicket);
+    handleClose1();
     setShowLoading(true);
   }
 
@@ -262,28 +263,28 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
       switch (filter) {
         case 'total_tickets':
           return tickets.filter(
-            (c) => c.subject?.toLocaleLowerCase().includes(ticketSearch),
+            (c) => c.name?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Pending':
           return tickets.filter(
             (c) =>
               c.status === 'Pending' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
+              c.name?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'Closed':
           return tickets.filter(
             (c) =>
               c.status === 'Closed' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
+              c.name?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         case 'In-Progress':
           return tickets.filter(
             (c) =>
               c.status === 'In-Progress' &&
-              c.subject?.toLocaleLowerCase().includes(ticketSearch),
+              c.name?.toLocaleLowerCase().includes(ticketSearch),
           );
 
         default:
@@ -439,7 +440,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
                                       : ticket.status === 'Re-Open',
                           }}
                           size="small"
-                          label={ticket.status}
+                          label={ticket.status === 'Completed' ? 'Under-Review' : ticket.status}
                         />
                       </TableCell>
                       <TableCell component={Link} to={`/ticket_details/${ticket.name}`}>
@@ -558,20 +559,6 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
             </Stack>
           </DialogTitle>
           <DialogContent>
-            {/* ---------------------------------------Toast Container Starts------------------------------------ */}
-            <ToastContainer
-              position="top-center"
-              autoClose={1000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-            {/* ---------------------------------------Toast Container Ends------------------------------------ */}
             <Stack >
               {/* <Typography variant='p'>{ticketId}</Typography> */}
               <Typography variant='p' pb={2}>{ticketRatingSubject}</Typography>
@@ -607,6 +594,20 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
         </Dialog>
         {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
         {/* <audio ref={closedTicketAudio} src={closedTicketSound} /> */}
+        {/* ---------------------------------------Toast Container Starts------------------------------------ */}
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        {/* ---------------------------------------Toast Container Ends------------------------------------ */}
       </Box>
     );
   }

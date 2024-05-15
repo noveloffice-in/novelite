@@ -16,6 +16,7 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  CircularProgress
 } from '@mui/material';
 import profilecover from 'src/assets/images/backgrounds/profilebg.jpg';
 import userimg from 'src/assets/images/profile/user-1.jpg';
@@ -66,7 +67,7 @@ const Banner = () => {
   const userImage = useSelector((state) => state.novelprofileReducer.userImage);
   const adminStatus = useSelector((state) => state.novelprofileReducer.adminStatus);
 
-  const [disableSubmit, setDisable] = React.useState(false);
+  const [disableSubmit, setDisableSubmit] = React.useState(false);
 
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -118,40 +119,39 @@ const Banner = () => {
     }));
   }
 
-  const { createDoc } = useFrappeCreateDoc();
-  const { updateDoc } = useFrappeUpdateDoc();
   const createUser = () => {
-    setDisable(true);
+    setDisableSubmit(true);
     const { email, first_name, new_password, confirmPassword } = userData;
 
     if (first_name === '') {
       setErrorField('first_name');
-      setDisable(false);
+      setDisableSubmit(false);
     } else if (email === '') {
       setErrorField('email');
-      setDisable(false);
+      setDisableSubmit(false);
     } else if (new_password === '') {
       setErrorField('new_password');
-      setDisable(false);
+      setDisableSubmit(false);
     } else if (confirmPassword === '') {
       setErrorField('confirmPassword');
-      setDisable(false);
+      setDisableSubmit(false);
     } else if (new_password !== confirmPassword) {
       setErrorField('confirmPassword');
-      setDisable(false);
+      setDisableSubmit(false);
     } else {
+
       axios.post('/api/method/novelite.api.user_creation.create_user', userData)
         .then((res) => {
           console.log("res = ", res);
           notifySuccess("User created sucessfully");
-          setDisable(false);
           setTimeout(() => {
+            setDisableSubmit(false);
             handleClose1();
           }, 2000);
         })
         .catch((err) => {
           notifyError(err);
-          setDisable(false);
+          setDisableSubmit(false);
           console.log("Error = ", err);
         })
     }
@@ -407,7 +407,7 @@ const Banner = () => {
           <DialogActions>
             <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>
               <Button variant="outlined" type='submit' onClick={createUser} disabled={disableSubmit}>
-                Submit
+                {disableSubmit ? <CircularProgress color="inherit" size={26} /> : "Submit"}
               </Button>
             </Box>
           </DialogActions>
