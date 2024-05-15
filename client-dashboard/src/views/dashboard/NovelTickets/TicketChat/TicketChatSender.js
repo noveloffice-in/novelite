@@ -41,7 +41,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
 
     // console.log("issueMessages = ", issueMessages.all_messages[0].parent);
 
-    const parentId = issueMessages.length !== 0 ? issueMessages.all_messages[0].parent : null;
+    const parentId = issueMessages.length !== 0 ? issueMessages.all_messages[0]?.parent : null;
     //Toast
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });

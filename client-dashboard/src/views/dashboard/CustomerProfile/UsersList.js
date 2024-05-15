@@ -116,6 +116,7 @@ export default function UsersList() {
 
     //Dialog for rise ticket
     const handleClickOpen = (permissionsArr, username) => {
+        console.log("User name  = ", username);
         setOpen1(true);
         setUser(username);
         setPermissionChange(false);
@@ -206,7 +207,7 @@ export default function UsersList() {
                                                 }
                                             </TableCell>
                                             <TableCell>
-                                                <Button variant='outlined' onClick={() => { handleClickOpen(row.permissions, row.username) }}>Edit</Button>
+                                                <Button variant='outlined' onClick={() => { handleClickOpen(row.permissions, row.userEmail) }}>Edit</Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}

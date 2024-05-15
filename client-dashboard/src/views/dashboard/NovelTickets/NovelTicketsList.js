@@ -81,7 +81,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
 
   //For Closed tickets Notification
   const isFirstRender = useRef(true);
-  const closedTicketAudio = useRef(null);
+  // const closedTicketAudio = useRef(null);
 
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -107,7 +107,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
         if (closedTicketData[0].review_show_popup === 0) {
           setTicketId(closedTicketData[0].name);
           handleClickOpen2(closedTicketData[0].name, closedTicketData[0].subject);
-          closedTicketAudio?.current.play();
+          // closedTicketAudio?.current.play();
           // alert("show")
         }
       }
@@ -606,7 +606,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
           </DialogActions>
         </Dialog>
         {/* ---------------------------------------Rating Dialog Ends------------------------------------ */}
-        <audio ref={closedTicketAudio} src={closedTicketSound} />
+        {/* <audio ref={closedTicketAudio} src={closedTicketSound} /> */}
       </Box>
     );
   }
