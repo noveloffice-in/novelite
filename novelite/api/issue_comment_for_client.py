@@ -77,31 +77,6 @@ def get_ticket_by_id():
         
         # Fetch the document based on the ticket_id
         doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
-        
-        # Return the document as a JSON response
-        return doc
-    
-    except Exception as e:
-        # Log the error
-        frappe.log_error("Error in get_ticket_by_id: {}".format(e))
-        
-        # Return an error response
-        frappe.response["http_status_code"] = 500
-        return {"error": "An error occurred while fetching the ticket."}
-    
-# ----------------------------------------Adding Data and attachment to Issue Comment For Client------------------------------------------------
-@frappe.whitelist()
-def update_seen_by_customer():
-    data = frappe.request.json
-
-    if data is None:
-        frappe.throw("No data provided")
-
-    try:
-        ticket_id = data.get('issue_id')
-        
-        # Fetch the document based on the ticket_id
-        doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
 
         # Update only if unread messages are not 0
         if doc.unread_messages != 0:
@@ -119,3 +94,4 @@ def update_seen_by_customer():
         # Return an error response
         frappe.response["http_status_code"] = 500
         return {"error": "An error occurred while fetching the ticket."}
+    

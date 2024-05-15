@@ -100,17 +100,28 @@ export default function TicketChatContent({ data, title, id }) {
                                                             <Typography variant="caption" color="grey.400" mb={1}>
                                                                 {comment.comment_by_name}
                                                             </Typography>
-                                                            <Box
-                                                                my={0.5}
-                                                                sx={{
-                                                                    p: 1,
-                                                                    backgroundColor: 'grey.100',
-                                                                    mr: 'auto',
-                                                                    maxWidth: '320px',
-                                                                }}
-                                                            >
-                                                                {comment.message}
-                                                            </Box>
+
+                                                            {comment.attachment ?
+                                                                (
+                                                                    <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px' }}>
+                                                                        <img src={comment.attachment} alt="attach" width="150" />
+                                                                    </Box>
+                                                                ) :
+                                                                (
+                                                                    <Box
+                                                                        my={0.5}
+                                                                        sx={{
+                                                                            p: 1,
+                                                                            backgroundColor: 'grey.100',
+                                                                            mr: 'auto',
+                                                                            maxWidth: '320px',
+                                                                        }}
+                                                                    >
+                                                                        {comment.message}
+                                                                    </Box>
+                                                                )
+                                                            }
+
                                                             <Typography variant="caption" color="grey.300" mb={1}>
                                                                 {/* {data.creation}{' '} */}
                                                                 {formatDistanceToNowStrict(new Date(comment.date_and_time ? comment.date_and_time : new Date()), {
@@ -118,11 +129,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                                 })}{' '}
                                                                 ago
                                                             </Typography>
-                                                            {comment.attachment ? (
-                                                                <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px' }}>
-                                                                    <img src={comment.attachment} alt="attach" width="150" />
-                                                                </Box>
-                                                            ) : null}
+
                                                         </Box>
                                                     </Box>)
                                                     :
@@ -140,17 +147,28 @@ export default function TicketChatContent({ data, title, id }) {
                                                                 <Typography variant="body2" color="grey.400" mb={1}>
                                                                     {fullName}
                                                                 </Typography>
-                                                                <Box
-                                                                    my={0.5}
-                                                                    sx={{
-                                                                        p: 1,
-                                                                        backgroundColor: 'primary.light',
-                                                                        ml: 'auto',
-                                                                        maxWidth: '320px',
-                                                                    }}
-                                                                >
-                                                                    {comment.message}
-                                                                </Box>
+
+                                                                {comment.attachment ?
+                                                                    (
+                                                                        <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px' }}>
+                                                                            <img src={comment.attachment} alt="attach" width="150" />
+                                                                        </Box>
+                                                                    )
+                                                                    :
+                                                                    (
+                                                                        <Box
+                                                                            my={0.5}
+                                                                            sx={{
+                                                                                p: 1,
+                                                                                backgroundColor: 'primary.light',
+                                                                                ml: 'auto',
+                                                                                maxWidth: '320px',
+                                                                            }}>
+                                                                            {comment.message}
+                                                                        </Box>
+                                                                    )
+                                                                }
+
                                                                 <Typography variant="body2" color="grey.300" mb={1}>
                                                                     {/* {data.creation}{' '} */}
                                                                     {formatDistanceToNowStrict(new Date(comment.date_and_time ? comment.date_and_time : new Date()), {
@@ -158,11 +176,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                                     })}{' '}
                                                                     ago
                                                                 </Typography>
-                                                                {comment.attachment ? (
-                                                                    <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px' }}>
-                                                                        <img src={comment.attachment} alt="attach" width="150" />
-                                                                    </Box>
-                                                                ) : null}
+
                                                             </Box>
                                                         </Box>
                                                     </Box>)
