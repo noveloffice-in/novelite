@@ -13,7 +13,7 @@
   "customer_email",
   "column_break_u6k4a",
   "lead_id",
-  "billing_entity",
+  "price",
   "visitor_details_section",
   "visitor_name",
   "vehicle_type",
@@ -24,7 +24,9 @@
   "visit_date",
   "visit_time",
   "custom_qr_code",
-  "qr_code_image"
+  "qr_code_image",
+  "quantity",
+  "particulars"
  ],
  "fields": [
   {
@@ -52,11 +54,6 @@
    "fieldtype": "Link",
    "label": "Lead ID",
    "options": "Leads"
-  },
-  {
-   "fieldname": "billing_entity",
-   "fieldtype": "Data",
-   "label": "Billing Entity"
   },
   {
    "fieldname": "visitor_details_section",
@@ -114,11 +111,29 @@
    "fieldtype": "Attach Image",
    "label": "QR code image",
    "options": "custom_qr_code"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price"
+  },
+  {
+   "default": "1",
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "particulars",
+   "fieldtype": "Select",
+   "label": "Particulars",
+   "options": "Parking (2S)\nParking (2U)\nParking (4S)\nParking (4U)"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-27 22:53:27.962534",
+ "modified": "2024-05-17 12:24:43.293987",
  "modified_by": "Administrator",
  "module": "Visitor Parkings",
  "name": "Visitor Parking Pass",

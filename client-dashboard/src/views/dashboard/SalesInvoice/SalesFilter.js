@@ -11,7 +11,7 @@ const BoxStyled = styled(Box)(() => ({
     },
 }));
 
-const SalesFilter = ({ salesInvoiceData, setStatusFilter }) => {
+const SalesFilter = ({ salesInvoiceData, setStatusFilter, locationFilter }) => {
     const [pending, setPending] = useState([]);
     const [paid, setPaid] = useState([]);
     const [creditNote, setCreditNote] = useState([]);
@@ -35,7 +35,7 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter }) => {
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
                         onClick={salesInvoiceData.length !== 0 ? () => setStatusFilter('ALL') : undefined}
-                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: salesInvoiceData.length !== 0 ? 'pointer' : 'default'  }}
+                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: salesInvoiceData.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{salesInvoiceData.length}</Typography>
                         <Typography variant="h6">ALL</Typography>
@@ -61,7 +61,7 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter }) => {
                 </Grid>
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={creditNote.length!== 0 ? () => setStatusFilter('Credit Note') : undefined}
+                        onClick={creditNote.length !== 0 ? () => setStatusFilter('Credit Note') : undefined}
                         sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: creditNote.length !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{creditNote.length}</Typography>

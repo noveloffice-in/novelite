@@ -20,24 +20,25 @@ const SalesInvoice = () => {
 
   const companyName = useSelector((state) => state.novelprofileReducer.companyName);
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [locationFilter, setLocationFilter] = useState("ALL");
   const [salesInvoiceData, setSalesInvoiceData] = useState([]);
   const [isPending, setIsPending] = useState(true);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchInvoices();
-  },[])
-  
+  }, [])
+
   //-----------------------------------------------------------Fetch Invoice-----------------------------------------------//
-  const fetchInvoices = ()=>{
-    axios.post('/api/method/novelite.api.sales_invoice.get_invoice_documents', {customer : companyName})
-    .then((res)=>{
-      console.log("Res = ", res.data.message);
-      setSalesInvoiceData(res.data.message);
-      setIsPending(false);
-    })
-    .catch((error)=>{
-      console.log("Error = ", error);
-    })
+  const fetchInvoices = () => {
+    axios.post('/api/method/novelite.api.sales_invoice.get_invoice_documents', { customer: companyName })
+      .then((res) => {
+        console.log("Res = ", res.data.message);
+        setSalesInvoiceData(res.data.message);
+        setIsPending(false);
+      })
+      .catch((error) => {
+        console.log("Error = ", error);
+      })
   }
 
   return (
@@ -46,10 +47,25 @@ const SalesInvoice = () => {
       <Breadcrumb title="Sales Invoice" items={BCrumb} />
 
       {/* Invoice Filters */}
-      {!isPending && <SalesFilter salesInvoiceData={salesInvoiceData} statusFilter={statusFilter} setStatusFilter={setStatusFilter} />}
+      {!isPending &&
+        <SalesFilter
+          salesInvoiceData={salesInvoiceData}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          locationFilter={locationFilter}
+        />
+      }
 
       {/* Table */}
-      {!isPending && <Table salesInvoiceData={salesInvoiceData} statusFilter={statusFilter} setStatusFilter={setStatusFilter} />}
+      {!isPending &&
+        <Table
+          salesInvoiceData={salesInvoiceData}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+        />
+      }
 
     </PageContainer>
   );

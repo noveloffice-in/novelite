@@ -30,7 +30,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-export default function Table1({ statusFilter, salesInvoiceData }) {
+export default function Table1({ statusFilter, salesInvoiceData, locationFilter, setLocationFilter }) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -46,6 +46,16 @@ export default function Table1({ statusFilter, salesInvoiceData }) {
         }
     }, [statusFilter])
 
+    useEffect(() => {
+        if (locationFilter !== "ALL") {
+            setFilterData(salesInvoiceData?.filter((element) => {
+                return element.location === locationFilter
+            }))
+        } else {
+            setFilterData(salesInvoiceData);
+        }
+    }, [locationFilter])
+
     //-----------------------------------------------------------Pagination-----------------------------------------------//
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterData?.length) : 0;
@@ -59,13 +69,51 @@ export default function Table1({ statusFilter, salesInvoiceData }) {
         setPage(0);
     };
 
+    //-----------------------------------------------------------Location Filter-----------------------------------------------//
+    let allLocations = [
+        { shortName: "ALL", fullName: "ALL" },
+        { shortName: "NTP", fullName: "Novel Tech Park - Kudlu Gate" },
+        { shortName: "NOM", fullName: "Novel Office Marathahalli" },
+        { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
+        { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
+        { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
+        { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
+        { shortName: "NOB", fullName: "Novel Office Brigade" },
+        { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+    ]
+
+    const handleChange = (event) => {
+        setLocationFilter(event.target.value)
+    };
+
     //-----------------------------------------------------------Component Start-----------------------------------------------//
     return (
         <Stack>
+
+            <Box display="flex" justifyContent={{ xs: 'center', md: 'end', ls: 'end' }} alignItems={'center'} mb={1}>
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small-label">Location</InputLabel>
+                    <Select
+                        labelId="demo-select-small-label"
+                        id="demo-select-small"
+                        value={locationFilter}
+                        label="Location"
+                        onChange={handleChange}
+                    >
+                        {
+                            allLocations.map((location) => {
+                                return (
+                                    <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
+            </Box>
+
             <Paper variant="outlined">
                 <TableContainer>
-
-                    <Table
+                    {filterData.length !== 0 ? <Table
                         aria-label="custom sales invoice"
                         sx={{
                             whiteSpace: 'nowrap',
@@ -167,7 +215,11 @@ export default function Table1({ statusFilter, salesInvoiceData }) {
                             </TableRow>
                         </TableFooter>}
 
-                    </Table>
+                    </Table> :
+                        <Stack justifyContent='center' alignItems='center' width='100%' padding={2}>
+                            <Typography variant='p'>No records to show</Typography>
+                        </Stack>
+                    }
 
                 </TableContainer>
             </Paper>
