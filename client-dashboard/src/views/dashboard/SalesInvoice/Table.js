@@ -36,25 +36,20 @@ export default function Table1({ statusFilter, salesInvoiceData, locationFilter,
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [filterData, setFilterData] = useState(salesInvoiceData);
 
+    //Filter based on Status and Location
     useEffect(() => {
-        if (statusFilter !== "ALL") {
-            setFilterData(salesInvoiceData?.filter((element) => {
-                return element.new_status === statusFilter
-            }))
-        } else {
-            setFilterData(salesInvoiceData);
-        }
-    }, [statusFilter])
+        let filteredData = salesInvoiceData;
 
-    useEffect(() => {
-        if (locationFilter !== "ALL") {
-            setFilterData(salesInvoiceData?.filter((element) => {
-                return element.location === locationFilter
-            }))
-        } else {
-            setFilterData(salesInvoiceData);
+        if (statusFilter !== "ALL" && locationFilter !== "ALL") {
+            filteredData = salesInvoiceData.filter(element => element.new_status === statusFilter && element.location === locationFilter);
+        } else if (statusFilter !== "ALL") {
+            filteredData = salesInvoiceData.filter(element => element.new_status === statusFilter);
+        } else if (locationFilter !== "ALL") {
+            filteredData = salesInvoiceData.filter(element => element.location === locationFilter);
         }
-    }, [locationFilter])
+
+        setFilterData(filteredData);
+    }, [statusFilter, locationFilter, salesInvoiceData]);
 
     //-----------------------------------------------------------Pagination-----------------------------------------------//
     // Avoid a layout jump when reaching the last page with empty rows.
