@@ -32,13 +32,14 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter, locationFilter }) => {
     return (
         <Box mb={2}>
             <Grid container spacing={3} textAlign="center">
+
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={() => setStatusFilter('ALL')}
-                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalCount !== 0 ? 'pointer' : 'default' }}
+                        onClick={paidCount !== 0 ? () => setStatusFilter('Paid') : undefined}
+                        sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: paidCount !== 0 ? 'pointer' : 'default' }}
                     >
-                        <Typography variant="h3">{totalCount}</Typography>
-                        <Typography variant="h6">ALL</Typography>
+                        <Typography variant="h3">{paidCount}</Typography>
+                        <Typography variant="h6">Paid</Typography>
                     </BoxStyled>
                 </Grid>
                 <Grid item xs={6} sm={6} lg={3}>
@@ -52,20 +53,20 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter, locationFilter }) => {
                 </Grid>
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
-                        onClick={paidCount !== 0 ? () => setStatusFilter('Paid') : undefined}
-                        sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: paidCount !== 0 ? 'pointer' : 'default' }}
-                    >
-                        <Typography variant="h3">{paidCount}</Typography>
-                        <Typography variant="h6">Paid</Typography>
-                    </BoxStyled>
-                </Grid>
-                <Grid item xs={6} sm={6} lg={3}>
-                    <BoxStyled
                         onClick={creditNoteCount !== 0 ? () => setStatusFilter('Credit Note') : undefined}
                         sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: creditNoteCount !== 0 ? 'pointer' : 'default' }}
                     >
                         <Typography variant="h3">{creditNoteCount}</Typography>
                         <Typography variant="h6">Credit Note</Typography>
+                    </BoxStyled>
+                </Grid>
+                <Grid item xs={6} sm={6} lg={3}>
+                    <BoxStyled
+                        onClick={() => setStatusFilter('ALL')}
+                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalCount !== 0 ? 'pointer' : 'default' }}
+                    >
+                        <Typography variant="h3">{totalCount}</Typography>
+                        <Typography variant="h6">ALL</Typography>
                     </BoxStyled>
                 </Grid>
             </Grid>
