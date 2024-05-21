@@ -19,7 +19,7 @@ import nom from '../../assets/images/dashboard/nom.png'
 import now from '../../assets/images/dashboard/now.png'
 import img from '../../assets/images/dashboard/img.png'
 import img2 from '../../assets/images/dashboard/img2.png'
-import { useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeGetDocList } from 'frappe-react-sdk';
 
 const listings = [
   {
@@ -90,6 +90,12 @@ export default function noveldashboard() {
       order: 'asc',
     },
   })
+
+  // const handleAfterInsert = (doc) => {
+  //   console.log('Document inserted:', doc);
+  // };
+
+  // useFrappeDocTypeEventListener("Issue", handleAfterInsert);
 
   console.log("Event Data = ", eventData);
 
