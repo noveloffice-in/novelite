@@ -1,6 +1,5 @@
 import React from 'react';
 import PageContainer from '../../components/container/PageContainer';
-import NovelDashCarousel from './DashboardElements/NovelDashCarousel';
 import WelcomeCardNovel from './DashboardElements/WelcomeCardNovel';
 import { useSelector } from 'react-redux';
 import Queries from './DashboardElements/Queries';
@@ -91,11 +90,11 @@ export default function noveldashboard() {
     },
   })
 
-  // const handleAfterInsert = (doc) => {
-  //   console.log('Document inserted:', doc);
-  // };
+  const handleAfterInsert = (doc) => {
+    console.log('Document inserted:', doc);
+  };
 
-  // useFrappeDocTypeEventListener("Issue", handleAfterInsert);
+  useFrappeDocTypeEventListener("Issue", handleAfterInsert);
 
   console.log("Event Data = ", eventData);
 

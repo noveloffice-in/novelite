@@ -27,6 +27,7 @@ def addDataToIssueCommentForClient():
                 content_type = "image/" + file_format
             
             doc = frappe.get_doc("Issue Comment For Client", issue_cmt_id)
+            doc.seen_by_employee = 0
             
             file_doc = frappe.get_doc({
                 "doctype": "File",
@@ -51,6 +52,7 @@ def addDataToIssueCommentForClient():
             
         else:
             doc = frappe.get_doc("Issue Comment For Client", {"ticket_id": ticket_id})
+            doc.seen_by_employee = 0
             # for item in doc.all_amessages:
             doc.append('all_messages', {
                 'message': data.get('message'),
