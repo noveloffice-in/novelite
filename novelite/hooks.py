@@ -127,12 +127,15 @@ doc_events = {
     # "*": {
     #     "after_insert": "novelite.api.messages.emit_todo_update",
     # }
-    "Comment": {
-        "after_insert": "novelite.messages.on_comment"
+     "Issue Comment For Client": {
+        "on_update": "novelite.api.event_publish.event_insert"
     },
-    "Notifications CD":{
-        "after_insert": "novelite.messages.on_comment"
-    }
+    # "Comment": {
+    #     "after_insert": "novelite.messages.on_comment"
+    # },
+    # "Notifications CD":{
+    #     "after_insert": "novelite.messages.on_comment"
+    # }
 # "after_insert": "my_custom_app.my_custom_app.doctype.my_custom_doctype.my_custom_script.on_comment"
 }
 

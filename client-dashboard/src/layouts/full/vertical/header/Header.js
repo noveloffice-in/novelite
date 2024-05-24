@@ -19,6 +19,7 @@ import NovelNavigation from '../../../../views/dashboard/NovelNavigation';
 //icons
 import whiteLogo from 'src/assets/images/logos/white-Logo.png';
 import blackLogo from 'src/assets/images/logos/black-Logo.png';
+import NovelNotifications from '../../../../views/dashboard/NovelNotification/NovelNotifications';
 
 const Header = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -84,6 +85,7 @@ const Header = () => {
           {/* ------------------------------------------- */}
 
           {/* <Notifications /> */}
+          <NovelNotifications/>
 
           {/* ------------------------------------------- */}
           {/* Toggle Right Sidebar for mobile */}

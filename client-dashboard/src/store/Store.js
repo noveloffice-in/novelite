@@ -10,6 +10,7 @@ import UserProfileReducer from './apps/userProfile/UserProfileSlice';
 import BlogReducer from './apps/blog/BlogSlice';
 import NovelprofileReducer from './apps/userProfile/NovelProfileSlice';
 import BookingsSliceReducer from './apps/bookings/BookingsSlice'
+import NotificationReducer from './apps/notifications/NotificationSlice';
 
 //For persist
 import storage from 'redux-persist/lib/storage';
@@ -42,7 +43,8 @@ const reducer = combineReducers({
   // userpostsReducer: UserProfileReducer,
   // blogReducer: BlogReducer,
   novelprofileReducer: NovelprofileReducer,
-  bookingsSliceReducer : BookingsSliceReducer
+  bookingsSliceReducer : BookingsSliceReducer,
+  notificationReducer: NotificationReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
