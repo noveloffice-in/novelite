@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestNotificationsCD(FrappeTestCase):
+class TestNoveliteNotifications(FrappeTestCase):
 	pass

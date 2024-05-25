@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-03-22 13:36:09.030507",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "document_type",
+  "doc_name",
+  "show_to",
+  "message"
+ ],
+ "fields": [
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Data",
+   "label": "Document Type"
+  },
+  {
+   "fieldname": "doc_name",
+   "fieldtype": "Data",
+   "label": "Doc Name"
+  },
+  {
+   "fieldname": "show_to",
+   "fieldtype": "Link",
+   "label": "Show To",
+   "options": "App Users"
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Data",
+   "label": "Message"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-05-25 10:17:58.993159",
+ "modified_by": "Administrator",
+ "module": "Novelite",
+ "name": "Novelite Notifications",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
