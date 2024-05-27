@@ -23,7 +23,7 @@ def addDataToIssueCommentForClient():
             f_name = data['message'].split('.')[0].split(' ')[0]
             file_name = f"{f_name}.{file_format}"
 
-            if file_format in ['png', 'jpg', 'jpeg']:
+            if file_format in ['png', 'jpg', 'jpeg', 'pdf', 'heif', 'hevc']:
                 content_type = "image/" + file_format
             
             doc = frappe.get_doc("Issue Comment For Client", issue_cmt_id)

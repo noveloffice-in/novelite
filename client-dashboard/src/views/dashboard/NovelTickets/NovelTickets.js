@@ -69,11 +69,7 @@ export default function NovelTickets() {
                 case 'NBP':
                     return { shortName: location, fullName: 'Novel Business Park - Adugodi' };
                 case 'NOB':
-                    return { shortName: location, fullName: 'Novel Office Brigade' };
-                case 'BTP1F':
-                    return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
-                case 'BTP3F':
-                    return { shortName: location, fullName: 'Novel Office Brigade-Whitefield' };
+                    return { shortName: location, fullName: 'Novel Office Brigade - Whitefield' };
                 default: return { shortName: location, fullName: location };
             }
         });
@@ -86,8 +82,7 @@ export default function NovelTickets() {
             { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
             { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
             { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
-            { shortName: "NOB", fullName: "Novel Office Brigade" },
-            { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+            { shortName: "NOB", fullName: "Novel Office Brigade - Whitefield" },
         ]
 
         allLocations.forEach((element) => {

@@ -79,7 +79,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
             return true;
         }
         const extension = file.name.split('.').pop().toLowerCase();
-        const allowedFormats = ['pdf', 'png', 'jpg'];
+        const allowedFormats = ['pdf', 'png', 'jpg', 'pdf', 'heif', 'hevc'];
         if (!allowedFormats.includes(extension)) {
             return true;
         }

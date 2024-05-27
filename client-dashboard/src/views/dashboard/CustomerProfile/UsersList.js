@@ -59,6 +59,7 @@ export default function UsersList() {
     const [user, setUser] = useState('');
 
     const [selectedPermissions, setSelectedPermissions] = useState([]);
+    const [userType, setUserType] = useState('Non Admin');
     const [permissionList, setPermissionList] = useState([
         { permittedComponent: 'Dashboard' },
         { permittedComponent: 'Tickets' },
@@ -71,6 +72,12 @@ export default function UsersList() {
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
     const notifyWarn = (msg) => toast.warn(msg, { toastId: "error" });
+
+    const [age, setAge] = React.useState('');
+
+    const handleChange = (event) => {
+        setAge(event.target.value);
+    };
 
     useEffect(() => {
         fetchPermissions();
@@ -99,7 +106,7 @@ export default function UsersList() {
 
     //Permisson Changes
     const handlePermissionSubmit = () => {
-        let sendingData = { user_email: user, permissions_array: selectedPermissions }
+        let sendingData = { user_email: user, permissions_array: selectedPermissions, user_type:userType }
         console.log("selectedPermissions = ", selectedPermissions);
         axios.post('/api/method/novelite.api.user_permissions.update_permissions', sendingData)
             .then((res) => {
@@ -115,10 +122,11 @@ export default function UsersList() {
     const [open1, setOpen1] = useState(false);
 
     //Dialog for rise ticket
-    const handleClickOpen = (permissionsArr, username) => {
+    const handleEdit = (permissionsArr, username, role) => {
         console.log("User name  = ", username);
         setOpen1(true);
         setUser(username);
+        setUserType(role);
         setPermissionChange(false);
         setSelectedPermissions(permissionsArr);
     };
@@ -188,7 +196,7 @@ export default function UsersList() {
                                             <TableCell>
                                                 <Typography variant="h6">{row.userEmail}</Typography>
                                             </TableCell>
-                                            
+
                                             <TableCell>
                                                 <Typography variant="h6" color="textSecondary">{row.userRole}</Typography>
                                             </TableCell>
@@ -207,7 +215,7 @@ export default function UsersList() {
                                                 }
                                             </TableCell>
                                             <TableCell>
-                                                <Button variant='outlined' onClick={() => { handleClickOpen(row.permissions, row.userEmail) }}>Edit</Button>
+                                                <Button variant='outlined' onClick={() => { handleEdit(row.permissions, row.userEmail, row.userRole) }}>Edit</Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -244,10 +252,10 @@ export default function UsersList() {
 
                         </TableContainer>
                     </Paper>}
-                </Box> : 
-                <Stack pt={4} alignItems='center' justifyContent='center' width='100%'>
-                    <Typography variant='p'>No users</Typography>
-                </Stack>
+                </Box> :
+                    <Stack pt={4} alignItems='center' justifyContent='center' width='100%'>
+                        <Typography variant='p'>No users</Typography>
+                    </Stack>
                 }
 
             </Grid>
@@ -257,7 +265,7 @@ export default function UsersList() {
                 maxWidth='sm'
                 open={open1}
                 onClose={handleClose1}
-            > 
+            >
                 <DialogTitle>
                     <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
                         <Typography variant='h5'>Edit Permissions</Typography>
@@ -278,6 +286,22 @@ export default function UsersList() {
                             />
                         );
                     })}
+                    
+                    <Box maxWidth='8rem' pt={1}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">User Type</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={userType}
+                                label="User Type"
+                                onChange={(e)=>{setUserType(e.target.value); setPermissionChange(true)}}
+                            >
+                                <MenuItem value="Admin">Admin</MenuItem>
+                                <MenuItem value="Non Admin">Non Admin</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>

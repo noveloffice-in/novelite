@@ -60,11 +60,13 @@ def update_permissions():
     data = frappe.request.json
     permission_arr = data.get('permissions_array')
     user_email = data.get('user_email')
+    user_type = data.get('user_type')
     # return user_email
 
     try:
         app_user = frappe.get_doc("App Users", user_email)
         # return app_user.name
+        app_user.user_type = user_type
         app_user.permissions = []
 
         if permission_arr:

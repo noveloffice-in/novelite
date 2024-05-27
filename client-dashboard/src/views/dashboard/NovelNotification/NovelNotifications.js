@@ -66,6 +66,7 @@ const NovelNotifications = () => {
         }, 1000);
         //Audio play
         closedTicketAudio?.current.play();
+        console.log("Setting This Event = ", data.notification);
     })
     
     //-----------------------------------------------------------Mark as read-----------------------------------------------//
@@ -74,6 +75,7 @@ const NovelNotifications = () => {
         console.log("notificationsDocNames = ", notificationsDocNames);
         notificationsDocNames.forEach((docName) => {
             deleteDoc("Novelite Notifications", docName);
+            console.log("Delete = ", docName);
         })
         setNotifications([])
     }
@@ -124,9 +126,9 @@ const NovelNotifications = () => {
                         <Box display='flex' flexDirection='column' direction="column" spacing={2}>
                             {
                                 notifications?.length > 0 &&
-                                notifications?.map((notification) => {
+                                notifications?.map((notification, index) => {
                                     return (
-                                        <Box>
+                                        <Box key={notification + index}>
                                             <Typography
                                                 variant="body1"
                                                 color="textPrimary"

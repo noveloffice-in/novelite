@@ -32,7 +32,7 @@ import {
 import BlankCard from '../../../components/shared/BlankCard';
 import ProfileTabs from './ProfileTabs';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 //Toastify 
@@ -68,6 +68,7 @@ const Banner = () => {
   const adminStatus = useSelector((state) => state.novelprofileReducer.adminStatus);
 
   const [disableSubmit, setDisableSubmit] = React.useState(false);
+  const navigate = useNavigate();
 
   //-----------------------------------------------------------Toast functions--------------------------------------------------//
   const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -142,11 +143,11 @@ const Banner = () => {
 
       axios.post('/api/method/novelite.api.user_creation.create_user', userData)
         .then((res) => {
-          console.log("res = ", res);
           notifySuccess("User created sucessfully");
           setTimeout(() => {
+            setOpen1(false);
             setDisableSubmit(false);
-            handleClose1();
+            navigate('/users-list');
           }, 2000);
         })
         .catch((err) => {

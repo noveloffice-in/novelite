@@ -33,12 +33,19 @@ def on_update(doc, method):
                 novelite_notifications_doc.unread_messages = doc.unread_messages
                 novelite_notifications_doc.message = message
                 novelite_notifications_doc.save()
+
+        else:
+            doc_list = frappe.get_list("Novelite Notifications", filters = { "doc_name": doc.name })
+            if len(doc_list) > 0:
+                existing_notification_doc = frappe.get_doc("Novelite Notifications", doc_list[0].name)
+                existing_notification_doc.delete()
+                print("3")
             
-            frappe.publish_realtime(
-                f"new_notification",
-                {
-                    'issue_name': doc,
-                    'notification': message
-                }
-            )
+        frappe.publish_realtime(
+            f"new_notification",
+            {
+                'issue_name': doc,
+                'notification': message
+            }
+        )
             

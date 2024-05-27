@@ -4,7 +4,7 @@ import { Divider, Box, Typography } from '@mui/material';
 import PageContainer from '../../../../components/container/PageContainer';
 import AppCard from 'src/components/shared/AppCard';
 import TicketChatContent from '../TicketChatContent';
-import { useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeEventListener, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
@@ -15,13 +15,12 @@ export default function NovelTicketChat({ id, title, status }) {
   const [issueMessages, setIssueMessages] = useState([])
 
   useEffect(() => {
-    updateSeen();
-    const intervalId = setInterval(fetchChats, 2000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
+    fetchChats()
   }, []);
+
+  useFrappeEventListener(`new_notification`, (data) => {
+    fetchChats()
+  })
 
   //------------------------------------------------------getting Messages----------------------------------------------//
   const fetchChats = () => {

@@ -1,6 +1,6 @@
 import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
 import { Box, Stack, borderRadius, height, padding } from '@mui/system'
-import { useFrappeCreateDoc, useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeCreateDoc, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import React, { useEffect, useRef, useState } from 'react'
 import Zoom from '@mui/material/Zoom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -61,7 +61,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function RaiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading, issueTypesArray }) {
+export default function RaiseTicket({ handleClose1, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading, issueTypesArray }) {
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
@@ -97,6 +97,13 @@ export default function RaiseTicket({ confirmedLocations, filterLocation, setFil
         priority: issuePriority
     });
 
+    //--------------------------------------------------------Locations fetching------------------------------------------------------//
+    const { data: allLocations, error, isValidating } = useFrappeGetDocList('Property Location', {
+        fields: [ 'location_name', 'short_name']
+    });
+
+    console.log("Locations = ", allLocations);
+
     const locationsDropdown = [
         { shortName: 'NTP', fullName: 'Novel Tech Park - Kudlu Gate' },
         { shortName: 'NOM', fullName: 'Novel Office Marathahalli' },
@@ -105,7 +112,6 @@ export default function RaiseTicket({ confirmedLocations, filterLocation, setFil
         { shortName: 'NOW', fullName: 'Novel Office WorkHub- Whitefield' },
         { shortName: 'NBP', fullName: 'Novel Business Park - Adugodi' },
         { shortName: 'NOB', fullName: 'Novel Office Brigade' },
-        { shortName: 'BTP1F', fullName: 'Novel Office Brigade-Whitefield' },
     ]
 
 
@@ -333,6 +339,7 @@ export default function RaiseTicket({ confirmedLocations, filterLocation, setFil
                     // Include base64 data in ticketDetails
                     ticketDetails.file = base64data;
                     ticketDetails.fileName = attachment.name.split('.')[0];
+                    handleClose1();
 
                     //,   Axios call
                     createIssue(ticketDetails);
@@ -352,6 +359,7 @@ export default function RaiseTicket({ confirmedLocations, filterLocation, setFil
                     // })
                 }
             } else {
+                handleClose1();
                 createIssue(ticketDetails);
                 console.log("ticket details = ", ticketDetails);
                 setShowLoading(false);
@@ -439,9 +447,9 @@ export default function RaiseTicket({ confirmedLocations, filterLocation, setFil
                                 label="Property Location"
                                 onChange={(e) => { setTicketocation(e.target.value) }}
                             >
-                                {locationsDropdown?.map((location) => {
+                                {allLocations?.map((location) => {
                                     return (
-                                        <MenuItem key={location.shortName} value={location.shortName}>{location.fullName}</MenuItem>
+                                        <MenuItem key={location.short_name} value={location.short_name}>{location.location_name}</MenuItem>
                                     )
                                 })}
                             </Select>

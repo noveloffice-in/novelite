@@ -220,7 +220,6 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   //Submit btn trigger inside modal
   const handleSubmit = () => {
     setSubmitTicket(!submitTicket);
-    handleClose1();
     setShowLoading(true);
   }
 
@@ -529,6 +528,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
                 setOpen1={setOpen1}
                 mutate={mutate}
                 submitTicket={submitTicket}
+                handleClose1={handleClose1}
                 setShowLoading={setShowLoading}
                 issueTypesArray={issueTypesArray}
               />}
