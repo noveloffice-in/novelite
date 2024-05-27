@@ -128,7 +128,7 @@ doc_events = {
     #     "after_insert": "novelite.api.messages.emit_todo_update",
     # }
      "Issue Comment For Client": {
-        "on_update": "novelite.api.event_publish.event_insert"
+        "on_update": "novelite.api.RealTimeEvents.issue_comment_for_clients.on_update"
     },
     # "Comment": {
     #     "after_insert": "novelite.messages.on_comment"

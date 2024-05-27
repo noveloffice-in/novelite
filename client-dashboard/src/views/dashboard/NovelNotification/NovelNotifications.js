@@ -66,7 +66,6 @@ const NovelNotifications = () => {
         }, 1000);
         //Audio play
         closedTicketAudio?.current.play();
-        console.log("Setting This Event = ", data.notification);
     })
     
     //-----------------------------------------------------------Mark as read-----------------------------------------------//
@@ -75,11 +74,9 @@ const NovelNotifications = () => {
         console.log("notificationsDocNames = ", notificationsDocNames);
         notificationsDocNames.forEach((docName) => {
             deleteDoc("Novelite Notifications", docName);
-            console.log("Delete = ", docName);
         })
         setNotifications([])
     }
-
 
     return (
         <Box>
