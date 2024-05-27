@@ -37,7 +37,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const closedIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'Closed'], ['raised_by', '=', userEmail]] : [['status', '=', 'Closed'],['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'Closed'], ['raised_by', '=', userEmail]] : [['status', '=', 'Closed'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
             false,
         );
 
@@ -49,7 +49,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const pendingIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'Pending'], ['raised_by', '=', userEmail]] : [['status', '=', 'Pending'],['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'Pending'], ['raised_by', '=', userEmail]] : [['status', '=', 'Pending'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
             false,
         );
 
@@ -62,7 +62,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const openIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'In-Progress'], ['raised_by', '=', userEmail]] : [['status', '=', 'In-Progress'],['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'In-Progress'], ['raised_by', '=', userEmail]] : [['status', '=', 'In-Progress'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
             false,
         );
 
@@ -74,20 +74,31 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
 
     return (
         <Grid container spacing={3} textAlign="center" p={1}>
+
+            <Grid item xs={6} sm={6} lg={3}>
+                <BoxStyled
+                    onClick={totalIssues() !== 0 ? () => dispatch(setVisibilityFilter('total_tickets')) : undefined}
+                    sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalIssues() !== 0 ? 'pointer' : 'default' }}
+                >
+                    <Typography variant="h3">{totalIssues()}</Typography>
+                    <Typography variant="h6">ALL</Typography>
+                </BoxStyled>
+            </Grid>
+
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={openIssues() !== 0 ? () => dispatch(setVisibilityFilter('In-Progress')) : undefined}
-                    sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: openIssues() !== 0 ? 'pointer' : 'default'  }}
+                    sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: openIssues() !== 0 ? 'pointer' : 'default' }}
                 >
                     <Typography variant="h3">{openIssues()}</Typography>
                     <Typography variant="h6">In-Progress</Typography>
                 </BoxStyled>
             </Grid>
-            
+
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
-                    onClick={ pendingIssues() !== 0 ? () => dispatch(setVisibilityFilter('Pending')) : undefined }
-                    sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: pendingIssues() !== 0 ? 'pointer' : 'default'  }}
+                    onClick={pendingIssues() !== 0 ? () => dispatch(setVisibilityFilter('Pending')) : undefined}
+                    sx={{ backgroundColor: 'warning.light', color: 'warning.main', cursor: pendingIssues() !== 0 ? 'pointer' : 'default' }}
                 >
                     <Typography variant="h3">{pendingIssues()}</Typography>
                     <Typography variant="h6">Pending</Typography>
@@ -97,22 +108,13 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
             <Grid item xs={6} sm={6} lg={3}>
                 <BoxStyled
                     onClick={closedIssues() !== 0 ? () => dispatch(setVisibilityFilter('Closed')) : undefined}
-                    sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: closedIssues()  !== 0 ? 'pointer' : 'default'  }}
+                    sx={{ backgroundColor: 'error.light', color: 'error.main', cursor: closedIssues() !== 0 ? 'pointer' : 'default' }}
                 >
                     <Typography variant="h3">{closedIssues()}</Typography>
                     <Typography variant="h6">Closed</Typography>
                 </BoxStyled>
             </Grid>
-            
-            <Grid item xs={6} sm={6} lg={3}>
-                <BoxStyled
-                    onClick={totalIssues() !== 0 ? () => dispatch(setVisibilityFilter('total_tickets')) : undefined}
-                    sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalIssues() !== 0 ? 'pointer' : 'default'  }}
-                >
-                    <Typography variant="h3">{totalIssues()}</Typography>
-                    <Typography variant="h6">Total</Typography>
-                </BoxStyled>
-            </Grid>
+
         </Grid>
     );
 };

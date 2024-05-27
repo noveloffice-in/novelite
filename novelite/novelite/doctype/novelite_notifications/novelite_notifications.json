@@ -9,6 +9,8 @@
  "field_order": [
   "document_type",
   "doc_name",
+  "unread_messages",
+  "column_break_eojuo",
   "show_to",
   "message"
  ],
@@ -33,11 +35,20 @@
    "fieldname": "message",
    "fieldtype": "Data",
    "label": "Message"
+  },
+  {
+   "fieldname": "unread_messages",
+   "fieldtype": "Int",
+   "label": "Unread Messages"
+  },
+  {
+   "fieldname": "column_break_eojuo",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-25 10:17:58.993159",
+ "modified": "2024-05-25 11:53:59.692970",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Novelite Notifications",
@@ -58,5 +69,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

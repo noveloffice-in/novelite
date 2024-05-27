@@ -35,6 +35,16 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter, locationFilter }) => {
 
                 <Grid item xs={6} sm={6} lg={3}>
                     <BoxStyled
+                        onClick={() => setStatusFilter('ALL')}
+                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalCount !== 0 ? 'pointer' : 'default' }}
+                    >
+                        <Typography variant="h3">{totalCount}</Typography>
+                        <Typography variant="h6">ALL</Typography>
+                    </BoxStyled>
+                </Grid>
+
+                <Grid item xs={6} sm={6} lg={3}>
+                    <BoxStyled
                         onClick={paidCount !== 0 ? () => setStatusFilter('Paid') : undefined}
                         sx={{ backgroundColor: 'success.light', color: 'success.main', cursor: paidCount !== 0 ? 'pointer' : 'default' }}
                     >
@@ -60,15 +70,7 @@ const SalesFilter = ({ salesInvoiceData, setStatusFilter, locationFilter }) => {
                         <Typography variant="h6">Credit Note</Typography>
                     </BoxStyled>
                 </Grid>
-                <Grid item xs={6} sm={6} lg={3}>
-                    <BoxStyled
-                        onClick={() => setStatusFilter('ALL')}
-                        sx={{ backgroundColor: 'primary.light', color: 'primary.main', cursor: totalCount !== 0 ? 'pointer' : 'default' }}
-                    >
-                        <Typography variant="h3">{totalCount}</Typography>
-                        <Typography variant="h6">ALL</Typography>
-                    </BoxStyled>
-                </Grid>
+
             </Grid>
         </Box>
     );

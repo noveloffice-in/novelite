@@ -90,14 +90,6 @@ export default function noveldashboard() {
     },
   })
 
-  const handleAfterInsert = (doc) => {
-    console.log('Document inserted:', doc);
-  };
-
-  useFrappeDocTypeEventListener("Issue", handleAfterInsert);
-
-  console.log("Event Data = ", eventData);
-
   const userName = useSelector((state) => state.novelprofileReducer.fullName)
 
   return (

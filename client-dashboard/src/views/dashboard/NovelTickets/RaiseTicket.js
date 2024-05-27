@@ -61,7 +61,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function RiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading, issueTypesArray }) {
+export default function RaiseTicket({ confirmedLocations, filterLocation, setFilterLocation, setOpen1, mutate, submitTicket, setShowLoading, issueTypesArray }) {
 
     const dispatch = useDispatch();
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
@@ -541,18 +541,21 @@ export default function RiseTicket({ confirmedLocations, filterLocation, setFilt
                 </FormControl>
 
                 {/* -------------------------------------Attach file-------------------------------------------  */}
-                <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="outlined"
-                        tabIndex={-1}
-                        startIcon={<AttachFileIcon />}
-                    >
-                        Attach file
-                        <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
-                    </Button>
-                    {attachment && <Typography variant='p'>{attachment.name}</Typography>}
+                <Box>
+                    <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="outlined"
+                            tabIndex={-1}
+                            startIcon={<AttachFileIcon />}
+                        >
+                            Attach file
+                            <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+                        </Button>
+                        {attachment && <Typography variant='p'>{attachment.name}</Typography>}
+                    </Box>
+                    <Typography pt={1} variant='body2' color="grey">Allowed formats 'png', 'jpg', 'jpeg', 'pdf' upto 5MB </Typography>
                 </Box>
 
                 {/* -------------------------------------Contact Details-------------------------------------------  */}

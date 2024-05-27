@@ -47,7 +47,7 @@ import Select from '@mui/material/Select';
 import Zoom from '@mui/material/Zoom';
 import { Link } from 'react-router-dom';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
-import RiseTicket from './RiseTicket';
+import RaiseTicket from './RaiseTicket';
 import { Stack } from '@mui/system';
 
 //Ratiog
@@ -522,7 +522,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
           </DialogTitle>
           <DialogContent>
             {issueTypesArray &&
-              <RiseTicket
+              <RaiseTicket
                 confirmedLocations={confirmedLocations}
                 filterLocation={filterLocation}
                 setFilterLocation={setFilterLocation}

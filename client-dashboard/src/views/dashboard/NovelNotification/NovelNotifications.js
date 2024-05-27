@@ -15,22 +15,22 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
 import { IconBellRinging } from '@tabler/icons';
 import { Stack } from '@mui/system';
-import { useFrappeEventListener, useFrappeGetDocList } from 'frappe-react-sdk';
-import { useDispatch, useSelector } from 'react-redux';
-import { resetNotification, setNotification, setNotificationNumber, setOwner } from '../../../store/apps/notifications/NotificationSlice';
+import { useFrappeDeleteDoc, useFrappeEventListener } from 'frappe-react-sdk';
+import { useSelector } from 'react-redux';
+
 //Notification sounds
 import closedTicketSound from '../../../notificationSounds/SuccessSound.wav'
+
+import axios from 'axios';
 
 const NovelNotifications = () => {
     const [anchorEl2, setAnchorEl2] = useState(null);
 
     //For Event 
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
-    const notifications = useSelector((state) => state.notificationReducer.notification);
-    const owner = useSelector((state) => state.notificationReducer.owner);
     const closedTicketAudio = useRef(null);
-
-    const dispatch = useDispatch();
+    const [notifications, setNotifications] = useState([]);
+    const [notificationsDocNames, setNotificationsDocNames] = useState([]);
 
     const handleClick2 = (event) => {
         setAnchorEl2(event.currentTarget);
@@ -41,39 +41,45 @@ const NovelNotifications = () => {
     };
 
     useEffect(() => {
-        if (owner !== userEmail) {
-            dispatch(setOwner(userEmail));
-            dispatch(resetNotification());
-        }
+        getNotifications();
     }, [])
 
     //-----------------------------------------------------------Fetch Tickets for Review Pop up-----------------------------------------------//
-    const { data: closedTicketData } = useFrappeGetDocList('Issue', {
-        fields: ['name'],
-        filters: [['raised_by', '=', userEmail], ['status', '!=', 'Closed']],
-        orderBy: {
-            field: 'modified',
-            order: 'desc',
-        },
-    });
-
-    useFrappeEventListener(`new_message`, (data) => {
-        closedTicketData.forEach((ticket) => {
-            if (ticket.name === data.issue_name.ticket_id) {
-                //update in store
-                dispatch(setNotification(data.notification));
-                //Audio play
-                closedTicketAudio?.current.play();
-                console.log("Setting This = ", data.notification);
-            }
-        })
-    })
-
-    const markAsRead = () => {
-        dispatch(resetNotification());
+    const getNotifications = () => {
+        axios.post('/api/method/novelite.api.api.fetchNoveliteNotifications', { userEmail: userEmail })
+            .then((res) => {
+                setNotifications(res.data.message);
+                setNotificationsDocNames(res.data.message.map((notification) => {
+                    return notification.name
+                }))
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
-    console.log("notifications = ", notifications);
+    //-----------------------------------------------------------Event for notification-----------------------------------------------//
+    useFrappeEventListener(`new_notification`, (data) => {
+        //update in Notifications
+        setTimeout(() => {
+            getNotifications();
+        }, 1000);
+        //Audio play
+        closedTicketAudio?.current.play();
+        console.log("Setting This Event = ", data.notification);
+    })
+    
+    //-----------------------------------------------------------Mark as read-----------------------------------------------//
+    const { deleteDoc } = useFrappeDeleteDoc();
+    const markAsRead = () => {
+        console.log("notificationsDocNames = ", notificationsDocNames);
+        notificationsDocNames.forEach((docName) => {
+            deleteDoc("Novelite Notifications", docName);
+            console.log("Delete = ", docName);
+        })
+        setNotifications([])
+    }
+
 
     return (
         <Box>
@@ -90,7 +96,7 @@ const NovelNotifications = () => {
                 }}
                 onClick={handleClick2}
             >
-                <Badge badgeContent={notifications.length} color="primary">
+                <Badge badgeContent={notifications?.length} color="primary">
                     <IconBellRinging size="21" stroke="1.5" />
                 </Badge>
             </IconButton>
@@ -113,15 +119,15 @@ const NovelNotifications = () => {
             >
                 <Stack direction="row" py={2} px={4} justifyContent="space-between" alignItems="center">
                     <Typography variant="h6">Notifications</Typography>
-                    <Chip label={`${notifications.length} new`} color="primary" size="small" />
+                    <Chip label={`${notifications?.length} new`} color="primary" size="small" />
                 </Stack>
                 <Scrollbar sx={{ height: '385px' }}>
 
                     <Box sx={{ py: 2, px: 4 }}>
                         <Box display='flex' flexDirection='column' direction="column" spacing={2}>
                             {
-                                notifications.length > 0 &&
-                                notifications.map((notification) => {
+                                notifications?.length > 0 &&
+                                notifications?.map((notification) => {
                                     return (
                                         <Box>
                                             <Typography
@@ -132,7 +138,7 @@ const NovelNotifications = () => {
                                                     width: '240px',
                                                 }}
                                             >
-                                                {notification}
+                                                {notification.message}
                                             </Typography>
                                             <br />
                                         </Box>

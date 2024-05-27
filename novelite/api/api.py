@@ -408,5 +408,16 @@ def removeDataFromLeadsAndVisitorParking(vps_id):
     
     return "Done!"
 
+# --------------------------------Fetch Novelite Notifications based on email----------------------------------------------------------
+@frappe.whitelist()
+def fetchNoveliteNotifications():
+    data = frappe.request.json
 
+    if data is None:
+        frappe.throw("No data provided")
+
+    user_email = data.get('userEmail')
+    doc_list = frappe.get_list("Novelite Notifications", filters = { "show_to": user_email }, fields = ['*'])
+
+    return doc_list
 
