@@ -3,7 +3,7 @@ const { webserver_port } = common_site_config;
 
 export default {
 	'^/(app|api|assets|files|private)': {
-		target: `http://localhost:80`,
+		target: `http://localhost:${webserver_port}`,
 		ws: true,
 		router: function(req) {
 			const site_name = req.headers.host.split(':')[0];

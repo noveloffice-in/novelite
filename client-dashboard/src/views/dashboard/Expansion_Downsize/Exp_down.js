@@ -15,7 +15,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 
-
 const BCrumb = [
     {
         to: '/dashboard',
@@ -33,10 +32,10 @@ export default function () {
     const [subAction, setSubAction] = React.useState('Seats');
     const [loading, setLoading] = React.useState(false);
     const companyName = useSelector((state) => state.novelprofileReducer.companyName);
-
+    
     let value = ['Expansion', 'Downsize'];
     let subActions = ['Seats', 'Amenities', 'Both', 'Others']
-
+    
     //-----------------------------------------------------------Toast functions--------------------------------------------------//
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
@@ -146,8 +145,9 @@ export default function () {
                             </Button>
 
                         </form>
-                        {/* <TextField id="outlined-basic" label="Seats" variant="outlined" sx={{ mt: 2 }} />
-                        <TextField id="outlined-basic" label="cabins" variant="outlined" sx={{ mt: 2 }} /> */}
+                        {/* <TextField onChange={(e)=>{setEmail(e.target.value)}} id="outlined-basic" label="Email" variant="outlined" sx={{ mt: 2 }} />
+                        <Button onClick={resetPassword}>Reset Password</Button> */}
+                        {/* <TextField id="outlined-basic" label="cabins" variant="outlined" sx={{ mt: 2 }} /> */}
                     </Box>
                     {/* ---------------------------------------Toast Container Starts------------------------------------ */}
                     <ToastContainer

@@ -12,7 +12,7 @@ import {
 import { formatDistanceToNowStrict } from 'date-fns';
 import user1 from 'src/assets/images/profile/user-1.jpg';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import novelLogo from '../../../assets/images/logo/novel logo.webp';
+import novelLogo from '../../../../assets/images/logo/novel logo.webp';
 import { useSelector } from 'react-redux';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
@@ -55,7 +55,6 @@ export default function TicketChatContent({ data, title, id }) {
                     sx={{
                         p: 1,
                         backgroundColor: 'grey.100',
-                        mr: 'auto',
                         maxWidth: '320px',
                     }}
                 >

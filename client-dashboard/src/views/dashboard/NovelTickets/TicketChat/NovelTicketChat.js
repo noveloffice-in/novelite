@@ -3,7 +3,7 @@ import Breadcrumb from '../../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { Divider, Box, Typography } from '@mui/material';
 import PageContainer from '../../../../components/container/PageContainer';
 import AppCard from 'src/components/shared/AppCard';
-import TicketChatContent from '../TicketChatContent';
+import TicketChatContent from './TicketChatContent';
 import { useFrappeEventListener, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
@@ -19,7 +19,10 @@ export default function NovelTicketChat({ id, title, status }) {
   }, []);
 
   useFrappeEventListener(`new_notification`, (data) => {
-    fetchChats()
+    console.log("Event Data = ", data);
+    setTimeout(() => {
+      fetchChats()
+    }, 500);
   })
 
   //------------------------------------------------------getting Messages----------------------------------------------//

@@ -108,8 +108,7 @@ const Banner = () => {
     customer: companyName,
     email: '',
     first_name: '',
-    new_password: '',
-    confirmPassword: ''
+    last_name: ''
   })
 
   const handleInput = (e) => {
@@ -122,22 +121,16 @@ const Banner = () => {
 
   const createUser = () => {
     setDisableSubmit(true);
-    const { email, first_name, new_password, confirmPassword } = userData;
+    const { email, first_name, last_name } = userData;
 
     if (first_name === '') {
       setErrorField('first_name');
       setDisableSubmit(false);
+    } else if (last_name === '') {
+      setErrorField('last_name');
+      setDisableSubmit(false);
     } else if (email === '') {
       setErrorField('email');
-      setDisableSubmit(false);
-    } else if (new_password === '') {
-      setErrorField('new_password');
-      setDisableSubmit(false);
-    } else if (confirmPassword === '') {
-      setErrorField('confirmPassword');
-      setDisableSubmit(false);
-    } else if (new_password !== confirmPassword) {
-      setErrorField('confirmPassword');
       setDisableSubmit(false);
     } else {
 
@@ -153,7 +146,7 @@ const Banner = () => {
         .catch((err) => {
           notifyError(err);
           setDisableSubmit(false);
-          console.log("Error = ", err);
+          console.log("Error = ", err.response.data._server_messages);
         })
     }
   }
@@ -330,10 +323,11 @@ const Banner = () => {
               component="form"
             >
               <Box>
-                {/* Name */}
+
+                {/* First Name */}
                 <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                   <TextField
-                    label="Name"
+                    label="First Name"
                     id="outlined-required"
                     name='first_name'
                     required
@@ -341,6 +335,19 @@ const Banner = () => {
                     error={errorField === 'first_name'}
                   />
                 </FormControl>
+
+                {/* Last Name */}
+                <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
+                  <TextField
+                    label="Last Name"
+                    id="outlined-required"
+                    name='last_name'
+                    required
+                    onChange={handleInput}
+                    error={errorField === 'last_name'}
+                  />
+                </FormControl>
+
                 {/* Email */}
                 <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                   <TextField
@@ -352,57 +359,8 @@ const Banner = () => {
                     error={errorField === 'email'}
                   />
                 </FormControl>
+                
               </Box>
-
-              {/* Password */}
-              <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password" required >Password</InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={showPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                  name='new_password'
-                  onChange={handleInput}
-                  error={errorField === 'new_password'}
-                />
-              </FormControl>
-
-              {/* Confirm Password */}
-              <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password" required >Confirm Password</InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickConfirmShowPassword}
-                        onMouseDown={handleMouseDownConfirmPassword}
-                        edge="end"
-                      >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                  name='confirmPassword'
-                  onChange={handleInput}
-                  error={errorField === 'confirmPassword'}
-                />
-              </FormControl>
             </Box>
           </DialogContent>
           <DialogActions>

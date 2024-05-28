@@ -3,17 +3,18 @@ import PageContainer from '../../components/container/PageContainer';
 import { Box, Stack } from '@mui/system';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
-import { Card, Divider, Grid, IconButton, InputAdornment, Typography } from '@mui/material';
+import { Card, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Logo from '../../layouts/full/shared/logo/Logo';
 import { useDispatch } from 'react-redux';
 import { setUser, setUserEmail } from '../../store/apps/userProfile/NovelProfileSlice';
 import Modal from '@mui/material/Modal';
+import axios from 'axios';
+
 
 //Frappe imports
 import { useFrappeAuth, useFrappeGetDoc } from 'frappe-react-sdk'
-import axios from 'axios';
 
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -78,6 +79,9 @@ export default function NovelLogin() {
     const errorAudio = useRef(null);
 
     const handleOpen = () => setOpen(!open);
+
+    const [email, setEmail] = React.useState('');
+
 
     //--------------------------------------------------------For Customer Login-----------------------------------------//
     const handleLoginChange = (e) => {
@@ -152,6 +156,20 @@ export default function NovelLogin() {
         }
     }
 
+    const resetPassword = () => {
+        console.log("Email = ", email);
+        axios.post('/api/method/novelite.api.api.sendResetPasswordMailToUser', { userEmail: email })
+            .then((res) => {
+                notifySuccess("Please check the email for reset password Link");
+                handleOpen();
+                console.log("Res = ", res);
+            })
+            .catch((err) => {
+                notifyError(err);
+                console.log("Err = ", err);
+            })
+    }
+
     //----------------------------------------------------------END----------------------------------------------------//
 
     return (
@@ -221,16 +239,8 @@ export default function NovelLogin() {
                                         <Box>
                                             <Stack>
                                                 <Box>
-                                                    <CustomFormLabel htmlFor="userName">Name</CustomFormLabel>
-                                                    <CustomTextField id="userName" variant="outlined" fullWidth autoComplete="userName" onChange={handleGuestLoginChange} />
-                                                </Box>
-                                                <Box>
                                                     <CustomFormLabel htmlFor="email">Email</CustomFormLabel>
-                                                    <CustomTextField id="email" type="email" variant="outlined" fullWidth autoComplete="email" onChange={handleGuestLoginChange} />
-                                                </Box>
-                                                <Box>
-                                                    <CustomFormLabel htmlFor="phoneNumber">Phone number</CustomFormLabel>
-                                                    <CustomTextField id="phoneNumber" type="text" variant="outlined" fullWidth autoComplete="current-phoneNumber" onChange={handleGuestLoginChange} />
+                                                    <CustomTextField id="email" type="email" variant="outlined" fullWidth autoComplete="email" onChange={(e) => { setEmail(e.target.value) }} />
                                                 </Box>
                                             </Stack>
                                             <Box mt={3}>
@@ -239,10 +249,22 @@ export default function NovelLogin() {
                                                     variant="contained"
                                                     size="large"
                                                     fullWidth
-                                                    onClick={guestLogin}
+                                                    onClick={resetPassword}
                                                     type="submit"
                                                 >
-                                                    Sign In As Guest
+                                                    Reset Password
+                                                </Button>
+                                            </Box>
+                                            <Box mt={3}>
+                                                <Button
+                                                    color="primary"
+                                                    variant="contained"
+                                                    size="large"
+                                                    fullWidth
+                                                    onClick={handleOpen}
+                                                    type="submit"
+                                                >
+                                                    Go Back
                                                 </Button>
                                             </Box>
                                         </Box>
@@ -287,6 +309,7 @@ export default function NovelLogin() {
                                                     Sign In
                                                 </Button>
                                             </Box>
+                                                <Typography variant='p' sx={{float:'right', textDecoration: 'underline', cursor:'pointer'}} pt={1} onClick={handleOpen}>Reset Password</Typography>
                                         </form>
                                     )
                                 }

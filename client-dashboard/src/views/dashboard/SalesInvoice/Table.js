@@ -73,8 +73,7 @@ export default function Table1({ statusFilter, salesInvoiceData, locationFilter,
         { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
         { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
         { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
-        { shortName: "NOB", fullName: "Novel Office Brigade" },
-        { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+        { shortName: "NOB", fullName: "Novel Office Brigade-Whitefield" },
     ]
 
     const handleChange = (event) => {
@@ -120,9 +119,8 @@ export default function Table1({ statusFilter, salesInvoiceData, locationFilter,
                                     <Typography variant="h6">Invoice No.</Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="h6">Invoice Amount</Typography>
+                                    <Typography variant="h6">Amount</Typography>
                                 </TableCell>
-
                                 <TableCell>
                                     <Typography variant="h6">Due Date</Typography>
                                 </TableCell>

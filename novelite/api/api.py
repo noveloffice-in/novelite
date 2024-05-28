@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.utils.password import get_decrypted_password
+from frappe.core.doctype.user.user import User
 
 import datetime
 from datetime import datetime
@@ -293,7 +294,7 @@ def issue():
             file_format = data['file'].split(';')[0].split('/')[1]
             file_name = f"{data['fileName']}.{file_format}"
 
-            if file_format in ['png', 'jpg', 'jpeg', 'pdf']:
+            if file_format in ['png', 'jpg', 'jpeg', 'pdf', 'heif', 'hevc', 'heic', 'mov', 'docx']:
                 content_type = "image/" + file_format
             elif file_format == 'mp4':
                 content_type = "video/mp4"
@@ -420,4 +421,17 @@ def fetchNoveliteNotifications():
     doc_list = frappe.get_list("Novelite Notifications", filters = { "show_to": user_email }, fields = ['*'])
 
     return doc_list
+
+# --------------------------------Reset password----------------------------------------------------------
+@frappe.whitelist(allow_guest=True)
+def sendResetPasswordMailToUser():
+    data = frappe.request.json
+
+    if data is None:
+        frappe.throw("No data provided")
+
+    user_email = data.get('userEmail')
+
+    User = frappe.get_doc("User", user_email)
+    User.reset_password(User)
 
