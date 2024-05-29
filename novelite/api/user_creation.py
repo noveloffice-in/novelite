@@ -17,7 +17,7 @@ def create_user():
         new_user.first_name = data.get('first_name')
         new_user.last_name = data.get('last_name')
         new_user.role_profile_name = data.get('app_user_type')
-        new_user.send_welcome_email = 0
+        new_user.send_welcome_email = 1
         new_user.insert(ignore_permissions=True)
         
         return new_user

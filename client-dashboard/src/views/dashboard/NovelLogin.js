@@ -14,7 +14,7 @@ import axios from 'axios';
 
 
 //Frappe imports
-import { useFrappeAuth, useFrappeGetDoc } from 'frappe-react-sdk'
+import { useFrappeAuth } from 'frappe-react-sdk'
 
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -240,7 +240,7 @@ export default function NovelLogin() {
                                             <Stack>
                                                 <Box>
                                                     <CustomFormLabel htmlFor="email">Email</CustomFormLabel>
-                                                    <CustomTextField id="email" type="email" variant="outlined" fullWidth autoComplete="email" onChange={(e) => { setEmail(e.target.value) }} />
+                                                    <CustomTextField id="email" type="email" variant="outlined" fullWidth autoComplete="email" placeholder="example@gmail.com" onChange={(e) => { setEmail(e.target.value) }} />
                                                 </Box>
                                             </Stack>
                                             <Box mt={3}>
