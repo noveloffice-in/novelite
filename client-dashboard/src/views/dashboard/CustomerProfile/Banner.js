@@ -237,8 +237,8 @@ const Banner = () => {
               <Box>
                 <ProfileImage>
                   <Avatar
-                    src={userimg}
-                    alt={userimg}
+                    src={userImage !== '' ? userImage : userimg}
+                    alt={userImage !== '' ? userImage : userimg}
                     sx={{
                       borderRadius: '50%',
                       width: '100px',
@@ -359,7 +359,7 @@ const Banner = () => {
                     error={errorField === 'email'}
                   />
                 </FormControl>
-                
+
               </Box>
             </Box>
           </DialogContent>

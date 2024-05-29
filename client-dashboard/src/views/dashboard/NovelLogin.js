@@ -309,7 +309,7 @@ export default function NovelLogin() {
                                                     Sign In
                                                 </Button>
                                             </Box>
-                                                <Typography variant='p' sx={{float:'right', textDecoration: 'underline', cursor:'pointer'}} pt={1} onClick={handleOpen}>Reset Password</Typography>
+                                                <Typography variant='p' sx={{float:'right', textDecoration: 'underline', cursor:'pointer'}} pt={1} onClick={handleOpen}>Forgot Password?</Typography>
                                         </form>
                                     )
                                 }
