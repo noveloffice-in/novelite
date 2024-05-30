@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress } from '@mui/material'
+import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, InputLabel, DialogTitle, CircularProgress, IconButton } from '@mui/material'
 import { Box, Stack, borderRadius, height, padding } from '@mui/system'
 import { useFrappeCreateDoc, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import React, { useEffect, useRef, useState } from 'react'
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
 
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -99,7 +100,7 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
 
     //--------------------------------------------------------Locations fetching------------------------------------------------------//
     const { data: allLocations, error, isValidating } = useFrappeGetDocList('Property Location', {
-        fields: [ 'location_name', 'short_name']
+        fields: ['location_name', 'short_name']
     });
 
     console.log("Locations = ", allLocations);
@@ -551,7 +552,7 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
                 {/* -------------------------------------Attach file-------------------------------------------  */}
                 <Box>
                     <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
-                        <Button
+                        {!attachment && <Button
                             component="label"
                             role={undefined}
                             variant="outlined"
@@ -560,8 +561,13 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
                         >
                             Attach file
                             <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
-                        </Button>
-                        {attachment && <Typography variant='p'>{attachment.name}</Typography>}
+                        </Button>}
+                        {attachment && <Box>
+                            <Typography variant='p'>{attachment.name}</Typography>
+                            <IconButton onClick={()=>{setAttachment(null)}}>
+                                <CloseIcon />
+                            </IconButton>
+                        </Box>}
                     </Box>
                     <Typography pt={1} variant='body2' color="grey">Allowed formats 'png', 'jpg', 'jpeg', 'pdf' upto 5MB </Typography>
                 </Box>

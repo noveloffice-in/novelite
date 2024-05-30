@@ -6,6 +6,7 @@ import { IconPaperclip, IconPhoto, IconSend } from '@tabler/icons';
 import { sendMsg } from 'src/store/apps/chat/ChatSlice';
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close';
 
 //Attachment
 import { styled } from '@mui/material/styles';
@@ -70,6 +71,11 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
         setAttachment(e.target.files[0])
         console.log(e.target.files[0]);
         setMsg(e.target.files[0].name);
+    }
+
+    const clearAttachment = () => {
+        setAttachment(null);
+        setMsg('');
     }
 
     const checkFileFormat = (file) => {
@@ -161,19 +167,25 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                 >
                     <IconSend stroke={1.5} size="20" />
                 </IconButton>
-                <IconButton >
-                    {/* <IconPaperclip stroke={1.5} size="20" /> */}
 
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="outlined"
-                        sx={{ backgroundColor: 'none', color: "none" }}
-                    >
-                        <IconPaperclip />
-                        <VisuallyHiddenInput type="file" onChange={(e) => sendAttachment(e)} />
-                    </Button>
-                </IconButton>
+                {attachment ?
+                    <IconButton onClick={clearAttachment} color="primary">
+                        <CloseIcon />
+                    </IconButton>
+                    :
+                    <IconButton >
+                        {/* <IconPaperclip stroke={1.5} size="20" /> */}
+
+                        <Button
+                            component="label"
+                            role={undefined}
+                            variant="outlined"
+                            sx={{ backgroundColor: 'none', color: "none" }}
+                        >
+                            <IconPaperclip />
+                            <VisuallyHiddenInput type="file" onChange={(e) => sendAttachment(e)} />
+                        </Button>
+                    </IconButton>}
             </form>
             <ToastContainer
                 position="top-center"

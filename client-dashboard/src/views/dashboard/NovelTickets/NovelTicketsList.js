@@ -258,32 +258,33 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
 
   //------------------------------------------------------Filtering-----------------------------------------------//
   const getVisibleTickets = (tickets, filter, ticketSearch) => {
+    ticketSearch = ticketSearch.toLowerCase();
     if (tickets != undefined) {
       switch (filter) {
         case 'total_tickets':
           return tickets.filter(
-            (c) => c.name?.toLocaleLowerCase().includes(ticketSearch),
+            (c) => c.subject?.toLowerCase().includes(ticketSearch) || c.name?.toLowerCase().includes(ticketSearch),
           );
 
         case 'Pending':
           return tickets.filter(
             (c) =>
               c.status === 'Pending' &&
-              c.name?.toLocaleLowerCase().includes(ticketSearch),
+              (c.subject?.toLowerCase().includes(ticketSearch) || c.name?.toLowerCase().includes(ticketSearch)),
           );
 
         case 'Closed':
           return tickets.filter(
             (c) =>
               c.status === 'Closed' &&
-              c.name?.toLocaleLowerCase().includes(ticketSearch),
+              (c.subject?.toLowerCase().includes(ticketSearch) || c.name?.toLowerCase().includes(ticketSearch)),
           );
 
         case 'In-Progress':
           return tickets.filter(
             (c) =>
               c.status === 'In-Progress' &&
-              c.name?.toLocaleLowerCase().includes(ticketSearch),
+              (c.subject?.toLowerCase().includes(ticketSearch) || c.name?.toLowerCase().includes(ticketSearch)),
           );
 
         default:

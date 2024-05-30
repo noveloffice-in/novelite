@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContainer from '../../components/container/PageContainer';
 import WelcomeCardNovel from './DashboardElements/WelcomeCardNovel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Queries from './DashboardElements/Queries';
 import ImagesSlider from './DashboardElements/ImagesSlider';
 import { Grid, Typography } from '@mui/material';
@@ -18,7 +18,8 @@ import nom from '../../assets/images/dashboard/nom.png'
 import now from '../../assets/images/dashboard/now.png'
 import img from '../../assets/images/dashboard/img.png'
 import img2 from '../../assets/images/dashboard/img2.png'
-import { useFrappeDocTypeEventListener, useFrappeGetDocList } from 'frappe-react-sdk';
+import { useFrappeDocTypeEventListener, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
+import { setAccountType, setAdminStatus, setCompanyName, setLeadsID, setUserImage } from '../../store/apps/userProfile/NovelProfileSlice';
 
 const listings = [
   {
@@ -73,6 +74,12 @@ const event = [
 
 export default function noveldashboard() {
 
+  const fullName = useSelector((state) => state.novelprofileReducer.fullName);
+  const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+  const userName = useSelector((state) => state.novelprofileReducer.fullName)
+
+  const dispatch = useDispatch();
+
   const { data: locationData } = useFrappeGetDocList('Room Locations', {
     fields: ['location_name', 'image', 'address'],
     filters: [],
@@ -90,7 +97,53 @@ export default function noveldashboard() {
     },
   })
 
-  const userName = useSelector((state) => state.novelprofileReducer.fullName)
+  //Getting data from App user to set wheather user is Admin / Non-Admin
+  const { data: appUserData } = useFrappeGetDoc('App Users', userEmail);
+  if (appUserData) {
+    dispatch(setAdminStatus(appUserData.user_type));
+  }
+
+  if (fullName !== 'Guest') {
+    const getUserData = () => {
+      const { data, error, isValidating, mutate } = useFrappeGetDoc(
+        'User',
+        `${userEmail}`
+      );
+      return data ? data : error;
+    }
+
+    const userData = getUserData();
+
+    const acc_type = userData?.app_user_type;
+    dispatch(setCompanyName(userData?.customer));
+    // console.log("Customer = ", getUserData()?.customer);
+    dispatch(setAccountType(acc_type))
+
+    if (userData?.user_image !== undefined) {
+      const userImage = userData?.user_image;
+      console.log("userImage = ", userData?.user_image);
+      dispatch(setUserImage(userImage))
+    } else {
+      dispatch(setUserImage(""))
+    }
+    console.log("DATA = ", userData);
+
+    //Getting leads and setting only lead Ids in store
+    const getLeadID = () => {
+      const { data: customerData } = useFrappeGetDoc(
+        'Customer', "Test-MR"
+      );
+      return customerData?.leads;
+    }
+
+    const leadsIDs = getLeadID()?.map((lead) => {
+      return lead.leads
+    });
+
+    dispatch(setLeadsID(leadsIDs))
+    // console.log(leadsIDs);
+  }
+
 
   return (
     <PageContainer title="Dashboard - Novel Office" description="this is Cards page">
