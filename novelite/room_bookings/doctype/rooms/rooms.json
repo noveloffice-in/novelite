@@ -51,7 +51,6 @@
   {
    "fieldname": "images",
    "fieldtype": "Table",
-   "hidden": 1,
    "label": "Images",
    "options": "Room Type Details"
   },
@@ -63,7 +62,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-29 10:19:20.960657",
+ "modified": "2024-05-31 17:38:24.003018",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Rooms",

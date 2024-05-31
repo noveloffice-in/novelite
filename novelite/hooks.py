@@ -110,9 +110,9 @@ before_uninstall = "novelite.uninstall.before_uninstall"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-#	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"User": "novelite.api.overridden_classes.user_overridden.User_Overriden"
+}
 
 # Document Events
 # ---------------
