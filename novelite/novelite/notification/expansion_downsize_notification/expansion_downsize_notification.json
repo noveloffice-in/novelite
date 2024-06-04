@@ -12,9 +12,9 @@
  "event": "Save",
  "idx": 0,
  "is_standard": 1,
- "message": "<h3>Hello Team,</h3>\n\n<p>An {{ doc.action }} request has been made from <b>\u201c{{ doc.customer }}\u201d</b> client. PFB the details:</p>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Please reach out to the customers.</p>",
+ "message": "<h3>Hello Team,</h3>\n\n<p>An {{ doc.action }} request has been made from <b>\u201c{{ doc.customer }}\u201d</b> client. PFB the details:</p>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n    <li>Location: {{ doc.location }}</li>\n</ul>\n\n<p>Please reach out to the customer.</p>",
  "message_type": "HTML",
- "modified": "2024-06-04 18:39:02.417597",
+ "modified": "2024-06-04 21:29:45.278204",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion Downsize Notification",
@@ -29,5 +29,5 @@
  "send_to_all_assignees": 0,
  "sender": "Ticketing",
  "sender_email": "tickets@noveloffice.in",
- "subject": "New {{ doc.action }} Request - {{doc.name}}"
+ "subject": "Request for \"{{ doc.action }}\" - {{doc.customer}} - {{doc.location}}"
 }
