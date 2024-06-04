@@ -13,7 +13,7 @@
  "is_standard": 1,
  "message": "<h3>Hello Team,</h3>\n\n<p>A <b>{{doc.room_type}}</b> booking request has been made by <b>\"{{ doc.customer }}\"</b> on <b>\"{{ doc.booking_date }}\"</b> at <b>\"{{ doc.from_time }}\"</b>.</p>\n\n<h4>More Details:</h4>\n\n<ul>\n    <li>Location: {{ doc.location }}</li>\n    <li>Room Name: {{ doc.room }}</li>\n    <li>Booking Date: {{ doc.booking_date }}</li>\n    <li>From Time: {{ doc.from_time }}</li>\n    <li>To Time: {{ doc.to_time }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Kindly check the availability and confirm.</p>\n",
  "message_type": "Markdown",
- "modified": "2024-06-04 17:17:46.368719",
+ "modified": "2024-06-04 18:39:11.387378",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Booking Notification",
@@ -26,7 +26,7 @@
  ],
  "send_system_notification": 0,
  "send_to_all_assignees": 0,
- "sender": "ERPNext Reports",
- "sender_email": "erpnextreports@noveloffice.in",
+ "sender": "Ticketing",
+ "sender_email": "tickets@noveloffice.in",
  "subject": "New Room Booking - {{doc.name}}"
 }
