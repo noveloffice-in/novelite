@@ -14,7 +14,7 @@ const BoxStyled = styled(Box)(() => ({
 }));
 
 
-const NovelTicketFilter = ({ userEmail, filterLocation }) => {
+const NovelTicketFilter = ({ userEmail, companyName, filterLocation }) => {
     const dispatch = useDispatch();
     const counter = useSelector((state) => state.ticketReducer.tickets);
     const currentFilter = useSelector((state) => state.ticketReducer.currentFilter);
@@ -26,7 +26,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const totalIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['customer', '=', companyName]] : [['customer', '=', companyName], ['location', '=', filterLocation]],
             false,
         );
 
@@ -38,7 +38,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const closedIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'Closed'], ['raised_by', '=', userEmail]] : [['status', '=', 'Closed'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'Closed'], ['customer', '=', companyName]] : [['status', '=', 'Closed'], ['customer', '=', companyName], ['location', '=', filterLocation]],
             false,
         );
 
@@ -50,7 +50,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const pendingIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'Pending'], ['raised_by', '=', userEmail]] : [['status', '=', 'Pending'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'Pending'], ['customer', '=', companyName]] : [['status', '=', 'Pending'], ['customer', '=', companyName], ['location', '=', filterLocation]],
             false,
         );
 
@@ -63,7 +63,7 @@ const NovelTicketFilter = ({ userEmail, filterLocation }) => {
     const openIssues = () => {
         const { data } = useFrappeGetDocCount(
             'Issue',
-            filterLocation === "ALL" ? [['status', '=', 'In-Progress'], ['raised_by', '=', userEmail]] : [['status', '=', 'In-Progress'], ['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+            filterLocation === "ALL" ? [['status', '=', 'In-Progress'], ['customer', '=', companyName]] : [['status', '=', 'In-Progress'], ['customer', '=', companyName], ['location', '=', filterLocation]],
             false,
         );
 

@@ -19,6 +19,7 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 export default function TicketChatContent({ data, title, id }) {
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
     const userImage = useSelector((state) => state.novelprofileReducer.userImage);
+    const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     const chatEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -36,7 +37,7 @@ export default function TicketChatContent({ data, title, id }) {
                     <Box>
                         {/* Render link for PDF attachment */}
                         <MuiLink href={comment.attachment} target="_blank" rel="noopener">
-                            View PDF Attachment
+                            {comment.attachment.split('/')[2]}
                         </MuiLink>
                     </Box>
                 )
@@ -65,6 +66,8 @@ export default function TicketChatContent({ data, title, id }) {
         }
     }
 
+    console.log("Data = ", data);
+
     return (
         <Box>
             {data?.length !== 0 ? (
@@ -81,11 +84,15 @@ export default function TicketChatContent({ data, title, id }) {
                                 <Box sx={{ p: 3, msOverflowStyle: 'scroll', maxHeight: { xs: '100%', md: '100%', lg: '100%' } }}>
                                     {data?.map((comment, index) => (
                                         <Box key={index}>
-                                            {comment.comment_by_name !== fullName ? (
+                                            {comment.comment_by_email !== userEmail ? (
                                                 <Box display="flex" alignItems="center" mb={2}>
-                                                    <ListItemAvatar>
-                                                        <img src={novelLogo} style={{ width: '45px', height: '45px' }} />
-                                                    </ListItemAvatar>
+                                                    {
+                                                        comment.comment_by_email.includes('noveloffice') ?
+                                                            <ListItemAvatar>
+                                                                <img src={novelLogo} style={{ width: '45px', height: '45px' }} />
+                                                            </ListItemAvatar> :
+                                                            <Avatar style={{ width: '45px', height: '45px', marginRight: '0.5rem' }} >{comment.comment_by_name.substring(0,1)}</Avatar>
+                                                    }
                                                     <Box>
                                                         <Typography variant="caption" color="grey.400" mb={1}>
                                                             {comment.comment_by_name}

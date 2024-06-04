@@ -177,7 +177,6 @@ const Router = [
 
       // Tickets 
       { path: '/tickets', exact: true, element: < Protected Component={NovelTickets} /> },
-      // { path: '/tickets_chat/:id/:title', exact: true, element: <  Protected  Component={NovelTicketChat} /> },
       { path: '/ticket_details/:id', exact: true, element: <  Protected Component={TicketDetails} /> },
 
       // Visitor Parking pass 

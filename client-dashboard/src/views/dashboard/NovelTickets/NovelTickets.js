@@ -100,10 +100,12 @@ export default function NovelTickets() {
             <Box>
                 <NovelTicketFilter
                     userEmail={userEmail}
+                    companyName={companyName}
                     filterLocation={filterLocation}
                 />
                 <NovelTicketsList
                     userEmail={userEmail}
+                    companyName={companyName}
                     filterLocation={filterLocation}
                     setFilterLocation={setFilterLocation}
                     confirmedLocations={confirmedLocations}

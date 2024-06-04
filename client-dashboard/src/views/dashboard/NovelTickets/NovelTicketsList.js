@@ -61,7 +61,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import closedTicketSound from '../../../notificationSounds/TicketClosedSound.wav'
 
 
-const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, filterLocation }) => {
+const NovelTicketsList = ({ userEmail, companyName, confirmedLocations, setFilterLocation, filterLocation }) => {
   const dispatch = useDispatch();
 
   //Dialouge component
@@ -133,7 +133,7 @@ const NovelTicketsList = ({ userEmail, confirmedLocations, setFilterLocation, fi
   //-----------------------------------------------------------Fetch Tickets-----------------------------------------------//
   let { data, error, isValidating, mutate } = useFrappeGetDocList('Issue', {
     fields: ['subject', 'creation', 'status', 'raised_by', 'name', 'description', 'review_show_popup', 'location', 'rating', 'unread_messages'],
-    filters: filterLocation === "ALL" ? [['raised_by', '=', userEmail]] : [['raised_by', '=', userEmail], ['location', '=', filterLocation]],
+    filters: filterLocation === "ALL" ? [['customer', '=', companyName]] : [['customer', '=', companyName], ['location', '=', filterLocation]],
     limit_start: 0,
     limit: 100000,
     orderBy: {

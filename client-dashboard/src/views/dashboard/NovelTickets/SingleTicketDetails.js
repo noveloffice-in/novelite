@@ -57,6 +57,7 @@ export default function SingleTicketDetails() {
                 id={data.name}
                 title={data.subject}
                 rating={data.rating}
+                raisedBy={data.raised_by}
                 ratingDescription={data.rating_description}
                 issueSubtype={data.custom_issue_subtype}
                 issueType={data.issue_type}
@@ -78,7 +79,7 @@ export default function SingleTicketDetails() {
   )
 }
 
-function Left({ id, title, description, rating, ratingDescription, issueSubtype, issueType, priority, location }) {
+function Left({ id, title, description, rating, raisedBy, ratingDescription, issueSubtype, issueType, priority, location }) {
 
   const formatDateTime = (inputDatetime, returnType) => {
     const date = new Date(inputDatetime);
@@ -198,14 +199,14 @@ function Left({ id, title, description, rating, ratingDescription, issueSubtype,
             {getLocationName(location)}
           </Typography>
         </Grid>
-        {/* <Grid item lg={6} xs={12} mt={4}>
+        <Grid item lg={6} xs={12} mt={4}>
           <Typography variant="body2" color="text.secondary">
-            Description
+            Raised By
           </Typography>
           <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-            {description ? description : "No ticket description"}
+            {raisedBy}
           </Typography>
-        </Grid> */}
+        </Grid>
 
         {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
                 <Typography variant="body2" color="text.secondary">
