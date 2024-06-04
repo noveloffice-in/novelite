@@ -58,6 +58,7 @@ class User_Overriden(User):
             sender = "erpnextreports@noveloffice.in"
         else:
             sender = "no-reply@noveloffice.in"
+            subject = "Welcome to Novel Office App"
 
         frappe.sendmail(
             recipients=self.email,
