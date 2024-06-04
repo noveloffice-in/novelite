@@ -180,7 +180,7 @@ const Router = [
       { path: '/ticket_details/:id', exact: true, element: <  Protected Component={TicketDetails} /> },
 
       // Visitor Parking pass 
-      // { path: '/visitor_pass', exact: true, element: < Protected Componentp={VisitorPass} /> },
+      // { path: '/visitor_pass', exact: true, element: < Protected Component={VisitorPass} /> },
       // { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
 
       // Invoice 

@@ -11,21 +11,28 @@
   "sub_action",
   "description",
   "column_break_cge8f",
+  "location",
+  "email_to",
+  "customer_email",
   "customer",
-  "email_to"
+  "cr_email"
  ],
  "fields": [
   {
    "fieldname": "action",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Expansion/Downsize",
-   "options": "Expansion\nDownsize"
+   "options": "Expansion\nDownsize",
+   "reqd": 1
   },
   {
    "fieldname": "sub_action",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Service",
-   "options": "Seats\nAmenities\nBoth\nOthers"
+   "options": "Seats\nAmenities\nBoth\nOthers",
+   "reqd": 1
   },
   {
    "fieldname": "description",
@@ -43,16 +50,39 @@
    "options": "Customer"
   },
   {
-   "default": "ragul.k@noveloffice.in",
+   "default": "bdm@noveloffice.in",
+   "description": "BDM Email",
    "fieldname": "email_to",
    "fieldtype": "Data",
    "label": "Email To",
+   "options": "Email"
+  },
+  {
+   "fieldname": "customer_email",
+   "fieldtype": "Link",
+   "label": "Customer Email",
+   "options": "User"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Location",
+   "options": "Room Locations",
+   "reqd": 1
+  },
+  {
+   "description": "Used in Notification CC",
+   "fetch_from": "location.building_admin_email",
+   "fieldname": "cr_email",
+   "fieldtype": "Data",
+   "label": "CR Email",
    "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-27 21:51:29.008041",
+ "modified": "2024-06-04 17:35:11.289907",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion and Dowsize",

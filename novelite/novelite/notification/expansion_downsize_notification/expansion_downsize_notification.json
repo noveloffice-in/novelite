@@ -13,14 +13,14 @@
  "is_standard": 1,
  "message": "<h3>Hello Team,</h3>\n\n<p>An {{ doc.action }} request has been made from <b>\u201c{{ doc.customer }}\u201d</b> client. PFB the details:</p>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Please reach out to the customers.</p>",
  "message_type": "HTML",
- "modified": "2024-04-30 13:05:32.556875",
+ "modified": "2024-06-04 17:42:46.446464",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion Downsize Notification",
  "owner": "Administrator",
  "recipients": [
   {
-   "cc": "mr@noveloffice.in",
+   "cc": "mr@noveloffice.in\nfida.k@noveloffice.in\n{{ doc.customer_email }}\n{{ doc.cr_email }}",
    "receiver_by_document_field": "email_to"
   }
  ],

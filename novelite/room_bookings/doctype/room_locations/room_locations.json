@@ -12,6 +12,7 @@
   "room_type_details",
   "image",
   "front_desk_email",
+  "building_admin_email",
   "address"
  ],
  "fields": [
@@ -46,11 +47,17 @@
    "fieldname": "address",
    "fieldtype": "Data",
    "label": "Address"
+  },
+  {
+   "fieldname": "building_admin_email",
+   "fieldtype": "Data",
+   "label": "Building Admin Email",
+   "options": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-11 11:18:19.499871",
+ "modified": "2024-06-04 17:15:33.608748",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Locations",

@@ -94,8 +94,8 @@
    "options": "Email"
   },
   {
-   "default": "mr@noveloffice.in",
    "description": "Building Admin's Email",
+   "fetch_from": "location.building_admin_email",
    "fieldname": "email_cc_admin",
    "fieldtype": "Data",
    "label": "Email CC Admin",
@@ -104,7 +104,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-30 10:36:04.712451",
+ "modified": "2024-06-04 17:16:45.328116",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room slots booking",

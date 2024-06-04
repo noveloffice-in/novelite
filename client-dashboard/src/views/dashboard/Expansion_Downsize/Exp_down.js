@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PageContainer from '../../../components/container/PageContainer'
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb'
 
@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Button, CircularProgress, TextField } from '@mui/material';
-import { useFrappeCreateDoc } from 'frappe-react-sdk';
+import { useFrappeCreateDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 
 //Toastify 
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,15 +31,23 @@ export default function () {
     const [action, setAction] = React.useState('Expansion');
     const [subAction, setSubAction] = React.useState('Seats');
     const [loading, setLoading] = React.useState(false);
+    const [customerLocation, setCustomerLocation] = React.useState("");
+    const [locationEmpty, setLocationEmpty] = React.useState(false);
     const companyName = useSelector((state) => state.novelprofileReducer.companyName);
-    
+    const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+
     let value = ['Expansion', 'Downsize'];
     let subActions = ['Seats', 'Amenities', 'Both', 'Others']
-    
+
     //-----------------------------------------------------------Toast functions--------------------------------------------------//
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
     const notifyWarn = (msg) => toast.warn(msg, { toastId: "error" });
+
+    //--------------------------------------------------------Locations fetching------------------------------------------------------//
+    const { data: allLocations, error, isValidating } = useFrappeGetDocList('Property Location', {
+        fields: ['location_name', 'short_name']
+    });
 
     const handleChange = (event) => {
         setAction(event.target.value);
@@ -48,32 +56,49 @@ export default function () {
     const handleSubAction = (event) => {
         setSubAction(event.target.value);
     };
+    
+    const handleLocation = (event) => {
+        setCustomerLocation(event.target.value);
+        setLocationEmpty(false);
+    };
 
     const { createDoc } = useFrappeCreateDoc();
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        let form = new FormData(e.target);
-        let formObj = Object.fromEntries(form.entries());
-        formObj.customer = companyName;
 
-        let { action, sub_action } = formObj;
-        console.log("Object = ", formObj);
-
-        if (action !== "" && sub_action !== "") {
-            createDoc('Expansion and Dowsize', formObj)
-                .then((res) => {
-                    notifySuccess("Application submitted successfully");
-                    setLoading(false);
-                }).catch((err) => {
-                    notifyError(err);
-                    setLoading(false);
-                    console.log(err);
-                })
-        } else {
-            notifyWarn("please fill all the details");
+        if(customerLocation === ""){
+            setLocationEmpty(true);
             setLoading(false);
+            return;
+        } else {
+            
+            setLocationEmpty(false);
+            let form = new FormData(e.target);
+            let formObj = Object.fromEntries(form.entries());
+            formObj.customer = companyName;
+            formObj.customer_email = userEmail;
+            formObj.location = customerLocation;
+    
+            let { action, sub_action } = formObj;
+            console.log("Object = ", formObj);
+    
+            if (action !== "" && sub_action !== "") {
+                createDoc('Expansion and Dowsize', formObj)
+                    .then((res) => {
+                        notifySuccess("Application submitted successfully");
+                        setLoading(false);
+                    }).catch((err) => {
+                        notifyError(err);
+                        setLoading(false);
+                        console.log(err);
+                    })
+            } else {
+                notifyWarn("please fill all the details");
+                setLoading(false);
+            }
         }
+
     }
 
     return (
@@ -88,7 +113,26 @@ export default function () {
                 }}>
                     <Box sx={{ minWidth: 120 }}>
                         <form onSubmit={handleSubmit} style={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
+
+                            {/* Location  */}
+                            <FormControl fullWidth sx={{ mt: 2 }} >
+                                <InputLabel id="demo-simple-select-label" error={locationEmpty} required>Location</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Location"
+                                    onChange={handleLocation}
+                                >
+                                    {allLocations?.map((location) => {
+                                        return (
+                                            <MenuItem key={location.location_name} value={location.location_name}>{location.location_name}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+
+                            {/* Expansion / Downsize */}
+                            <FormControl fullWidth sx={{ mt: 2 }}>
                                 <InputLabel id="demo-simple-select-label">Expansion / Downsize</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -107,6 +151,8 @@ export default function () {
                                     }
                                 </Select>
                             </FormControl>
+
+                            {/* Service */}
                             <FormControl fullWidth sx={{ mt: 2 }}>
                                 <InputLabel id="demo-simple-select-label" >Service</InputLabel>
                                 <Select
@@ -127,6 +173,7 @@ export default function () {
                                 </Select>
                             </FormControl>
 
+                            {/* Description  */}
                             <FormControl fullWidth sx={{ mt: 2 }}>
                                 <Box>
                                     <TextField

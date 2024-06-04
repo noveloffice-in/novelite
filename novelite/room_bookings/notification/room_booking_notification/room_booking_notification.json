@@ -13,14 +13,14 @@
  "is_standard": 1,
  "message": "<h3>Hello Team,</h3>\n\n<p>A <b>{{doc.room_type}}</b> booking request has been made by <b>\"{{ doc.customer }}\"</b> on <b>\"{{ doc.booking_date }}\"</b> at <b>\"{{ doc.from_time }}\"</b>.</p>\n\n<h4>More Details:</h4>\n\n<ul>\n    <li>Location: {{ doc.location }}</li>\n    <li>Room Name: {{ doc.room }}</li>\n    <li>Booking Date: {{ doc.booking_date }}</li>\n    <li>From Time: {{ doc.from_time }}</li>\n    <li>To Time: {{ doc.to_time }}</li>\n    <li>Description: {{ doc.description }}</li>\n</ul>\n\n<p>Kindly check the availability and confirm.</p>\n",
  "message_type": "Markdown",
- "modified": "2024-06-03 15:56:42.406938",
+ "modified": "2024-06-04 17:17:46.368719",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Booking Notification",
  "owner": "Administrator",
  "recipients": [
   {
-   "cc": "{{ doc.email_cc }}\n{{ doc.email_cc_admin }}",
+   "cc": "{{ doc.email_cc }}\n{{ doc.email_cc_admin }}\nfida.k@noveloffice.in\nmr@noveloffice.com",
    "receiver_by_document_field": "email_to"
   }
  ],
