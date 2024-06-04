@@ -18,13 +18,13 @@
   "visitor_name",
   "vehicle_type",
   "visit_location",
+  "qr_code_image",
   "column_break_isnkc",
   "visitor_email",
   "vehicle_no",
   "visit_date",
   "visit_time",
   "custom_qr_code",
-  "qr_code_image",
   "quantity",
   "particulars"
  ],
@@ -108,7 +108,7 @@
   },
   {
    "fieldname": "qr_code_image",
-   "fieldtype": "Attach Image",
+   "fieldtype": "Image",
    "label": "QR code image",
    "options": "custom_qr_code"
   },
@@ -133,7 +133,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-17 12:24:43.293987",
+ "modified": "2024-06-01 10:33:00.237286",
  "modified_by": "Administrator",
  "module": "Visitor Parkings",
  "name": "Visitor Parking Pass",

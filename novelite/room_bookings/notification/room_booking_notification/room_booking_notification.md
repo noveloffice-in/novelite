@@ -1,6 +1,6 @@
 <h3>Hello Team,</h3>
 
-<p>A <b>{{doc.room_type}}</b>booking request has been made by <b>"{{ doc.customer }}"</b> on <b>"{{ doc.booking_date }}"</b> at <b>"{{ doc.from_time }}"</b>.</p>
+<p>A <b>{{doc.room_type}}</b> booking request has been made by <b>"{{ doc.customer }}"</b> on <b>"{{ doc.booking_date }}"</b> at <b>"{{ doc.from_time }}"</b>.</p>
 
 <h4>More Details:</h4>
 

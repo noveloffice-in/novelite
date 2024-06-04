@@ -53,6 +53,7 @@ export default function CustomerProfile() {
                                 <IconLicense size="21" />
                                 <Stack direction={{xs:"column", md:"row", lg:"row"}} gap={{xs:0, md:2, lg:2}}>
                                     {
+                                        userData.permissions.length > 0 ? 
                                         userData.permissions.map((permission) => {
                                             return (
                                                 <>
@@ -60,7 +61,8 @@ export default function CustomerProfile() {
                                                     <br />
                                                 </>
                                             )
-                                        })
+                                        }) :
+                                        <Typography variant="h6">No permissions</Typography>
                                     }
                                 </Stack>
                             </Stack>

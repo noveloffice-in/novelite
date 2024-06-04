@@ -131,7 +131,7 @@ export default function () {
                                 <Box>
                                     <TextField
                                         id="outlined-multiline-static"
-                                        label="Description"
+                                        label="Additional info"
                                         multiline
                                         rows={2}
                                         style={{ width: '100%' }}

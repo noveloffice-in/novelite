@@ -20,6 +20,7 @@
    "fieldname": "location",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Location",
    "options": "Room Locations",
    "reqd": 1
@@ -28,6 +29,7 @@
    "fieldname": "room_type",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Room Type",
    "options": "Room Type",
    "reqd": 1
@@ -62,7 +64,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-31 17:38:24.003018",
+ "modified": "2024-06-03 19:16:21.435606",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Rooms",

@@ -13,7 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 //Time
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
-import { Button, CircularProgress, TextField } from '@mui/material';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
 import ChildCard from '../../../components/shared/ChildCard';
 import { useFrappeCreateDoc } from 'frappe-react-sdk';
 
@@ -21,6 +21,8 @@ import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router';
+
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 
 
 export default function BookSlot() {
@@ -102,7 +104,7 @@ export default function BookSlot() {
 
     // Time Change
 
-    const handleTimeChange = (newValue, change)=>{
+    const handleTimeChange = (newValue, change) => {
         const date = new Date(newValue);
         const hours = date.getHours();
         const minutes = date.getMinutes();
@@ -124,13 +126,13 @@ export default function BookSlot() {
         // Check if toTime is lesser or equal to fromTime
         const fromTimeMinutes = dayjs(fromTime, 'hh:mm A').hour() * 60 + dayjs(fromTime, 'hh:mm A').minute();
         const toTimeMinutes = dayjs(toTime, 'hh:mm A').hour() * 60 + dayjs(toTime, 'hh:mm A').minute();
-    
+
         if (toTimeMinutes <= fromTimeMinutes) {
             notifyWarn('To time must be greater than from time.');
             setDisableBtn(false);
             return;
         }
-        
+
         const boookingData = {
             customer: companyName,
             location: location,
@@ -142,7 +144,7 @@ export default function BookSlot() {
             to_time: toTime,
             description: formObj.description,
         }
-        
+
         console.log('boookingData = ', boookingData);
 
         if (date !== '' && fromTime !== '' && toTime !== '') {
@@ -160,39 +162,56 @@ export default function BookSlot() {
         } else {
             notifyWarn("Please Fill all the details");
         }
-
     }
 
     return (
         <PageContainer title="Book Slots - Novel Office">
             <Breadcrumb title="Booking Slots" items={BCrumb} />
+
             <ChildCard justifyContent='center' alignItems='center' width='100%'>
+
+                <Box bgcolor={'warning' + '.light'} textAlign="center" my={1}>
+                    <Stack justifyContent='center' alignItems='center' flexDirection='row'>
+                        <Box color={'warning' + '.main'}>
+                            <WarningAmberOutlinedIcon sx={{ marginRight: "0.5rem", paddingLeft: "0.5rem", marginBottom: "-0.4rem" }} />
+                        </Box>
+                        <Typography
+                            color={'warning' + '.main'}
+                            m={1}
+                            variant="p"
+                            fontWeight={600}
+                        >
+                            Our team will receive the request, we will get back to you with a confirmation via email.
+                        </Typography>
+                    </Stack>
+                </Box>
+
                 <Stack width='100%' justifyContent='center' alignItems='center'>
 
                     <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']} >
-                                <DatePicker label="Plesase select date" onChange={(newValue) => { handleDateChange(newValue.$d) }} />
+                                <DatePicker label="Date" onChange={(newValue) => { handleDateChange(newValue.$d) }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="From" onChange={(newValue)=>{handleTimeChange(newValue, 'from')}} />
+                                <TimePicker label="From" onChange={(newValue) => { handleTimeChange(newValue, 'from') }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimePicker']} >
-                                <TimePicker label="To" onChange={(newValue)=>{handleTimeChange(newValue, 'to')}} />
+                                <TimePicker label="To" onChange={(newValue) => { handleTimeChange(newValue, 'to') }} />
                             </DemoContainer>
                         </LocalizationProvider>
 
                         <Box >
                             <TextField
                                 id="outlined-multiline-static"
-                                label="Description"
+                                label="Additional info"
                                 multiline
                                 rows={2}
                                 style={{ width: '14.5rem' }}

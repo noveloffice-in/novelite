@@ -18,6 +18,7 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
 export default function TicketChatContent({ data, title, id }) {
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
+    const userImage = useSelector((state) => state.novelprofileReducer.userImage);
     const chatEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -108,7 +109,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                 <Box mb={2} display="flex" alignItems="flex-end" flexDirection="row-reverse">
                                                     <Box display="flex" flexDirection="row-reverse" alignItems="center">
                                                         <ListItemAvatar>
-                                                            <Avatar src={user1} style={{ width: '45px', height: '40px', marginBottom: '1rem', marginLeft: '0.5rem' }} />
+                                                            <Avatar src={userImage !== '' ? userImage : user1} alt={user1} style={{ width: '45px', height: '45px', marginBottom: '1rem', marginLeft: '0.5rem' }} />
                                                         </ListItemAvatar>
                                                         <Box alignItems="flex-end" display="flex" flexDirection={'column'}>
                                                             <Typography variant="body2" color="grey.400" mb={1}>

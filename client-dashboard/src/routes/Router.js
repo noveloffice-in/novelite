@@ -158,7 +158,7 @@ const Router = [
     path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', element: <Navigate to="/Login" /> },
+      { path: '/', element: <Navigate to="/dashboard" /> },
 
       // Custom added 
       { path: '/dashboard', exact: true, element: < GetData Component={Noveldashboard} /> },
@@ -172,11 +172,6 @@ const Router = [
       { path: '/payment_summary', exact: true, element: < Protected Component={PaymentSummary} /> },
       { path: '/checkout', exact: true, element: < Protected Component={Checkout} /> },
 
-      //Upcomming
-      // { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-      { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-      // { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
-
       //Expansion and Downsize
       { path: '/Expansion_Downsize', exact: true, element: < Protected Component={Exp_down} /> },
 
@@ -186,11 +181,17 @@ const Router = [
       { path: '/ticket_details/:id', exact: true, element: <  Protected Component={TicketDetails} /> },
 
       // Visitor Parking pass 
-      { path: '/visitor_pass', exact: true, element: < Protected Component={VisitorPass} /> },
-      { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
+      // { path: '/visitor_pass', exact: true, element: < Protected Componentp={VisitorPass} /> },
+      // { path: '/visit_details/:id', exact: true, element: <  Protected Component={PassDetails} /> },
 
       // Invoice 
       { path: '/invoice', exact: true, element: < Protected Component={SalesInvoice} /> },
+
+      //Upcomming
+      // { path: '/location', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      { path: '/gatepass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      { path: '/visitor_pass', exact: true, element: < UpcomingParent Component={Upcoming} /> },
+      // { path: '/Expansion_Downsize', exact: true, element: < UpcomingParent Component={Upcoming} /> },
 
       //Profile
       { path: '/customer-profile', element: <CustomerProfile /> },
@@ -274,7 +275,8 @@ const Router = [
     element: <BlankLayout />,
     children: [
       //Custom added
-      { path: '/Login', exact: true, element: < CheckLogin Component={NovelLogin} /> },
+      { path: '/Login', exact: true, element: < NovelLogin /> },
+      // { path: '/Login', exact: true, element: < CheckLogin Component={NovelLogin} /> },
       { path: '/dashboards/NovelSignup', exact: true, element: <NovelSignup /> },
 
       { path: '/auth/404', element: <Error /> },

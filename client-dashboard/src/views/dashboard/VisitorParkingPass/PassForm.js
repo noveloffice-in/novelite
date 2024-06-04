@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider, Button, CircularProgress } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField, DialogTitle, Divider, Button, CircularProgress, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useSelector } from 'react-redux';
@@ -11,8 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DateField } from '@mui/x-date-pickers/DateField';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 //Time
 import { TimeField } from '@mui/x-date-pickers/TimeField';
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 export default function PassForm({ billingLocation, setOpen1, mutate }) {
     const customerName = useSelector((state) => state.novelprofileReducer.fullName);
@@ -34,7 +36,6 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
 
     const allLocations = [
         { location: 'Novel Office WorkHub - Whitefield' },
-        { location: 'Novel Office Brigade' },
         { location: 'Novel Tech Park - Kudlu Gate' },
         { location: 'Novel Office Brigade - Whitefield' },
         { location: 'Novel Office Central - MG Road' },
@@ -101,17 +102,20 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
     const handleSubmit = () => {
         setShowLoading(true);
         const { customer, customerEmail, visitorName, vehicleNumber, vehicleType, visitorEmail, visitLocation, billingLead, billingLoc, visitingDate, visitingTime } = userData;
-    
+
         if (!(customer && customerEmail && visitorName && vehicleNumber && vehicleType && visitorEmail && visitLocation && billingLead && billingLoc && visitingDate && visitingTime)) {
             notifyWarn("Please fill in all the details");
             setShowLoading(false);
         } else {
             const currentDate = new Date();
             const currentDateTime = currentDate.getTime();
-    
-            const [day, month, year] = visitingDate.split('-');
+
+            const [day, month, year] = visitingDate?.split('-');
             const visitingDateTime = new Date(`${year}-${month}-${day}`);
-    
+
+            console.log("visitingDate  = ", visitingDate);
+            console.log("visitingDateTime  = ", visitingDateTime);
+
             if (visitingDateTime.getTime() <= currentDateTime) {
                 notifyWarn("Visiting date must be greater than the current date");
                 setShowLoading(false);
@@ -134,7 +138,7 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
             }
         }
     }
-    
+
 
 
 
@@ -158,8 +162,9 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
                         </Select>
                     </FormControl>
                     <TextField label="Your Email" variant="standard" required style={{ width: '100%', marginTop: '8px' }} name="customerEmail" value={userData.customerEmail} onChange={handleInputChange} />
+                    <Typography variant='caption' color='grey' pt={1}> (You will receive booking details on this mail)</Typography>
                 </Box>
-                <Divider />
+                {/* <Divider /> */}
                 <DialogTitle sx={{ ml: "-2.2em", mb: "-1rem" }}>Visitor Details</DialogTitle>
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, gap: 2 }}>
                     <Box >
@@ -201,11 +206,17 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
                 </FormControl>
                 <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row", ls: "row" }, justifyContent: 'space-between', gap: 2, mt: 2 }}>
                     <Box>
+                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['TimePicker']} >
+                                <TimePicker label="Time" onChange={(newValue) => { handleTimeChange(newValue) }} />
+                            </DemoContainer>
+                        </LocalizationProvider> */}
+
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['TimeField', 'TimeField', 'TimeField']}>
                                 <TimeField
                                     label="Time"
-                                    defaultValue={userData.visitingDate}
+                                    // defaultValue={userData.visitingDate}
                                     format="hh:mm a"
                                     onChange={(value) => { handleTimeChange(value.$d) }}
                                 />
@@ -213,12 +224,18 @@ export default function PassForm({ billingLocation, setOpen1, mutate }) {
                         </LocalizationProvider>
                     </Box>
                     <Box>
+                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']} >
+                                <DatePicker label="Date" onChange={(newValue) => { handleDateChange(newValue.$d) }} />
+                            </DemoContainer>
+                        </LocalizationProvider> */}
+
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DateField', 'DateField']}>
                                 <DateField
                                     label="Date"
-                                    defaultValue={userData.visitingDate}
-                                    format="DD-MM-YYYY"
+                                    // defaultValue={userData.visitingDate}
+                                    format="MM-DD-YYYY"
                                     onChange={(newValue) => handleDateChange(newValue.$d)}
                                 />
                             </DemoContainer>

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:room_type",
  "creation": "2024-01-24 12:27:17.827364",
@@ -22,7 +23,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-29 10:22:22.442446",
+ "modified": "2024-06-03 15:36:32.232981",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Type",

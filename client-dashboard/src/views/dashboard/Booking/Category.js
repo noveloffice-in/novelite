@@ -65,15 +65,15 @@ export default function Category() {
         <PageContainer title="Category - Novel Office">
             <Breadcrumb title="Category - Novel Office" items={BCrumb} />
             <Grid container spacing={3}>
- 
+
                 {/* ------------------------------------------- */}
                 {/* Cards */}
                 {/* ------------------------------------------- */}
                 {data && data.room_type_details.map((card, index) => {
                     return (
                         <Grid item xs={12} sm={4} lg={3} key={card.room_type + index}>
-                            <Card variant="outlined" sx={{ maxWidth: 345, height:'100%' }}>
-                                <CardActionArea component={Link} sx={{height:'100%'}} to="/bookings" onClick={() => { dispatch(setRoomCategory(card.room_type)); dispatch(setPrice(card.price)) }}>
+                            <Card variant="outlined" sx={{ maxWidth: 345, height: '100%' }}>
+                                <CardActionArea component={Link} sx={{ height: '100%' }} to="/bookings" onClick={() => { dispatch(setRoomCategory(card.room_type)); dispatch(setPrice(card.price)) }}>
                                     <CardMedia
                                         component="img"
                                         height="140"
@@ -81,11 +81,16 @@ export default function Category() {
                                         alt={card.room_type}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
+                                        <Typography gutterBottom variant="p" component="div">
                                             {card.room_type}
                                         </Typography>
+
                                         <Typography variant="body2" color="text.primary">
-                                        &#x20B9; {card.price} / hour
+                                            &#x20B9; {card.price_per_hour} / hour
+                                        </Typography>
+
+                                        <Typography variant="body2" color="text.primary">
+                                            &#x20B9; {card.price_per_day} / day
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>

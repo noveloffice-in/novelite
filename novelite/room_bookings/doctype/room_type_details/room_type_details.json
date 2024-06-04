@@ -9,7 +9,8 @@
   "room_type",
   "image",
   "column_break_hx81o",
-  "price",
+  "price_per_hour",
+  "price_per_day",
   "description"
  ],
  "fields": [
@@ -18,8 +19,7 @@
    "fieldtype": "Attach Image",
    "in_filter": 1,
    "in_standard_filter": 1,
-   "label": "Image",
-   "reqd": 1
+   "label": "Image"
   },
   {
    "fieldname": "room_type",
@@ -30,12 +30,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "price",
-   "fieldtype": "Currency",
-   "label": "Price",
-   "reqd": 1
-  },
-  {
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
@@ -43,12 +37,26 @@
   {
    "fieldname": "column_break_hx81o",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "price_per_hour",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price per hour",
+   "reqd": 1
+  },
+  {
+   "fieldname": "price_per_day",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price per day",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-29 10:25:19.074786",
+ "modified": "2024-06-03 18:25:55.815038",
  "modified_by": "Administrator",
  "module": "Room Bookings",
  "name": "Room Type Details",

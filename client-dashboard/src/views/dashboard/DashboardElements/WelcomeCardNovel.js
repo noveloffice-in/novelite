@@ -5,8 +5,12 @@ import { Breadcrumbs, Grid, Link } from '@mui/material';
 import { Box, Avatar, Typography } from '@mui/material';
 import userImg from 'src/assets/images/profile/user-1.jpg';
 import welcomeImg from 'src/assets/images/backgrounds/welcome-bg.svg';
+import { useSelector } from 'react-redux';
 
 const WelcomeCardNovel = ({ subtitle, items, title, children }) => {
+
+  const userImage = useSelector((state) => state.novelprofileReducer.userImage);
+
   return (
     <Grid
       container
@@ -30,9 +34,9 @@ const WelcomeCardNovel = ({ subtitle, items, title, children }) => {
             alignItems: 'center',
           }}
         >
-          <Avatar src={userImg} alt="img" sx={{ width: {xs:30, sm:30, lg:40}, height: {xs:30, sm:30, lg:40} }} />
+          <Avatar src={userImage !== '' ? userImage : userImg} alt={userImg} sx={{ width: {xs:30, sm:30, lg:40}, height: {xs:30, sm:30, lg:40} }} />
           <Typography variant="h5" whiteSpace="nowrap" sx={{textWrap:"pretty"}}>
-            Welcome&nbsp; back&nbsp; {title}
+            Welcome&nbsp; {title}
           </Typography>
         </Box>
         <Typography color="textSecondary" variant="h6" fontWeight={400} mt={0.8} mb={0}>

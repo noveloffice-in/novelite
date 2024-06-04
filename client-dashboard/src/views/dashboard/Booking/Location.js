@@ -75,7 +75,7 @@ export default function Location() {
                                         alt={card.name}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
+                                        <Typography gutterBottom variant="p" component="div">
                                             {card.name}
                                         </Typography>
                                         {/* <Typography variant="body2" color="text.primary">

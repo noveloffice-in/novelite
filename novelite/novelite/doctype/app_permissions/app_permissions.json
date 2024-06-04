@@ -14,13 +14,13 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Permissions",
-   "options": "Dashboard\nTickets\nInvoice\nBookings\nExpansion/Downsize"
+   "options": "Invoice\nBookings\nExpansion/Downsize"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-05-08 14:46:45.052789",
+ "modified": "2024-06-03 12:06:25.397194",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "App Permissions",

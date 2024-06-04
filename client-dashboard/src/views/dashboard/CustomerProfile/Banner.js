@@ -46,8 +46,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useFrappeCreateDoc, useFrappeUpdateDoc } from 'frappe-react-sdk';
+import { useFrappeCreateDoc, useFrappeGetDoc, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
+import AddNewUser from './AddNewUser';
 
 const Banner = () => {
   const ProfileImage = styled(Box)(() => ({
@@ -83,6 +84,7 @@ const Banner = () => {
   //Dialog for rise ticket
   const handleClickOpen = () => {
     setOpen1(true);
+    setDisableSubmit(false);
   };
 
   const handleClose1 = () => {
@@ -103,6 +105,13 @@ const Banner = () => {
   };
 
   //-----------------------------------------------------------User creation form-----------------------------------------------//
+  let permissions = [];
+
+  const handleCheckboxChange = (component) => {
+    permissions.push(component);
+    console.log("permissions =", permissions);
+  }
+
   const [userData, setUserData] = useState({
     app_user_type: 'Property Customer',
     customer: companyName,
@@ -120,8 +129,10 @@ const Banner = () => {
   }
 
   const createUser = () => {
-    setDisableSubmit(true);
     const { email, first_name, last_name } = userData;
+
+    setDisableSubmit(true);
+    // getUserData(email);
 
     if (first_name === '') {
       setErrorField('first_name');
@@ -134,19 +145,45 @@ const Banner = () => {
       setDisableSubmit(false);
     } else {
 
-      axios.post('/api/method/novelite.api.user_creation.create_user', userData)
+      //Checking if user aleardy exists
+      axios.post('/api/method/novelite.api.user_creation.check_user', { userEmail: email })
         .then((res) => {
-          notifySuccess("User created sucessfully");
-          setTimeout(() => {
-            setOpen1(false);
+          if (res.data.message) {
+            notifyError("User already exists");
             setDisableSubmit(false);
-            navigate('/users-list');
-          }, 2000);
+          } else {
+            const newPermissions = permissions;
+            const userDataWithPermissions = { permissions: newPermissions, name: userData.email };
+
+            //Creating User
+            axios.post('/api/method/novelite.api.user_creation.create_user', userData)
+              .then((res) => {
+                notifySuccess("User created sucessfully");
+
+                //Adding permissions to app user
+                axios.post('/api/method/novelite.api.user_creation.modify_app_user_permission', userDataWithPermissions)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  })
+
+                setTimeout(() => {
+                  setOpen1(false);
+                  setDisableSubmit(false);
+                  navigate('/users-list');
+                }, 2000);
+              })
+              .catch((err) => {
+                notifyError(err);
+                setDisableSubmit(false);
+                console.log("Error = ", err.response.data._server_messages);
+              })
+          }
         })
         .catch((err) => {
-          notifyError(err);
-          setDisableSubmit(false);
-          console.log("Error = ", err.response.data._server_messages);
+          console.log(err);
         })
     }
   }
@@ -319,49 +356,8 @@ const Banner = () => {
             </Stack>
           </DialogTitle>
           <DialogContent>
-            <Box
-              component="form"
-            >
-              <Box>
-
-                {/* First Name */}
-                <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                  <TextField
-                    label="First Name"
-                    id="outlined-required"
-                    name='first_name'
-                    required
-                    onChange={handleInput}
-                    error={errorField === 'first_name'}
-                  />
-                </FormControl>
-
-                {/* Last Name */}
-                <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                  <TextField
-                    label="Last Name"
-                    id="outlined-required"
-                    name='last_name'
-                    required
-                    onChange={handleInput}
-                    error={errorField === 'last_name'}
-                  />
-                </FormControl>
-
-                {/* Email */}
-                <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                  <TextField
-                    label="Email"
-                    id="outlined-required"
-                    name='email'
-                    required
-                    onChange={handleInput}
-                    error={errorField === 'email'}
-                  />
-                </FormControl>
-
-              </Box>
-            </Box>
+            {/* Add user Form  */}
+            <AddNewUser errorField={errorField} handleInput={handleInput} handleCheckboxChange={handleCheckboxChange} />
           </DialogContent>
           <DialogActions>
             <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>

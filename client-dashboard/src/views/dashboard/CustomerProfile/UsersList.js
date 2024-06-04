@@ -48,6 +48,25 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+//Tooptip icon
+import HelpIcon from '@mui/icons-material/Help';
+import { styled } from '@mui/material/styles';
+import Zoom from '@mui/material/Zoom';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+
+//Custom tooltip
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 300,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
+
 export default function UsersList() {
 
     const [page, setPage] = useState(0);
@@ -61,12 +80,11 @@ export default function UsersList() {
     const [selectedPermissions, setSelectedPermissions] = useState([]);
     const [userType, setUserType] = useState('Non Admin');
     const [permissionList, setPermissionList] = useState([
-        { permittedComponent: 'Dashboard' },
-        { permittedComponent: 'Tickets' },
         { permittedComponent: 'Invoice' },
         { permittedComponent: 'Bookings' },
         { permittedComponent: 'Expansion/Downsize' },
     ]);
+    const [openToolTip, setOpenToolTip] = useState(false);
 
     //-----------------------------------------------------------Toast functions--------------------------------------------------//
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -106,7 +124,7 @@ export default function UsersList() {
 
     //Permisson Changes
     const handlePermissionSubmit = () => {
-        let sendingData = { user_email: user, permissions_array: selectedPermissions, user_type:userType }
+        let sendingData = { user_email: user, permissions_array: selectedPermissions, user_type: userType }
         console.log("selectedPermissions = ", selectedPermissions);
         axios.post('/api/method/novelite.api.user_permissions.update_permissions', sendingData)
             .then((res) => {
@@ -275,6 +293,43 @@ export default function UsersList() {
                     </Stack>
                 </DialogTitle>
                 <DialogContent>
+
+                    <Stack flexDirection='row' alignItems='center' justifyContent='space-beetween' gap={2}>
+                        <Box maxWidth='8rem' py={1}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">User Type</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={userType}
+                                    label="User Type"
+                                    onChange={(e) => { setUserType(e.target.value); setPermissionChange(true) }}
+                                >
+                                    <MenuItem value="Admin">Admin</MenuItem>
+                                    <MenuItem value="Non Admin">Non Admin</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+
+                        <HtmlTooltip placement="bottom" TransitionComponent={Zoom} sx={{ transform: 'translate(-14px, 51px)' }}
+                            PopperProps={{
+                                disablePortal: true,
+                            }}
+                            onClose={() => { setOpenToolTip(stubFalse) }}
+                            open={openToolTip}
+                            disableFocusListener
+                            disableHoverListener
+                            disableTouchListener
+                            title={
+                                <>
+                                    <Typography variant='p'>The administrator will possess complete permissions, including the ability to add users.</Typography>
+                                </>
+                            }>
+                            <HelpIcon onClick={() => { setOpenToolTip(!openToolTip) }} />
+                        </HtmlTooltip>
+                    </Stack>
+
+
                     {permissionList.map((element) => {
                         const isChecked = selectedPermissions.some((ele) => ele.permittedComponent === element.permittedComponent);
                         return (
@@ -286,22 +341,7 @@ export default function UsersList() {
                             />
                         );
                     })}
-                    
-                    <Box maxWidth='8rem' pt={1}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">User Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={userType}
-                                label="User Type"
-                                onChange={(e)=>{setUserType(e.target.value); setPermissionChange(true)}}
-                            >
-                                <MenuItem value="Admin">Admin</MenuItem>
-                                <MenuItem value="Non Admin">Non Admin</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
+
                 </DialogContent>
                 <DialogActions>
                     <Box display='flex' justifyContent='center' alignItems='center' height='100%' width='100%' p={1}>

@@ -64,10 +64,10 @@ export default function Bookings() {
                                             component="img"
                                             height="140"
                                             image={card.image}
-                                            alt="green iguana"
+                                            alt="img"
                                         />
                                         <CardContent>
-                                            <Typography gutterBottom variant="h5" component="div">
+                                            <Typography gutterBottom variant="p" component="div">
                                                 {card.room_name}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary">
@@ -82,7 +82,7 @@ export default function Bookings() {
                     :
                     (
                         <Stack direction="row" alignItems='center' justifyContent='center' width='100%' mt={4} ml={3}>
-                            <Typography variant='h3'>There are no rooms available in this category</Typography>
+                            <Typography variant='h4'>There are no rooms available in this category</Typography>
                         </Stack>
                     )
                 }

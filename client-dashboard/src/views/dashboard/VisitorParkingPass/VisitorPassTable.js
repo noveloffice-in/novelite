@@ -108,6 +108,17 @@ export default function VisitorPassTable() {
         setPage(0);
     };
 
+    //Changing date format
+    const convertDateFormat = (inputDate) => {
+        // Split the inputDate string into year, month, and day parts
+        const [year, month, day] = inputDate.split('-');
+        
+        // Concatenate the parts in the desired format
+        const outputDate = `${day}-${month}-${year}`;
+        
+        return outputDate;
+    };
+
     // Function to check if cancel button should be disabled
     const isCancelDisabled = (visitDate, visitTime) => {
         const currentDate = new Date();
@@ -118,6 +129,8 @@ export default function VisitorPassTable() {
         if (period === 'PM' && hours !== 12) hours += 12;
         const visitDateTime = new Date(year, month - 1, day, hours, minutes);
 
+        console.log("visitDateTime = ", visitDateTime);
+        console.log("currentDate = ", currentDate);
         return visitDateTime < currentDate;
     };
 
@@ -168,9 +181,9 @@ export default function VisitorPassTable() {
                                 <TableCell>
                                     <Typography variant="h6">Visit Date</Typography>
                                 </TableCell>
-                                <TableCell>
+                                {/* <TableCell>
                                     <Typography variant="h6">Visit Time</Typography>
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell>
                                     <Typography variant="h6">Visitor Vehicle No</Typography>
                                 </TableCell>
@@ -191,7 +204,7 @@ export default function VisitorPassTable() {
                                     <TableCell component={Link} to={`/visit_details/${element.name}`} >
                                         <Box>
                                             <Typography variant="h6" fontWeight="500" noWrap>
-                                                {element.visit_date}
+                                                {convertDateFormat(element.visit_date)}
                                             </Typography>
                                             <Typography
                                                 color="textSecondary"
@@ -204,11 +217,11 @@ export default function VisitorPassTable() {
                                             </Typography>
                                         </Box>
                                     </TableCell>
-                                    <TableCell component={Link} to={`/visit_details/${element.name}`} >
+                                    {/* <TableCell component={Link} to={`/visit_details/${element.name}`} >
                                         <Stack direction="row" gap="10px" alignItems="center">
                                             <Typography variant="h6">{element.visit_time}</Typography>
                                         </Stack>
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell component={Link} to={`/visit_details/${element.name}`} >
                                         <Typography>{element.vehicle_no}</Typography>
                                     </TableCell>

@@ -183,7 +183,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                             sx={{ backgroundColor: 'none', color: "none" }}
                         >
                             <IconPaperclip />
-                            <VisuallyHiddenInput type="file" onChange={(e) => sendAttachment(e)} />
+                            <VisuallyHiddenInput type="file" accept=".png,.jpg,.jpeg,.pdf,.heif,.hevc,.heic,.mov" onChange={(e) => sendAttachment(e)} />
                         </Button>
                     </IconButton>}
             </form>

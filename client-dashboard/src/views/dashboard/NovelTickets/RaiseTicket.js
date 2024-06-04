@@ -2,7 +2,6 @@ import { FormControl, MenuItem, Select, TextField, Tooltip, Typography, Button, 
 import { Box, Stack, borderRadius, height, padding } from '@mui/system'
 import { useFrappeCreateDoc, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import React, { useEffect, useRef, useState } from 'react'
-import Zoom from '@mui/material/Zoom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../../store/apps/userProfile/NovelProfileSlice';
 import HelpIcon from '@mui/icons-material/Help';
@@ -19,6 +18,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 //Ac vent image
 import acVent from '../../../assets/images/acVent/AC Vent Number Identification.jpg'
+import Zoom from '@mui/material/Zoom';
 
 import { tooltipClasses } from '@mui/material/Tooltip';
 import { stubFalse } from 'lodash';
@@ -560,7 +560,7 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
                             startIcon={<AttachFileIcon />}
                         >
                             Attach file
-                            <VisuallyHiddenInput type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+                            <VisuallyHiddenInput type="file" accept="image/png,image/jpeg,image/jpg,application/pdf,image/heif,image/heic,image/hevc,video/quicktime,application/vnd.openxmlformats-officedocument.wordprocessingml.document"  onChange={(e) => setAttachment(e.target.files[0])} />
                         </Button>}
                         {attachment && <Box>
                             <Typography variant='p'>{attachment.name}</Typography>
@@ -569,7 +569,7 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
                             </IconButton>
                         </Box>}
                     </Box>
-                    <Typography pt={1} variant='body2' color="grey">Allowed formats 'png', 'jpg', 'jpeg', 'pdf' upto 5MB </Typography>
+                    <Typography pt={1} variant='body2' color="grey">Allowed upto 5MB </Typography>
                 </Box>
 
                 {/* -------------------------------------Contact Details-------------------------------------------  */}

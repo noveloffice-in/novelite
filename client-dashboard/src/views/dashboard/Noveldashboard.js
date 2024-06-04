@@ -144,39 +144,46 @@ export default function noveldashboard() {
     // console.log(leadsIDs);
   }
 
-
   return (
     <PageContainer title="Dashboard - Novel Office" description="this is Cards page">
       <WelcomeCardNovel title={userName} mb={2} />
       <Queries />
 
-      <Typography variant='h3' mt={2} mb={2} pl={1} >Featured listings</Typography>
-      <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
-        <Grid container spacing={2} >
-          {
-            locationData && locationData.map((listing, index) => {
-              return (
-                <Grid item xs={12} sm={4} lg={4} key={listing.buildingName}>
-                  <ImagesSlider key={listing.location_name} image={listing.image} name={listing.location_name} location={listing.address} />
-                </Grid>
-              )
-            })
-          }
-        </Grid>
-      </Box>
+      {locationData?.length > 0 &&
+        <>
+          <Typography variant='h3' mt={2} mb={2} pl={1} >Featured listings</Typography>
+          <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
+            <Grid container spacing={2} >
+              {
+                locationData.map((listing, index) => {
+                  return (
+                    <Grid item xs={12} sm={4} lg={4} key={listing.buildingName}>
+                      <ImagesSlider key={listing.location_name} image={listing.image} name={listing.location_name} location={listing.address} />
+                    </Grid>
+                  )
+                })
+              }
+            </Grid>
+          </Box>
+        </>
+      }
 
-      <Typography variant='h3' mt={2} pl={1} >Upcoming Events</Typography>
-      <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
-        <Grid container spacing={2}>
-          {eventData && eventData.map((event, index) => {
-            return (
-              <Grid item xs={12} sm={6} lg={6} key={event.eventName}>
-                <NovelEvents key={event.event_name} image={event.image} name={event.event_name} date={event.starts_on} />
-              </Grid>
-            )
-          })}
-        </Grid>
-      </Box>
+      {eventData?.length > 0 &&
+        <>
+          <Typography variant='h3' mt={2} pl={1} >Upcoming Events</Typography>
+          <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
+            <Grid container spacing={2}>
+              {eventData.map((event, index) => {
+                return (
+                  <Grid item xs={12} sm={6} lg={6} key={event.eventName}>
+                    <NovelEvents key={event.event_name} image={event.image} name={event.event_name} date={event.starts_on} />
+                  </Grid>
+                )
+              })}
+            </Grid>
+          </Box>
+        </>
+      }
     </PageContainer>
   )
 }

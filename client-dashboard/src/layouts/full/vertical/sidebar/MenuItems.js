@@ -71,7 +71,7 @@ const Menuitems = [
     icon: GridViewOutlinedIcon,
     href: '/dashboard',
     chipColor: 'secondary',
-    permission: 0,
+    permission: 1,
     name: 'Dashboard'
   },
   // {
@@ -99,7 +99,7 @@ const Menuitems = [
     title: 'Tickets',
     icon: IconTicket,
     href: '/tickets',
-    permission: 0,
+    permission: 1,
     name: 'Tickets'
   },
   {
@@ -152,7 +152,7 @@ const Menuitems = [
     title: 'Gate pass',
     icon: IconChartDonut3,
     href: '/gatepass',
-    chip: 'Upcoming',
+    // chip: 'Soon',
     chipColor: 'secondary',
     permission: 1,
     name: 'GatePass'
