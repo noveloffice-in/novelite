@@ -251,7 +251,8 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
             return true;
         }
         const extension = file.name.split('.').pop().toLowerCase();
-        const allowedFormats = ['pdf', 'png', 'jpg', 'mp4'];
+        const allowedFormats = ['png', 'jpg', 'jpeg', 'pdf', 'heif', 'hevc', 'heic', 'mov', 'docx', 'doc', 'mp4'];
+        // const allowedFormats = ['pdf', 'png', 'jpg', 'mp4'];
         if (!allowedFormats.includes(extension)) {
             return true;
         }
@@ -562,7 +563,7 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
                             startIcon={<AttachFileIcon />}
                         >
                             Attach file
-                            <VisuallyHiddenInput type="file" accept="image/png,image/jpeg,image/jpg,application/pdf,image/heif,image/heic,image/hevc,video/quicktime,application/vnd.openxmlformats-officedocument.wordprocessingml.document"  onChange={(e) => setAttachment(e.target.files[0])} />
+                            <VisuallyHiddenInput type="file"  accept=".png, .jpg, .jpeg, .pdf, .heif, .hevc, .heic, .mov, .docx, .doc, .mp4"  onChange={(e) => setAttachment(e.target.files[0])} />
                         </Button>}
                         {attachment && <Box>
                             <Typography variant='p'>{attachment.name}</Typography>

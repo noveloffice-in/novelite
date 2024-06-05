@@ -294,8 +294,14 @@ def issue():
             file_format = data['file'].split(';')[0].split('/')[1]
             file_name = f"{data['fileName']}.{file_format}"
 
-            if file_format in ['png', 'jpg', 'jpeg', 'pdf', 'heif', 'hevc', 'heic', 'mov', 'docx']:
+            content_type = None 
+
+            if file_format in ['png', 'jpg', 'jpeg', 'heif', 'hevc', 'heic']:
                 content_type = "image/" + file_format
+            elif file_format in ['pdf', 'doc', 'docx']:
+                content_type = "application/" + file_format
+            elif file_format == 'mov':
+                content_type = "video/quicktime"
             elif file_format == 'mp4':
                 content_type = "video/mp4"
 
