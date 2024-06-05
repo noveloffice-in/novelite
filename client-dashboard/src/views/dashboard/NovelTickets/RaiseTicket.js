@@ -195,12 +195,14 @@ export default function RaiseTicket({ handleClose1, filterLocation, setFilterLoc
         issueSubTypesArray = [...nonOtherItems, ...otherItems];
     }
 
-
     //----------------------------------------------------------Issue and Issue Type Dropdown change-----------------------------------------------//
     const handleIssueDropdownChange = (e) => {
         const selectedIssue = e.target.value;
         dispatch(setIssueType(selectedIssue));
         setIssueTypeNew(selectedIssue);
+        if(selectedIssue.includes('Other')){
+            setIssueSubTypeNew('Other');
+        }
         // setIssueDropdown(selectedIssue);
         // const newIssueTypeOptions = issueOptions[selectedIssue] || ["Other"];
         // setIssueTypeOptions(newIssueTypeOptions);
