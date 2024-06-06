@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IconButton, InputBase, Box, Button } from '@mui/material';
+import { IconButton, InputBase, Box, Button, Typography } from '@mui/material';
 // import Picker from 'emoji-picker-react';
 import { IconPaperclip, IconPhoto, IconSend } from '@tabler/icons';
 import { sendMsg } from 'src/store/apps/chat/ChatSlice';
-import { useFrappeCreateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -33,12 +32,12 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
     const dispatch = useDispatch();
     const [msg, setMsg] = React.useState('');
     const [attachment, setAttachment] = React.useState(null);
+    const [attachmentName, setAttachmentName] = React.useState("");
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [chosenEmoji, setChosenEmoji] = React.useState();
 
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     const fullName = useSelector((state) => state.novelprofileReducer.fullName);
-    const { createDoc, isCompleted, } = useFrappeCreateDoc();
 
     // console.log("issueMessages = ", issueMessages.all_messages[0].parent);
 
@@ -48,12 +47,9 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
     const notifyError = (msg) => toast.error(msg, { toastId: "error" });
     const notifyWarn = (msg) => toast.warn(msg, { toastId: "warn" });
 
-    //     return ()=> clearInterval(checkMsg);
-    // },[])
-
     const onEmojiClick = (_event, emojiObject) => {
         setChosenEmoji(emojiObject);
-        setMsg(emojiObject.emoji);
+        setAttachmentName(emojiObject.emoji);
     };
 
     const handleChatMsgChange = (e) => {
@@ -70,12 +66,14 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
     const sendAttachment = (e) => {
         setAttachment(e.target.files[0])
         console.log(e.target.files[0]);
+        setAttachmentName(e.target.files[0].name);
         setMsg(e.target.files[0].name);
     }
 
     const clearAttachment = () => {
-        setAttachment(null);
         setMsg('');
+        setAttachment(null);
+        setAttachmentName("");
     }
 
     const checkFileFormat = (file) => {
@@ -85,7 +83,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
             return true;
         }
         const extension = file.name.split('.').pop().toLowerCase();
-        const allowedFormats = ['pdf', 'png', 'jpg', 'pdf', 'heif', 'hevc', 'heic', 'mov', 'docx'];
+        const allowedFormats = ['pdf', 'png', 'jpg', 'jpeg', 'heif', 'hevc', 'heic', 'mov', 'docx', 'doc', 'mov', 'mp4', 'webm'];
         if (!allowedFormats.includes(extension)) {
             return true;
         }
@@ -95,7 +93,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
     //--------------------------------------------------------Send Chat-----------------------------------------//
     const onChatMsgSubmit = (e) => {
 
-        if (msg !== "") {
+        if (msg.trim() !== "") {
             const messageData = {
                 message: msg,
                 issue_id: id,
@@ -105,7 +103,8 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
 
             if (attachment) {
                 if (checkFileFormat(attachment)) {
-                    notifyWarn("File size cannot be more than 5MB and must be in PDF, PNG, or JPG format");
+                    notifyWarn("File size cannot be more than 5MB");
+                    setAttachmentName("");
                 } else {
                     const reader = new FileReader();
                     reader.readAsDataURL(attachment);
@@ -116,14 +115,16 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                         messageData.file = base64data;
                         sendChat(messageData);
                         setAttachment(null);
-                        console.log("1");
+                        setAttachmentName("");
                     }
                 }
             } else {
                 sendChat(messageData);
                 setAttachment(null);
-                console.log("3");
+                setAttachmentName("");
             }
+        } else {
+            notifyWarn("Please type a valid message");
         }
         setMsg('');
     };
@@ -132,6 +133,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
         axios.post('/api/method/novelite.api.issue_comment_for_client.addDataToIssueCommentForClient', data)
             .then((res) => {
                 notifySuccess(res.data.message)
+                setAttachmentName("");
                 fetchChats();
             })
             .catch((err) => {
@@ -183,10 +185,13 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                             sx={{ backgroundColor: 'none', color: "none" }}
                         >
                             <IconPaperclip />
-                            <VisuallyHiddenInput type="file" accept=".png,.jpg,.jpeg,.pdf,.heif,.hevc,.heic,.mov" onChange={(e) => sendAttachment(e)} />
+                            <VisuallyHiddenInput type="file" accept=".png,.jpg,.jpeg,.pdf,.heif,.hevc,.heic,.mov,.doc,.docx,.mp4,.webm,.mkv" onChange={(e) => sendAttachment(e)} />
                         </Button>
                     </IconButton>}
             </form>
+            {attachmentName && <Box>
+                <Typography variant='caption'>{attachmentName}</Typography>
+            </Box>}
             <ToastContainer
                 position="top-center"
                 autoClose={1000}

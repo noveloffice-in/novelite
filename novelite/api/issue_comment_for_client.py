@@ -23,8 +23,16 @@ def addDataToIssueCommentForClient():
             f_name = data['message'].split('.')[0].split(' ')[0]
             file_name = f"{f_name}.{file_format}"
 
-            if file_format in ['png', 'jpg', 'jpeg', 'pdf', 'heif', 'hevc', 'heic', 'mov', 'docx']:
+            content_type = None 
+
+            if file_format in ['png', 'jpg', 'jpeg', 'heif', 'hevc', 'heic']:
                 content_type = "image/" + file_format
+            elif file_format in ['pdf', 'doc', 'docx']:
+                content_type = "application/" + file_format
+            elif file_format == 'mov':
+                content_type = "video/quicktime"
+            elif file_format == 'mp4':
+                content_type = "video/mp4"
             
             doc = frappe.get_doc("Issue Comment For Client", issue_cmt_id)
             doc.seen_by_employee = 0
@@ -44,6 +52,7 @@ def addDataToIssueCommentForClient():
             doc.all_amessages = []
             doc.append('all_messages', {
                 "comment_by_email": data.get('comment_by_email'),
+                'message': data.get('message'),
                 "seen_by_customer": 1,
                 "attachment": file_doc.file_url
             })

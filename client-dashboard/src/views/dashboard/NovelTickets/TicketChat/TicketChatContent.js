@@ -32,7 +32,8 @@ export default function TicketChatContent({ data, title, id }) {
 
     const populateMessage = (comment) => {
         if (comment.attachment) {
-            if (comment.attachment.split('.')[1] == 'pdf') {
+            const fileExtension = comment.attachment.split('.').pop().toLowerCase();
+            if (['pdf', 'doc', 'docx', 'msword', 'document', 'ms-doc'].includes(fileExtension)) {
                 return (
                     <Box>
                         {/* Render link for PDF attachment */}
@@ -41,12 +42,39 @@ export default function TicketChatContent({ data, title, id }) {
                         </MuiLink>
                     </Box>
                 )
+            } else if (['mov', 'mp4', 'webm'].includes(fileExtension)) {
+                return (
+                    <Box sx={{ backgroundColor: 'grey.100', padding: "1rem" }}>
+                        <video width="320" controls>
+                            <source src={comment.attachment} type={`video/${fileExtension}`} />
+                            Your browser does not support the video tag.
+                        </video>
+                        {comment.message &&
+                            <Box my={0.5}
+                                sx={{
+                                    p: 1,
+                                    maxWidth: '320px',
+                                }}>
+                                <Typography>{comment.message}</Typography>
+                            </Box>
+                        }
+                    </Box>
+                )
             }
             return (
-                <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px' }}>
+                <Box mb={1} sx={{ overflow: 'hidden', lineHeight: '0px', backgroundColor: 'grey.100', maxWidth: '320px', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: "center", padding: comment.message ? "1rem" : "0rem" }}>
                     <MuiLink href={comment.attachment} target="_blank" rel="noopener">
                         <img src={comment.attachment} alt="attach" width="150" />
                     </MuiLink>
+                    {comment.message &&
+                        <Box my={0.5}
+                            sx={{
+                                p: 1,
+                                maxWidth: '320px',
+                            }}>
+                            <Typography>{comment.message}</Typography>
+                        </Box>
+                    }
                 </Box>
             )
 
@@ -91,7 +119,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                             <ListItemAvatar>
                                                                 <img src={novelLogo} style={{ width: '45px', height: '45px' }} />
                                                             </ListItemAvatar> :
-                                                            <Avatar style={{ width: '45px', height: '45px', marginRight: '0.5rem' }} >{comment.comment_by_name.substring(0,1)}</Avatar>
+                                                            <Avatar style={{ width: '45px', height: '45px', marginRight: '0.5rem' }} >{comment.comment_by_name.substring(0, 1)}</Avatar>
                                                     }
                                                     <Box>
                                                         <Typography variant="caption" color="grey.400" mb={1}>
@@ -101,7 +129,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                         {/* All messages are populated here  */}
                                                         {populateMessage(comment)}
 
-                                                        <Typography variant="caption" color="grey.300" mb={1}>
+                                                        <Typography variant="caption" color="grey.300" mt={0.5} mb={1}>
                                                             {formatDistanceToNowStrict(
                                                                 new Date(comment.date_and_time ? comment.date_and_time : new Date()),
                                                                 {
@@ -116,7 +144,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                 <Box mb={2} display="flex" alignItems="flex-end" flexDirection="row-reverse">
                                                     <Box display="flex" flexDirection="row-reverse" alignItems="center">
                                                         <ListItemAvatar>
-                                                            <Avatar src={userImage !== '' ? userImage : user1} alt={user1} style={{ width: '45px', height: '45px', marginBottom: '1rem', marginLeft: '0.5rem' }} />
+                                                            <Avatar src={userImage !== '' ? userImage : user1} alt={user1} style={{ width: '45px', height: '45px', marginLeft: '0.5rem' }} />
                                                         </ListItemAvatar>
                                                         <Box alignItems="flex-end" display="flex" flexDirection={'column'}>
                                                             <Typography variant="body2" color="grey.400" mb={1}>
@@ -126,7 +154,7 @@ export default function TicketChatContent({ data, title, id }) {
                                                             {/* All messages are populated here  */}
                                                             {populateMessage(comment)}
 
-                                                            <Typography variant="body2" color="grey.300" mb={1}>
+                                                            <Typography variant="body2" color="grey.300" mt={0.5} mb={1}>
                                                                 {formatDistanceToNowStrict(
                                                                     new Date(comment.date_and_time ? comment.date_and_time : new Date()),
                                                                     {
