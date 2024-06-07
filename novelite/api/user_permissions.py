@@ -14,45 +14,42 @@ def get_document_by_email(user_email):
 
 # ----------------------------------------Getting Members and their permissions------------------------------------------------
 @frappe.whitelist()
-def get_user_permissions_by_email(user_email):
+def get_user_permissions_by_email(company_name, user_email):
     try:
-        # Query the document based on the user email
-        app_user = frappe.get_doc("App Users", {"user": user_email})
-        
-        # Initialize a list to store user data
-        user_permissions = []
-        
-        if app_user.user_type == "Admin":
-            # Iterate through members
-            for member in app_user.get("members"):
-                # Fetch user data from app users
-                user = frappe.get_doc("App Users", member.user)
-                
-                # Initialize a list to store permissions for the current member
-                permissions_list = []
-                
-                # Iterate through permissions of the current member
-                for permission in user.permissions:
-                    permissions_list.append({
-                        "permittedComponent": permission.permissions,
-                    })
-                
-                # Append username and permissions to the list
-                user_permissions.append({
-                    "userEmail": user.name,
-                    "userName":user.user_name,
-                    "userRole": user.user_type,
-                    "permissions": permissions_list
-                })
-            
-            # Return the user data as a JSON response
-            return user_permissions
-    
+        data = frappe.db.sql(
+            '''
+            SELECT 
+                au.*,
+                GROUP_CONCAT(ap.permissions) AS permissions
+            FROM 
+                `tabApp Users` au 
+            LEFT JOIN 
+                `tabApp Permissions` ap 
+            ON 
+                au.name = ap.parent 
+            WHERE 
+                au.company_name = %s 
+            AND 
+                au.name != %s
+            GROUP BY 
+                au.name
+            ''', 
+            (company_name, user_email), as_dict=True)
+
+        # Convert permissions from a comma-separated string to a list
+        for record in data:
+            permissions = []
+            if record['permissions']:
+                for permission in record['permissions'].split(','):
+                    permissions.append({"permittedComponent": permission})
+                record['permissions'] = permissions
+
+        return list(data)
+
     except Exception as e:
-        # Handle any errors
-        frappe.log_error(_("Error in fetching user permissions by email: {0}").format(str(e)))
-        frappe.response["http_status_code"] = 500
-        return {"error": str(e)}
+        frappe.log_error(f"An error occurred: {str(e)}")
+        return {"error": "An error occurred while processing the request. Please try again later."}
+
 
 # ----------------------------------------Updating Permissions------------------------------------------------
 @frappe.whitelist()
@@ -82,3 +79,37 @@ def update_permissions():
     except Exception as e:
         return f"Error: {str(e)}"
     
+# ---------------------------------------------------------------------------------------------------------------------------
+#-> This is the same method without sql query, search this method by name.
+# TODO -> Use this if needed
+# @frappe.whitelist()
+# def get_user_permissions_by_email(company_name, user_email):
+#     users_with_permissions = []
+
+#     # Fetch list of app users based on company_name and excluding the specified user_email
+#     app_users = frappe.get_all("App Users",
+#                                 filters={"company_name": company_name, "user": ("!=", user_email)},
+#                                 fields=["name", "user_name", "user", "company_name"])
+
+#     for user in app_users:
+#         user_permissions = []
+
+#         # Fetch permissions for each user
+#         permissions = frappe.get_all("App Permissions",
+#                                       filters={"parent": user["name"]},
+#                                       fields=["permissions"])
+
+#         for permission in permissions:
+#             user_permissions.append(permission["permissions"])
+
+#         # Construct user object with permissions
+#         user_data = {
+#             "user_name": user["user_name"],
+#             "user_email": user["user"],
+#             "company_name": user["company_name"],
+#             "permissions": user_permissions
+#         }
+
+#         users_with_permissions.append(user_data)
+
+#     return users_with_permissions

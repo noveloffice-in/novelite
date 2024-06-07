@@ -10,10 +10,11 @@
  "field_order": [
   "user",
   "user_type",
+  "company_name",
   "column_break_ebdwe",
   "user_name",
+  "user_status",
   "section_break_mkoan",
-  "members",
   "permissions"
  ],
  "fields": [
@@ -33,14 +34,6 @@
    "options": "Admin\nNon Admin"
   },
   {
-   "depends_on": "eval:doc.user_type === \"Admin\";",
-   "fieldname": "members",
-   "fieldtype": "Table",
-   "label": "Members",
-   "options": "App Members"
-  },
-  {
-   "depends_on": "eval:doc.user_type === \"Non Admin\";",
    "fieldname": "permissions",
    "fieldtype": "Table",
    "label": "Permissions",
@@ -59,11 +52,24 @@
   {
    "fieldname": "section_break_mkoan",
    "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "user.customer",
+   "fieldname": "company_name",
+   "fieldtype": "Link",
+   "label": "Company Name",
+   "options": "Customer"
+  },
+  {
+   "default": "1",
+   "fieldname": "user_status",
+   "fieldtype": "Data",
+   "label": "User Status"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-03 12:00:06.155711",
+ "modified": "2024-06-07 16:40:21.962836",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "App Users",

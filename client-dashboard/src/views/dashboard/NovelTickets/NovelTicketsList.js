@@ -370,7 +370,7 @@ const NovelTicketsList = ({ userEmail, companyName, confirmedLocations, setFilte
           <Paper variant="outlined" sx={{ mt: 2 }}>
             <TableContainer>
               <Table
-                aria-label="custom sales invoice"
+                aria-label="Tickets list"
                 sx={{
                   whiteSpace: 'nowrap',
                 }}

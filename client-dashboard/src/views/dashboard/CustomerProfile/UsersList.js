@@ -48,6 +48,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+//Actions icon
+import EditIcon from '@mui/icons-material/Edit';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+
 //Tooptip icon
 import HelpIcon from '@mui/icons-material/Help';
 import { styled } from '@mui/material/styles';
@@ -75,6 +79,7 @@ export default function UsersList() {
     const [pending, setPending] = useState(true);
     const [permissionChange, setPermissionChange] = useState(false);
     const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
     const [user, setUser] = useState('');
 
     const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -102,9 +107,10 @@ export default function UsersList() {
     }, [])
     //-----------------------------------------------------------Fetching user permission-----------------------------------------------//
     const fetchPermissions = () => {
-        axios.post('/api/method/novelite.api.user_permissions.get_user_permissions_by_email', { user_email: userEmail })
+        axios.post('/api/method/novelite.api.user_permissions.get_user_permissions_by_email', { user_email: userEmail, company_name: companyName })
             .then((res) => {
                 setUsersList(res.data.message);
+                console.log(res.data.message);
                 setPending(false);
             })
     }
@@ -137,12 +143,13 @@ export default function UsersList() {
 
     //-----------------------------------------------------------Dialouge-----------------------------------------------//
     //Dialouge component
-    const [open1, setOpen1] = useState(false);
+    const [openEditUser, setOpenEditUser] = useState(false);
+    const [openDisableUser, setOpenDisableUser] = useState(false);
 
     //Dialog for rise ticket
     const handleEdit = (permissionsArr, username, role) => {
         console.log("User name  = ", username);
-        setOpen1(true);
+        setOpenEditUser(true);
         setUser(username);
         setUserType(role);
         setPermissionChange(false);
@@ -150,7 +157,16 @@ export default function UsersList() {
     };
 
     const handleClose1 = () => {
-        setOpen1(false);
+        setOpenEditUser(false);
+    };
+
+    //Dialog for diable user
+    const disableUserOpen = () => {
+        setOpenDisableUser(true);
+    };
+
+    const disableUserClose = () => {
+        setOpenDisableUser(false);
     };
 
     //-----------------------------------------------------------Pagination-----------------------------------------------//
@@ -165,6 +181,12 @@ export default function UsersList() {
         setPage(0);
     };
 
+    //-----------------------------------------------------------Disable User-----------------------------------------------//
+
+    const handleDisableUser = () => {
+        disableUserClose();
+    }
+
     return (
         <PageContainer title="User - Novel Office" description="this is User Profile page">
             <Grid>
@@ -176,7 +198,7 @@ export default function UsersList() {
                     {!pending && <Paper variant="outlined">
                         <TableContainer>
                             <Table
-                                aria-label="custom sales invoice"
+                                aria-label="User"
                                 sx={{
                                     whiteSpace: 'nowrap',
                                 }}
@@ -196,7 +218,10 @@ export default function UsersList() {
                                             <Typography variant="h6">Permissions</Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="h6">Action</Typography>
+                                            <Typography variant="h6">Status</Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="h6">Actions</Typography>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -208,23 +233,23 @@ export default function UsersList() {
                                     )?.map((row) => (
                                         <TableRow key={row.username}>
                                             <TableCell>
-                                                <Typography variant="h6">{row.userName}</Typography>
+                                                <Typography variant="h6">{row.user_name}</Typography>
                                             </TableCell>
 
                                             <TableCell>
-                                                <Typography variant="h6">{row.userEmail}</Typography>
+                                                <Typography variant="h6">{row.user}</Typography>
                                             </TableCell>
 
                                             <TableCell>
-                                                <Typography variant="h6" color="textSecondary">{row.userRole}</Typography>
+                                                <Typography variant="h6" color="textSecondary">{row.user_type}</Typography>
                                             </TableCell>
 
                                             <TableCell>
                                                 {
-                                                    row.permissions.map((permission) => {
+                                                    row.permissions.map((permission, index) => {
                                                         return (
                                                             <>
-                                                                <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent}>
+                                                                <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent + index}>
                                                                     {permission.permittedComponent}
                                                                 </Typography>
                                                             </>
@@ -232,9 +257,30 @@ export default function UsersList() {
                                                     })
                                                 }
                                             </TableCell>
+
                                             <TableCell>
-                                                <Button variant='outlined' onClick={() => { handleEdit(row.permissions, row.userEmail, row.userRole) }}>Edit</Button>
+                                                <Typography variant="h6" color="textSecondary">{row.user_status === "1" ? "Active" : "In-active"}</Typography>
                                             </TableCell>
+
+                                            {row.user_status === "1" &&
+                                                <TableCell>
+                                                    <Stack flexDirection="row" gap={1}>
+                                                        {/* <Button variant='outlined' onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }}>Edit</Button> */}
+                                                        <IconButton color="primary" label="Edit" onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }} >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton color="primary" label="Disable User" onClick={disableUserOpen}>
+                                                            <PersonOffIcon />
+                                                        </IconButton>
+                                                    </Stack>
+                                                </TableCell>}
+
+                                            { row.user_status === "0" &&
+                                                <TableCell>
+                                                    <Button variant="outlined" >Enable User</Button>
+                                                </TableCell>
+                                            }
+
                                         </TableRow>
                                     ))}
 
@@ -281,7 +327,7 @@ export default function UsersList() {
             <Dialog
                 fullWidth
                 maxWidth='sm'
-                open={open1}
+                open={openEditUser}
                 onClose={handleClose1}
             >
                 <DialogTitle>
@@ -322,13 +368,12 @@ export default function UsersList() {
                             disableTouchListener
                             title={
                                 <>
-                                    <Typography variant='p'>The administrator will possess complete permissions, including the ability to add users.</Typography>
+                                    <Typography variant='p'>The administrator will possess complete permissions, including the ability to add users and disable users.</Typography>
                                 </>
                             }>
                             <HelpIcon onClick={() => { setOpenToolTip(!openToolTip) }} />
                         </HtmlTooltip>
                     </Stack>
-
 
                     {permissionList.map((element) => {
                         const isChecked = selectedPermissions.some((ele) => ele.permittedComponent === element.permittedComponent);
@@ -351,6 +396,44 @@ export default function UsersList() {
                     </Box>
                 </DialogActions>
             </Dialog>
+            {/* ---------------------------------------Edit User Dialog END---------------------------------- */}
+
+            {/* ---------------------------------------Disable User Dialog Start---------------------------------- */}
+            <Dialog
+                fullWidth
+                maxWidth='sm'
+                open={openDisableUser}
+                onClose={disableUserClose}
+            >
+                <DialogTitle>
+                    <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
+                        <Typography variant='h5'>Are you sure want to disable user?</Typography>
+                        <IconButton onClick={disableUserClose} aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    </Stack>
+                </DialogTitle>
+                <DialogContent>
+
+                    <Stack>
+                        {/* <Typography variant='p'>Are you sure want to disable user?</Typography> */}
+                        <Typography variant='caption' color='grey'>Click <b>YES</b> to disable the user. This will not delete the user permanently. If you want to enable this user click on "Enable User" button. </Typography>
+                    </Stack>
+
+                </DialogContent>
+                <DialogActions>
+                    <Box display='flex' justifyContent='center' alignItems='center' gap={2} height='100%' width='100%' p={1}>
+                        <Button variant="outlined" color="error" onClick={handleDisableUser}>
+                            Yes
+                        </Button>
+                        <Button variant="outlined" color="success" onClick={disableUserClose}>
+                            Cancel
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
+            {/* ---------------------------------------Disable User Dialog END---------------------------------- */}
+
             {/* ---------------------------------------Toast Container Starts------------------------------------ */}
             <ToastContainer
                 position="top-center"

@@ -14,7 +14,7 @@
  "is_standard": 1,
  "message": "<h3>Hello Team,</h3>\n\n<p>An {{ doc.action }} request has been made from <b>\u201c{{ doc.customer }}\u201d</b> client. PFB the details:</p>\n\n<ul>\n    <li>Service: {{ doc.sub_action }}</li>\n    <li>Description: {{ doc.description }}</li>\n    <li>Location: {{ doc.location }}</li>\n</ul>\n\n<p>Please reach out to the customer.</p>",
  "message_type": "HTML",
- "modified": "2024-06-04 21:29:45.278204",
+ "modified": "2024-06-06 18:00:42.581822",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Expansion Downsize Notification",

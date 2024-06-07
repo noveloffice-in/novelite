@@ -79,6 +79,8 @@ const Profile = () => {
     localStorage.clear();
     setTimeout(() => {
       navigate("/Login");
+      //,uncomment this if you want permissions to apply without user refresh
+      // window.location.reload(true);
     }, 500);
   }
 
