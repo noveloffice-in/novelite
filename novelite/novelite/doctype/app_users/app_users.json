@@ -61,15 +61,18 @@
    "options": "Customer"
   },
   {
-   "default": "1",
+   "default": "Active",
    "fieldname": "user_status",
-   "fieldtype": "Data",
-   "label": "User Status"
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "User Status",
+   "options": "Active\nIn-Active",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-07 16:40:21.962836",
+ "modified": "2024-06-08 09:35:03.817420",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "App Users",

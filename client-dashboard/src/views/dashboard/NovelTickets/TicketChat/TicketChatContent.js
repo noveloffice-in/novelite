@@ -35,11 +35,20 @@ export default function TicketChatContent({ data, title, id }) {
             const fileExtension = comment.attachment.split('.').pop().toLowerCase();
             if (['pdf', 'doc', 'docx', 'msword', 'document', 'ms-doc'].includes(fileExtension)) {
                 return (
-                    <Box>
+                    <Box sx={{ backgroundColor: 'grey.100', padding: "1rem" }}>
                         {/* Render link for PDF attachment */}
                         <MuiLink href={comment.attachment} target="_blank" rel="noopener">
                             {comment.attachment.split('/')[2]}
                         </MuiLink>
+                        {comment.message &&
+                            <Box my={0.5}
+                                sx={{
+                                    p: 1,
+                                    maxWidth: '320px',
+                                }}>
+                                <Typography>{comment.message}</Typography>
+                            </Box>
+                        }
                     </Box>
                 )
             } else if (['mov', 'mp4', 'webm'].includes(fileExtension)) {

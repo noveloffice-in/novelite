@@ -53,7 +53,7 @@ def create_user():
         frappe.response["http_status_code"] = 500
         return {"error": "An error occurred while creating the user.", "data": new_user}
 
-# -------------------------------------------------Modify App User Doc------------------------------------------------------------
+# -------------------------------------------------Modify App User Permissions------------------------------------------------------------
 @frappe.whitelist()
 def modify_app_user_permission():
 
@@ -86,3 +86,31 @@ def modify_app_user_permission():
     except Exception as e:
         return f"Error: {str(e)}"
     
+# ------------------------------------------Update app user status----------------------------------------------------------
+@frappe.whitelist()
+def update_app_user_status(doc, method):
+    try:
+        user_doc = frappe.get_doc("User", doc.email)
+        app_user = frappe.get_doc("App Users", {"user": doc.email})
+
+        if user_doc and app_user:
+            if user_doc.enabled == 1:
+                if app_user.user_status != 'Active':
+                    app_user.user_status = 'Active'
+                    app_user.save()
+                    return {"success": _("User status updated successfully.")}
+                else:
+                    return {"info": _("User status is already set to Active.")}
+            else:
+                if app_user.user_status != 'In-Active':
+                    app_user.user_status = 'In-Active'
+                    app_user.save()
+                    return {"success": _("User status updated successfully.")}
+                else:
+                    return {"info": _("User status is already set to In-Active.")}
+        else:
+            return {"error": _("No document found for the provided user email.")}
+
+    except Exception as e:
+        frappe.log_error(_("Error in updating user status: {0}").format(str(e)))
+        return {"error": _("An error occurred while updating user status. Please try again later.")}

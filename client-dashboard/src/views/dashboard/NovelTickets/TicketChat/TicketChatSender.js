@@ -67,7 +67,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
         setAttachment(e.target.files[0])
         console.log(e.target.files[0]);
         setAttachmentName(e.target.files[0].name);
-        setMsg(e.target.files[0].name);
+        // setMsg(e.target.files[0].name);
     }
 
     const clearAttachment = () => {

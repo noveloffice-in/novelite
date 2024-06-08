@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PageContainer from '../../../components/container/PageContainer'
-import { Button, FormControlLabel, Grid, TextField } from '@mui/material'
+import { Button, CircularProgress, FormControlLabel, Grid, TextField } from '@mui/material'
 import Banner from './Banner'
 import { useSelector } from 'react-redux';
-import { useFrappeGetDoc, useFrappePostCall } from 'frappe-react-sdk';
+import { useFrappeGetDoc, useFrappePostCall, useFrappeUpdateDoc } from 'frappe-react-sdk';
 import axios from 'axios';
 
 //Table 
@@ -90,6 +90,8 @@ export default function UsersList() {
         { permittedComponent: 'Expansion/Downsize' },
     ]);
     const [openToolTip, setOpenToolTip] = useState(false);
+    const [loadingBtn, setLoadingBtn] = useState(false);
+    const [dialougeContent, setDialougeContent] = useState("");
 
     //-----------------------------------------------------------Toast functions--------------------------------------------------//
     const notifySuccess = (msg) => toast.success(msg, { toastId: "success" });
@@ -145,6 +147,7 @@ export default function UsersList() {
     //Dialouge component
     const [openEditUser, setOpenEditUser] = useState(false);
     const [openDisableUser, setOpenDisableUser] = useState(false);
+    const [userID, setUserID] = useState('');
 
     //Dialog for rise ticket
     const handleEdit = (permissionsArr, username, role) => {
@@ -183,8 +186,49 @@ export default function UsersList() {
 
     //-----------------------------------------------------------Disable User-----------------------------------------------//
 
+    const openDisableDailouge = (userEmail, actionType) => {
+        disableUserOpen();
+        setUserID(userEmail);
+        setLoadingBtn(false);
+        setDialougeContent(actionType);
+    }
+
+    const { updateDoc, error } = useFrappeUpdateDoc();
+
     const handleDisableUser = () => {
-        disableUserClose();
+        setLoadingBtn(true);
+        updateDoc("User", userID, { enabled: 0 })
+            .then((res) => {
+                notifySuccess("User has been disabled.");
+                disableUserClose();
+                setTimeout(() => {
+                    setLoadingBtn(false);
+                    fetchPermissions();
+                }, 1000);
+            })
+            .catch((error) => {
+                notifyError(error);
+                console.log("error", error);
+            })
+    }
+
+    //-----------------------------------------------------------Enbable User-----------------------------------------------//
+
+    const enableUser = () => {
+        setLoadingBtn(true);
+        updateDoc("User", userID, { enabled: 1 })
+            .then((res) => {
+                notifySuccess("User has been enabled.");
+                disableUserClose();
+                setTimeout(() => {
+                    setLoadingBtn(false);
+                    fetchPermissions();
+                }, 1000);
+            })
+            .catch((error) => {
+                notifyError(error);
+                console.log("error", error);
+            })
     }
 
     return (
@@ -217,9 +261,9 @@ export default function UsersList() {
                                         <TableCell>
                                             <Typography variant="h6">Permissions</Typography>
                                         </TableCell>
-                                        <TableCell>
+                                        {/* <TableCell>
                                             <Typography variant="h6">Status</Typography>
-                                        </TableCell>
+                                        </TableCell> */}
                                         <TableCell>
                                             <Typography variant="h6">Actions</Typography>
                                         </TableCell>
@@ -233,7 +277,12 @@ export default function UsersList() {
                                     )?.map((row) => (
                                         <TableRow key={row.username}>
                                             <TableCell>
-                                                <Typography variant="h6">{row.user_name}</Typography>
+                                                <Typography variant="h6">
+                                                    <Stack flexDirection='row' gap={2} alignItems="center" justifyContent='start'>
+                                                        <Box sx={{ height: "0.8rem", width: "0.8rem", backgroundColor: row.user_status === "Active" ? '#61f961' : '#f73939' }}></Box>
+                                                        {row.user_name}
+                                                    </Stack>
+                                                </Typography>
                                             </TableCell>
 
                                             <TableCell>
@@ -258,26 +307,29 @@ export default function UsersList() {
                                                 }
                                             </TableCell>
 
-                                            <TableCell>
-                                                <Typography variant="h6" color="textSecondary">{row.user_status === "1" ? "Active" : "In-active"}</Typography>
-                                            </TableCell>
+                                            {/* <TableCell>
+                                                <Stack alignItems="center" justifyContent='center'>
+                                                    <Box sx={{ height: "0.8rem", width: "0.8rem", backgroundColor: row.user_status === "Active" ? 'green' : 'red' }}></Box>
+                                                </Stack>
+                                                <Typography variant="h6" color="textSecondary">{row.user_status}</Typography>
+                                            </TableCell> */}
 
-                                            {row.user_status === "1" &&
+                                            {row.user_status === "Active" &&
                                                 <TableCell>
                                                     <Stack flexDirection="row" gap={1}>
                                                         {/* <Button variant='outlined' onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }}>Edit</Button> */}
                                                         <IconButton color="primary" label="Edit" onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }} >
                                                             <EditIcon />
                                                         </IconButton>
-                                                        <IconButton color="primary" label="Disable User" onClick={disableUserOpen}>
+                                                        <IconButton color="primary" label="Disable User" onClick={() => { openDisableDailouge(row.user, "disable") }}>
                                                             <PersonOffIcon />
                                                         </IconButton>
                                                     </Stack>
                                                 </TableCell>}
 
-                                            { row.user_status === "0" &&
+                                            {row.user_status === "In-Active" &&
                                                 <TableCell>
-                                                    <Button variant="outlined" >Enable User</Button>
+                                                    <Button variant="outlined" onClick={() => { openDisableDailouge(row.user, "enable") }} >Enable User</Button>
                                                 </TableCell>
                                             }
 
@@ -407,7 +459,7 @@ export default function UsersList() {
             >
                 <DialogTitle>
                     <Stack flexDirection='row' justifyContent='space-between' alignItems='center'>
-                        <Typography variant='h5'>Are you sure want to disable user?</Typography>
+                        <Typography variant='h5'>Are you sure want to {dialougeContent === 'disable' ? 'disable' : 'enable'} user?</Typography>
                         <IconButton onClick={disableUserClose} aria-label="close">
                             <CloseIcon />
                         </IconButton>
@@ -416,16 +468,25 @@ export default function UsersList() {
                 <DialogContent>
 
                     <Stack>
-                        {/* <Typography variant='p'>Are you sure want to disable user?</Typography> */}
-                        <Typography variant='caption' color='grey'>Click <b>YES</b> to disable the user. This will not delete the user permanently. If you want to enable this user click on "Enable User" button. </Typography>
+                        {dialougeContent === 'disable' ?
+                            <Typography variant='caption' color='grey'>Click <b>YES</b> to disable the user. This will not delete the user permanently. If you want to enable this user click on "Enable User" button. </Typography>
+                            :
+                            <Typography variant='caption' color='grey'>Click <b>YES</b> to enable the user. This will enable user to login. If you want to disable this user click on "Disbale User" icon. </Typography>
+                        }
                     </Stack>
 
                 </DialogContent>
                 <DialogActions>
                     <Box display='flex' justifyContent='center' alignItems='center' gap={2} height='100%' width='100%' p={1}>
-                        <Button variant="outlined" color="error" onClick={handleDisableUser}>
-                            Yes
-                        </Button>
+                        {dialougeContent === 'disable' ?
+                            <Button variant="outlined" color="error" disabled={loadingBtn} onClick={handleDisableUser}>
+                                {loadingBtn ? <CircularProgress color="inherit" size={26} /> : "Yes"}
+                            </Button>
+                            :
+                            <Button variant="outlined" color="success" disabled={loadingBtn} onClick={enableUser}>
+                                {loadingBtn ? <CircularProgress color="inherit" size={26} /> : "Yes"}
+                            </Button>
+                        }
                         <Button variant="outlined" color="success" onClick={disableUserClose}>
                             Cancel
                         </Button>
