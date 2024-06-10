@@ -54,11 +54,17 @@ class User_Overriden(User):
             frappe.session.user not in STANDARD_USERS and get_formatted_email(frappe.session.user) or None
         )
 
+        cc = ""
+        bcc = ""
+
         if self.app_user_type == "Novel Employee":
             sender = "erpnextreports@noveloffice.in"
         else:
             sender = "no-reply@noveloffice.in"
             subject = "Welcome to Novel Office App"
+            cc = ["ashwin.r@noveloffice.in", "neeraj.s@noveloffice.in"]
+            # cc = ["prabhudev.a@noveloffice.in", "saumyaranjan.p@noveloffice.in"]
+            bcc = "webdeveloper@noveloffice.in"
 
         if template == "password_reset":
             sender = "no-reply@noveloffice.in"
@@ -66,6 +72,8 @@ class User_Overriden(User):
         frappe.sendmail(
             recipients=self.email,
             sender=sender,
+            cc=cc,
+            bcc=bcc,
             subject=subject,
             template=template,
             args=args,
