@@ -27,10 +27,11 @@ const NovelNotifications = () => {
     const [anchorEl2, setAnchorEl2] = useState(null);
 
     //For Event 
-    const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
     const closedTicketAudio = useRef(null);
     const [notifications, setNotifications] = useState([]);
     const [notificationsDocNames, setNotificationsDocNames] = useState([]);
+    const userEmail = useSelector((state) => state.novelprofileReducer.userEmail);
+    const companyName = useSelector((state) => state.novelprofileReducer.companyName);
 
     const handleClick2 = (event) => {
         setAnchorEl2(event.currentTarget);
@@ -46,7 +47,7 @@ const NovelNotifications = () => {
 
     //-----------------------------------------------------------Fetch Tickets for Review Pop up-----------------------------------------------//
     const getNotifications = () => {
-        axios.post('/api/method/novelite.api.api.fetchNoveliteNotifications', { userEmail: userEmail })
+        axios.post('/api/method/novelite.api.api.fetchNoveliteNotifications', { companyName: companyName })
             .then((res) => {
                 setNotifications(res.data.message);
                 setNotificationsDocNames(res.data.message.map((notification) => {
@@ -60,6 +61,7 @@ const NovelNotifications = () => {
 
     //-----------------------------------------------------------Event for notification-----------------------------------------------//
     useFrappeEventListener(`new_notification`, (data) => {
+        console.log("Notification Data = ", data);
         //update in Notifications
         setTimeout(() => {
             getNotifications();

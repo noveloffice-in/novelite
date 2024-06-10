@@ -14,7 +14,6 @@ def after_install():
 def add_default_lead_statuses():
 	statuses = {
 		"Novel Office Brigade - Whitefield",
-		"Novel Office Brigade",
 		"Novel Business Park - Adugodi",
 		"Novel Office WorkHub - Whitefield",
 		"Novel Office Queens - Queens Road",

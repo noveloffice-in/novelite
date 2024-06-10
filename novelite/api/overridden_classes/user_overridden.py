@@ -60,6 +60,9 @@ class User_Overriden(User):
             sender = "no-reply@noveloffice.in"
             subject = "Welcome to Novel Office App"
 
+        if template == "password_reset":
+            sender = "no-reply@noveloffice.in"
+            
         frappe.sendmail(
             recipients=self.email,
             sender=sender,

@@ -51,6 +51,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //Actions icon
 import EditIcon from '@mui/icons-material/Edit';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
+import PersonIcon from '@mui/icons-material/Person';
 
 //Tooptip icon
 import HelpIcon from '@mui/icons-material/Help';
@@ -314,8 +315,8 @@ export default function UsersList() {
                                                 <Typography variant="h6" color="textSecondary">{row.user_status}</Typography>
                                             </TableCell> */}
 
-                                            {row.user_status === "Active" &&
-                                                <TableCell>
+                                            <TableCell>
+                                                {row.user_status === "Active" ?
                                                     <Stack flexDirection="row" gap={1}>
                                                         {/* <Button variant='outlined' onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }}>Edit</Button> */}
                                                         <IconButton color="primary" label="Edit" onClick={() => { handleEdit(row.permissions, row.user, row.user_type) }} >
@@ -325,13 +326,14 @@ export default function UsersList() {
                                                             <PersonOffIcon />
                                                         </IconButton>
                                                     </Stack>
-                                                </TableCell>}
-
-                                            {row.user_status === "In-Active" &&
-                                                <TableCell>
-                                                    <Button variant="outlined" onClick={() => { openDisableDailouge(row.user, "enable") }} >Enable User</Button>
-                                                </TableCell>
-                                            }
+                                                    :
+                                                    <Stack flexDirection="row">
+                                                        <IconButton color="primary" label="Enable User" onClick={() => { openDisableDailouge(row.user, "enable") }} >
+                                                            <PersonIcon/>
+                                                        </IconButton>
+                                                    </Stack>
+                                                }
+                                            </TableCell>
 
                                         </TableRow>
                                     ))}
@@ -469,7 +471,7 @@ export default function UsersList() {
 
                     <Stack>
                         {dialougeContent === 'disable' ?
-                            <Typography variant='caption' color='grey'>Click <b>YES</b> to disable the user. This will not delete the user permanently. If you want to enable this user click on "Enable User" button. </Typography>
+                            <Typography variant='caption' color='grey'>Click <b>YES</b> to disable the user. This will not delete the user permanently. User will not be able to login. If you want to enable this user click on "Enable User" button. </Typography>
                             :
                             <Typography variant='caption' color='grey'>Click <b>YES</b> to enable the user. This will enable user to login. If you want to disable this user click on "Disbale User" icon. </Typography>
                         }

@@ -9,10 +9,13 @@ import { useParams } from 'react-router';
 import TicketChatSender from './TicketChatSender';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Stack } from '@mui/system';
 
 export default function NovelTicketChat({ id, title, status }) {
 
   const [issueMessages, setIssueMessages] = useState([])
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchChats()
@@ -29,10 +32,11 @@ export default function NovelTicketChat({ id, title, status }) {
   const fetchChats = () => {
     axios.post('/api/method/novelite.api.issue_comment_for_client.get_ticket_by_id', { issue_id: id })
       .then((res) => {
-        setIssueMessages(res.data.message)
+        setIssueMessages(res.data.message);
       })
       .catch((err) => {
         console.log(err);
+        setError(err);
       })
   };
 
@@ -68,8 +72,12 @@ export default function NovelTicketChat({ id, title, status }) {
       </Box>
       // </PageContainer>
     )
+  } else {
+    return (
+      <Stack alignItems='center' justifyContent="center" height='100%' width='100%'>
+        {!error && <CircularProgress />}
+        {error && <Typography> Chats not found for this Ticket</Typography>}
+      </Stack>
+    )
   }
-  return (
-    <Typography> Chats not found for this Ticket</Typography>
-  )
 }

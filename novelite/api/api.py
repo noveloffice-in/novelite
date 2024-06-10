@@ -423,8 +423,8 @@ def fetchNoveliteNotifications():
     if data is None:
         frappe.throw("No data provided")
 
-    user_email = data.get('userEmail')
-    doc_list = frappe.get_list("Novelite Notifications", filters = { "show_to": user_email }, fields = ['*'])
+    companyName = data.get('companyName')
+    doc_list = frappe.get_list("Novelite Notifications", filters = { "company_name": companyName }, fields = ['*'])
 
     return doc_list
 

@@ -130,9 +130,9 @@ doc_events = {
      "Issue Comment For Client": {
         "on_update": "novelite.api.RealTimeEvents.issue_comment_for_clients.on_update"
     },
-    # "Comment": {
-    #     "after_insert": "novelite.messages.on_comment"
-    # },
+    "User": {
+        "on_update": "novelite.api.user_creation.update_app_user_status"
+    },
     # "Notifications CD":{
     #     "after_insert": "novelite.messages.on_comment"
     # }

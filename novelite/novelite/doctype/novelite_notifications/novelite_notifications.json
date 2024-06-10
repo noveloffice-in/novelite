@@ -12,6 +12,7 @@
   "unread_messages",
   "column_break_eojuo",
   "show_to",
+  "company_name",
   "message"
  ],
  "fields": [
@@ -44,11 +45,17 @@
   {
    "fieldname": "column_break_eojuo",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "show_to.company_name",
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-06 17:53:21.678875",
+ "modified": "2024-06-10 10:44:23.158274",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Novelite Notifications",
