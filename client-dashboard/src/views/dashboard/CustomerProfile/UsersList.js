@@ -276,7 +276,7 @@ export default function UsersList() {
                                         ? usersList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         : usersList
                                     )?.map((row) => (
-                                        <TableRow key={row.username}>
+                                        <TableRow key={row.user}>
                                             <TableCell>
                                                 <Typography variant="h6">
                                                     <Stack flexDirection='row' gap={2} alignItems="center" justifyContent='start'>
@@ -296,7 +296,7 @@ export default function UsersList() {
 
                                             <TableCell>
                                                 {
-                                                    row.permissions.map((permission, index) => {
+                                                    row.permissions?.map((permission, index) => {
                                                         return (
                                                             <>
                                                                 <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent + index}>
