@@ -30,7 +30,7 @@
    "fieldname": "show_to",
    "fieldtype": "Link",
    "label": "Show To",
-   "options": "App Users"
+   "options": "User"
   },
   {
    "fieldname": "message",
@@ -55,7 +55,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-10 10:44:23.158274",
+ "modified": "2024-06-11 09:12:56.573110",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Novelite Notifications",
