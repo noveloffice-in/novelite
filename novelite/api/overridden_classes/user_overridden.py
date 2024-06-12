@@ -63,11 +63,13 @@ class User_Overriden(User):
             sender = "no-reply@noveloffice.in"
             subject = "Welcome to Novel Office App"
             cc = ["ashwin.r@noveloffice.in", "neeraj.s@noveloffice.in"]
-            # cc = ["prabhudev.a@noveloffice.in", "saumyaranjan.p@noveloffice.in"]
+            # cc = ["prabhudev.a@noveloffice.in", "prasad.p@noveloffice.in"]
             bcc = "webdeveloper@noveloffice.in"
 
         if template == "password_reset":
             sender = "no-reply@noveloffice.in"
+            cc = ""
+            bcc = ""
             
         frappe.sendmail(
             recipients=self.email,
