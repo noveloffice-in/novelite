@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"1SFpzeOEZF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Client Dashboard</span>\",\"col\":12}},{\"id\":\"R71Bf46CdF\",\"type\":\"card\",\"data\":{\"card_name\":\"Room Bookings\",\"col\":4}},{\"id\":\"OgmhfaBRjF\",\"type\":\"card\",\"data\":{\"card_name\":\"Invoices\",\"col\":4}},{\"id\":\"5S9poheviG\",\"type\":\"card\",\"data\":{\"card_name\":\"Tickets\",\"col\":4}},{\"id\":\"NdrnvsNsJm\",\"type\":\"card\",\"data\":{\"card_name\":\"Expansion/Downsize\",\"col\":4}},{\"id\":\"_FfV54bH3O\",\"type\":\"card\",\"data\":{\"card_name\":\"Visitor Parking Pass\",\"col\":4}},{\"id\":\"B9s_gOWkOC\",\"type\":\"card\",\"data\":{\"card_name\":\"Others\",\"col\":4}}]",
+ "content": "[{\"id\":\"rAZ6GXsgRS\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Users</b></span>\",\"col\":12}},{\"id\":\"fF_iyOyMzK\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active\",\"col\":3}},{\"id\":\"NDNlLUwg6h\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Inactive\",\"col\":3}},{\"id\":\"QYD3WHpKiT\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Tickets</b></span>\",\"col\":12}},{\"id\":\"xFlMAoFy4B\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"All\",\"col\":3}},{\"id\":\"RVFUrP14tk\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"In-Progress\",\"col\":3}},{\"id\":\"eMMSqKjetm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending\",\"col\":3}},{\"id\":\"8stzSrJ1QB\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Closed\",\"col\":3}},{\"id\":\"Qx50ZSecJl\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Others</b></span>\",\"col\":12}},{\"id\":\"Lv6MsB9QIq\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Bookings\",\"col\":3}},{\"id\":\"gBJIOWTNB3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Expansion and downsize\",\"col\":3}},{\"id\":\"1SFpzeOEZF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Client Dashboard</span>\",\"col\":12}},{\"id\":\"R71Bf46CdF\",\"type\":\"card\",\"data\":{\"card_name\":\"Room Bookings\",\"col\":4}},{\"id\":\"OgmhfaBRjF\",\"type\":\"card\",\"data\":{\"card_name\":\"Invoices\",\"col\":4}},{\"id\":\"5S9poheviG\",\"type\":\"card\",\"data\":{\"card_name\":\"Tickets\",\"col\":4}},{\"id\":\"NdrnvsNsJm\",\"type\":\"card\",\"data\":{\"card_name\":\"Expansion/Downsize\",\"col\":4}},{\"id\":\"_FfV54bH3O\",\"type\":\"card\",\"data\":{\"card_name\":\"Visitor Parking Pass\",\"col\":4}},{\"id\":\"B9s_gOWkOC\",\"type\":\"card\",\"data\":{\"card_name\":\"Others\",\"col\":4}}]",
  "creation": "2024-04-27 22:00:44.000863",
  "custom_blocks": [],
  "docstatus": 0,
@@ -217,11 +217,44 @@
    "type": "Link"
   }
  ],
- "modified": "2024-06-10 10:43:20.289645",
+ "modified": "2024-06-12 14:37:16.814802",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Client Dashboard",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Pending",
+   "number_card_name": "Pending Tickets"
+  },
+  {
+   "label": "Bookings",
+   "number_card_name": "Bookings"
+  },
+  {
+   "label": "Active",
+   "number_card_name": "Active Users"
+  },
+  {
+   "label": "Inactive",
+   "number_card_name": "Inactive users"
+  },
+  {
+   "label": "Closed",
+   "number_card_name": "Closed Tickets"
+  },
+  {
+   "label": "Expansion and downsize",
+   "number_card_name": "Expansion and  Downsize"
+  },
+  {
+   "label": "All",
+   "number_card_name": "Issues Created"
+  },
+  {
+   "label": "In-Progress",
+   "number_card_name": "In-progress Tickets"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
