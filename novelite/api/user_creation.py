@@ -90,26 +90,24 @@ def modify_app_user_permission():
 @frappe.whitelist()
 def update_app_user_status(doc, method):
     try:
-        user_doc = frappe.get_doc("User", doc.email)
-        if user_doc:
-            if user_doc.app_user_type == "Property Customer":
-                app_user = frappe.get_doc("App Users", {"user": doc.email})
-                
-                if app_user:
-                    if user_doc.enabled == 1:
-                        if app_user.user_status != 'Active':
-                            app_user.user_status = 'Active'
-                            app_user.save()
-                            return {"success": _("User status updated successfully.")}
-                        else:
-                            return {"info": _("User status is already set to Active.")}
+        if doc.app_user_type == "Property Customer":
+            app_user = frappe.get_doc("App Users", {"user": doc.email})
+            
+            if app_user:
+                if doc.enabled == 1:
+                    if app_user.user_status != 'Active':
+                        app_user.user_status = 'Active'
+                        app_user.save()
+                        return {"success": _("User status updated successfully.")}
                     else:
-                        if app_user.user_status != 'In-Active':
-                            app_user.user_status = 'In-Active'
-                            app_user.save()
-                            return {"success": _("User status updated successfully.")}
-                        else:
-                            return {"info": _("User status is already set to In-Active.")}
+                        return {"info": _("User status is already set to Active.")}
+                else:
+                    if app_user.user_status != 'In-Active':
+                        app_user.user_status = 'In-Active'
+                        app_user.save()
+                        return {"success": _("User status updated successfully.")}
+                    else:
+                        return {"info": _("User status is already set to In-Active.")}
         else:
             return {"error": _("No document found for the provided user email.")}
 
