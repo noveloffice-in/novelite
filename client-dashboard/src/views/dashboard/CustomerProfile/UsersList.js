@@ -300,7 +300,7 @@ export default function UsersList() {
                                                         return (
                                                             <>
                                                                 <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent + index}>
-                                                                    * {permission.permittedComponent}
+                                                                &#x2022; {permission.permittedComponent}
                                                                 </Typography>
                                                             </>
                                                         )
@@ -432,7 +432,7 @@ export default function UsersList() {
                     </Stack>
 
                     {permissionList.map((element) => {
-                        const isChecked = selectedPermissions.some((ele) => ele.permittedComponent === element.permittedComponent);
+                        const isChecked = selectedPermissions?.some((ele) => ele.permittedComponent === element.permittedComponent);
                         return (
                             <FormControlLabel
                                 key={element.permittedComponent}
