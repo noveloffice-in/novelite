@@ -47,7 +47,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "show_to.company_name",
+   "fetch_from": "show_to.customer",
    "fieldname": "company_name",
    "fieldtype": "Data",
    "label": "Company Name"
@@ -55,7 +55,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-11 09:12:56.573110",
+ "modified": "2024-06-13 10:37:12.812914",
  "modified_by": "Administrator",
  "module": "Novelite",
  "name": "Novelite Notifications",
