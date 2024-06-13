@@ -296,15 +296,17 @@ export default function UsersList() {
 
                                             <TableCell>
                                                 {
-                                                    row.permissions?.map((permission, index) => {
+                                                    row.permissions ? row.permissions?.map((permission, index) => {
                                                         return (
                                                             <>
                                                                 <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent + index}>
-                                                                    {permission.permittedComponent}
+                                                                    * {permission.permittedComponent}
                                                                 </Typography>
                                                             </>
                                                         )
-                                                    })
+                                                    }) 
+                                                    : 
+                                                    <Typography variant='h6'>-------</Typography>
                                                 }
                                             </TableCell>
 
