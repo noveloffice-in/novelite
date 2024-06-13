@@ -122,13 +122,18 @@ export default function UsersList() {
     const handleCheckboxChange = (event, permission) => {
         const isChecked = event.target.checked;
         setPermissionChange(true);
-        if (isChecked) {
-            // If checkbox is checked, add permission to selectedPermissions
-            setSelectedPermissions(prevPermissions => [...prevPermissions, { permittedComponent: permission }]);
-        } else {
-            // If checkbox is unchecked, remove permission from selectedPermissions
-            setSelectedPermissions(prevPermissions => prevPermissions.filter(item => item.permittedComponent !== permission));
-        }
+        setSelectedPermissions(prevPermissions => {
+            if (!Array.isArray(prevPermissions)) {
+                prevPermissions = [];
+            }
+            if (isChecked) {
+                // If checkbox is checked, add permission to selectedPermissions
+                return [...prevPermissions, { permittedComponent: permission }];
+            } else {
+                // If checkbox is unchecked, remove permission from selectedPermissions
+                return prevPermissions.filter(item => item.permittedComponent !== permission);
+            }
+        });
     };
 
     //Permisson Changes
@@ -300,13 +305,13 @@ export default function UsersList() {
                                                         return (
                                                             <>
                                                                 <Typography color="textSecondary" variant="h6" fontWeight="400" key={permission.permittedComponent + index}>
-                                                                &#x2022; {permission.permittedComponent}
+                                                                    &#x2022; {permission.permittedComponent}
                                                                 </Typography>
                                                             </>
                                                         )
-                                                    }) 
-                                                    : 
-                                                    <Typography variant='h6'>-------</Typography>
+                                                    })
+                                                        :
+                                                        <Typography variant='h6'>-------</Typography>
                                                 }
                                             </TableCell>
 
@@ -331,7 +336,7 @@ export default function UsersList() {
                                                     :
                                                     <Stack flexDirection="row">
                                                         <IconButton color="primary" label="Enable User" onClick={() => { openDisableDailouge(row.user, "enable") }} >
-                                                            <PersonIcon/>
+                                                            <PersonIcon />
                                                         </IconButton>
                                                     </Stack>
                                                 }
