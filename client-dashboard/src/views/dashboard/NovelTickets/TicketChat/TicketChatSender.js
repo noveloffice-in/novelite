@@ -71,7 +71,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
     }
 
     const clearAttachment = () => {
-        setMsg('');
+        // setMsg('');
         setAttachment(null);
         setAttachmentName("");
     }
@@ -163,7 +163,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                 <IconButton
                     aria-label="send"
                     onClick={onChatMsgSubmit}
-                    disabled={!msg}
+                    disabled={!msg || msg.length > 500}
                     type='submit'
                     color="primary"
                 >
@@ -182,6 +182,7 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
                             component="label"
                             role={undefined}
                             variant="outlined"
+                            disabled={msg.length > 500}
                             sx={{ backgroundColor: 'none', color: "none" }}
                         >
                             <IconPaperclip />
@@ -191,6 +192,10 @@ export default function TicketChatSender({ id, fetchChats, issueMessages }) {
             </form>
             {attachmentName && <Box>
                 <Typography variant='caption'>{attachmentName}</Typography>
+            </Box>}
+            {msg.length > 500 && <Box>
+                <Typography variant='caption' color={msg.length > 500 ? '#fd4f4f' : ""} >{msg.length} letters</Typography> <br />
+                <Typography variant='caption' color='#fd4f4f' > Letters / characters cannot exceed 500. </Typography>
             </Box>}
             <ToastContainer
                 position="top-center"

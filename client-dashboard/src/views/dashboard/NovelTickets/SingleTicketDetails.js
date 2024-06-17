@@ -108,10 +108,9 @@ function Left({ id, title, description, rating, raisedBy, ratingDescription, iss
     { shortName: "NOM", fullName: "Novel Office Marathahalli" },
     { shortName: "NOC", fullName: "Novel Office Central - MG Road" },
     { shortName: "NOQ", fullName: "Novel Office Queens- Queens Road" },
-    { shortName: "NOW", fullName: "Novel Office WorkHub- Whitefield" },
+    { shortName: "NOW", fullName: "Novel Office WorkHub - Whitefield" },
     { shortName: "NBP", fullName: "Novel Business Park - Adugodi" },
-    { shortName: "NOB", fullName: "Novel Office Brigade" },
-    { shortName: "BTP1F", fullName: "Novel Office Brigade-Whitefield" },
+    { shortName: "NOB", fullName: "Novel Office Brigade - Whitefield" },
   ]
 
   //Converting location 
@@ -125,8 +124,37 @@ function Left({ id, title, description, rating, raisedBy, ratingDescription, iss
     return "No Location";
   }
 
+  //Ticket's data
+  let allData = [
+    {
+      title: "Issue Type",
+      value: issueType ? issueType : "No issue type"
+    },
+    {
+      title: "Issue Subtype",
+      value: issueSubtype ? issueSubtype : "No issue sub type"
+    },
+    {
+      title: "Priority",
+      value: priority
+    },
+    {
+      title: "Description",
+      value: description ? description : "No ticket description"
+    },
+    {
+      title: "Location",
+      value: getLocationName(location)
+    },
+    {
+      title: "Raised By",
+      value: raisedBy
+    },
+  ]
+
   return (
-    <Box >
+    <Box>
+
       <Box display="flex" alignItems="center">
         <ConfirmationNumberTwoToneIcon sx={{ width: '70px', height: '70px' }} />
 
@@ -139,93 +167,25 @@ function Left({ id, title, description, rating, raisedBy, ratingDescription, iss
           </Typography>
         </Box>
       </Box>
+
       <Grid container>
-        {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
+
+        {
+          allData.map((ticket) => {
+            return (
+              <Grid item lg={6} xs={12} mt={4}>
                 <Typography variant="body2" color="text.secondary">
-                  Issue Type
+                  {ticket.title}
                 </Typography>
                 <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {issueType}
+                  {ticket.value}
                 </Typography>
-              </Grid> */}
-        {/* <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Status
-                </Typography>
-                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {status}
-                </Typography>
-              </Grid> */}
+              </Grid>
+            )
+          })
+        }
 
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Issue Type
-          </Typography>
-          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-            {issueType ? issueType : "No issue type"}
-          </Typography>
-        </Grid>
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Issue Subtype
-          </Typography>
-          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-            {issueSubtype ? issueSubtype : "No issue sub type"}
-          </Typography>
-        </Grid>
-
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Priority
-          </Typography>
-          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-            {priority}
-          </Typography>
-        </Grid>
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Description
-          </Typography>
-          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-            {description ? description : "No ticket description"}
-          </Typography>
-        </Grid>
-
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Location
-          </Typography>
-          <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-            {getLocationName(location)}
-          </Typography>
-        </Grid>
-        <Grid item lg={6} xs={12} mt={4}>
-          <Typography variant="body2" color="text.secondary">
-            Raised By
-          </Typography>
-          <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-            {raisedBy}
-          </Typography>
-        </Grid>
-
-        {/* <Grid item lg={6} xs={12} mt={4} mx={2}>
-                <Typography variant="body2" color="text.secondary">
-                  Issue Subtype
-                </Typography>
-                <Typography variant="subtitle1" mb={0.5} fontWeight={600}>
-                  {issueSubtype}
-                </Typography>
-              </Grid> */}
-        {/* <Grid item lg={6} xs={12} mt={4}>
-                <Typography variant="body2" color="text.secondary">
-                  Creation date and time
-                </Typography>
-                <Typography variant="subtitle1" fontWeight={600} mb={0.5}>
-                  {formatDateTime(creation, 'Date')} <br />
-                  {formatDateTime(creation, 'Time')}
-                </Typography>
-              </Grid> */}
-        {rating > 0 ?
+        {rating > 0 &&
           <>
             <Grid item lg={6} xs={12} mt={4}>
               <Typography variant="body2" mb={0.5} color="text.secondary">
@@ -245,7 +205,8 @@ function Left({ id, title, description, rating, raisedBy, ratingDescription, iss
                 {ratingDescription ? ratingDescription : 'No review description'}
               </Typography>
             </Grid>
-          </> : null}
+          </>
+        }
       </Grid>
     </Box>
   )

@@ -45,7 +45,7 @@ export default function NovelTickets() {
         return data?.leads.map(lead => lead.confirmed_location);
     }
 
-    var confirmedLocations = getLeadsId();
+    let confirmedLocations = getLeadsId();
     if (confirmedLocations) {
         if (filterLocation === null) {
             setFilterLocation("ALL");
