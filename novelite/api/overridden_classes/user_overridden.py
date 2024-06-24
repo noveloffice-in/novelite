@@ -62,7 +62,7 @@ class User_Overriden(User):
         else:
             sender = "no-reply@noveloffice.in"
             subject = "Welcome to Novel Office App"
-            cc = ["ashwin.r@noveloffice.in", "neeraj.s@noveloffice.in"]
+            cc = ["ashwin.r@noveloffice.in", "neeraj.s@noveloffice.in", "prapthi.h@noveloffice.in", "fathima.n@noveloffice.in", "adam.a@noveloffice.in"]
             # cc = ["prabhudev.a@noveloffice.in", "prasad.p@noveloffice.in"]
             bcc = "webdeveloper@noveloffice.in"
 
