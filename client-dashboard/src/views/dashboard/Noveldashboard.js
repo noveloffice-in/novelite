@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageContainer from '../../components/container/PageContainer';
 import WelcomeCardNovel from './DashboardElements/WelcomeCardNovel';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,11 @@ import img from '../../assets/images/dashboard/img.png'
 import img2 from '../../assets/images/dashboard/img2.png'
 import { useFrappeDocTypeEventListener, useFrappeGetDoc, useFrappeGetDocList } from 'frappe-react-sdk';
 import { setAccountType, setAdminStatus, setCompanyName, setLeadsID, setUserImage } from '../../store/apps/userProfile/NovelProfileSlice';
+import axios from 'axios';
+import Router from '../../routes/Router';
+import Protected from '../../routes/Protected';
+import Exp_down from './Expansion_Downsize/Exp_down';
+import SalesInvoice from './SalesInvoice/SalesInvoice';
 
 const listings = [
   {
@@ -170,7 +175,7 @@ export default function noveldashboard() {
 
       {eventData?.length > 0 &&
         <>
-          <Typography variant='h3' mt={2} pl={1} >Upcoming Events</Typography>
+          <Typography variant='h3' mt={2} pl={1} >Past Events</Typography>
           <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
             <Grid container spacing={2}>
               {eventData.map((event, index) => {
