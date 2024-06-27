@@ -97,8 +97,8 @@ export default function noveldashboard() {
   const { data: eventData } = useFrappeGetDocList('Novel Events', {
     fields: ['event_name', 'starts_on', 'image'],
     orderBy: {
-      field: 'name',
-      order: 'asc',
+      field: 'starts_on',
+      order: 'desc',
     },
   })
 
@@ -175,7 +175,7 @@ export default function noveldashboard() {
 
       {eventData?.length > 0 &&
         <>
-          <Typography variant='h3' mt={2} pl={1} >Past Events</Typography>
+          <Typography variant='h3' mt={2} pl={1} >Events</Typography>
           <Box sx={{ display: "flex", flexDirection: "col", justifyContent: "center", alignItems: "streach" }}>
             <Grid container spacing={2}>
               {eventData.map((event, index) => {
