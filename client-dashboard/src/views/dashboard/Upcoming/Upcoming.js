@@ -26,7 +26,7 @@ export default function Upcoming({ tittle, bookings }) {
                 <Typography variant='h3'>
                     {bookings.heading}
                 </Typography>
-                <Box sx={{width:800}}>
+                <Box sx={{maxWidth:800}}>
                     <Typography variant='p'>
                         {bookings.content}
                     </Typography>
